@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom"
 
 const Layout: React.FC = () => {
   return (
-    <>
+    <div className="flex">
       <Sidebar />
-      <main>
+      <main className="flex-grow p-4">
         <Outlet />
       </main>
-    </>
+    </div>
   )
 }
 
