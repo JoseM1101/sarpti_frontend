@@ -9,6 +9,29 @@ interface EntityProps
   entity: Entity
 }
 
+const formatList = (items: string[], separator = "; ") => {
+  return items.map((item, index) =>
+    index !== items.length - 1 ? `${item}${separator}` : item
+  )
+}
+
+const formatLinks = (
+  items: { title: string; url: string }[],
+  separator = "; "
+) => {
+  return items.map((item, index) => (
+    <a
+      key={item.title}
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {item.title}
+      {index !== items.length - 1 && separator}
+    </a>
+  ))
+}
+
 const EntityCard: React.FC<EntityProps> = ({ className, entity }) => {
   const baseClasses = "w-full"
   const mergedClasses = twMerge(baseClasses, className)
@@ -35,32 +58,15 @@ const EntityCard: React.FC<EntityProps> = ({ className, entity }) => {
           <div className="flex justify-between mt-2">
             <div className="flex flex-col">
               <p className="text-sm font-semibold w-72 overflow-hidden whitespace-nowrap text-ellipsis truncate">
-                Autores:&nbsp;
-                {authors.map((author, index) => {
-                  return index !== authors.length - 1 ? `${author}; ` : author
-                })}
+                Autores: {formatList(authors)}
               </p>
               <p className="text-sm font-semibold w-72 overflow-hidden whitespace-nowrap text-ellipsis truncate">
-                Tutores:&nbsp;
-                {tutors.map((tutor, index) => {
-                  return index !== tutors.length - 1 ? `${tutor}; ` : tutor
-                })}
+                Tutores: {formatList(tutors)}
               </p>
             </div>
             <div className="flex flex-col">
               <p className="text-sm font-semibold w-64 overflow-hidden whitespace-nowrap text-ellipsis truncate">
-                Productos:&nbsp;
-                {relatedProducts.map((product, index) => {
-                  return index !== relatedProducts.length - 1 ? (
-                    <a key={product.title} href={product.url} target="_blank">
-                      {product.title};&nbsp;
-                    </a>
-                  ) : (
-                    <a key={product.title} href={product.url} target="_blank">
-                      {product.title}
-                    </a>
-                  )
-                })}
+                Productos: {formatLinks(relatedProducts)}
               </p>
               <p className="text-sm font-semibold w-64 overflow-hidden whitespace-nowrap text-ellipsis truncate">
                 Inversión: ${investment}
@@ -76,8 +82,11 @@ const EntityCard: React.FC<EntityProps> = ({ className, entity }) => {
             <div className="flex flex-col">
               <p className="text-sm">Palabras clave:</p>
               <div className="flex gap-2 flex-wrap">
-                {keywords.map((keyword) => (
-                  <div className="border border-lightblue p-1 rounded-md">
+                {keywords.map((keyword, index) => (
+                  <div
+                    key={index}
+                    className="border border-lightblue p-1 rounded-md"
+                  >
                     <p className="text-xs">{keyword}</p>
                   </div>
                 ))}

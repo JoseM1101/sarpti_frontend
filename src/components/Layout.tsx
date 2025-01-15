@@ -4,8 +4,8 @@ import { Outlet } from "react-router-dom"
 const Layout: React.FC = () => {
   return (
     <div className="flex">
-      <Sidebar />
-      <main className="flex-grow p-4">
+      <Sidebar className="w-3/12" />
+      <main className="w-9/12 p-4 ml-auto">
         <Outlet />
       </main>
     </div>
