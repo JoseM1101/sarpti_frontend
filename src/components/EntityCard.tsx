@@ -1,4 +1,4 @@
-import Card from "./Card"
+import {Card} from "./Card"
 import { twMerge } from "tailwind-merge"
 import Entity from "../types/Entity"
 import Badge from "./Badge"
