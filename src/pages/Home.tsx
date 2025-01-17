@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react"
 import EntityCard from "../components/EntityCard"
 import projects from "../data/projects"
-import Button from "../components/Button"
+import Button from "../components/ui/Button"
 import SearchBar from "../components/SearchBar"
 import Entity from "../types/Entity"
 

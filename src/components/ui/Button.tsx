@@ -1,6 +1,6 @@
 import { VariantProps, cva } from "class-variance-authority"
 import { ButtonHTMLAttributes } from "react"
-import { cn } from "../utils"
+import { cn } from "../../lib/utils"
 
 const buttonVariants = cva("text-white rounded-sm py-1 px-3", {
   variants: {

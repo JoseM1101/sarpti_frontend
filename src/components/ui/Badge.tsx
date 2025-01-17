@@ -1,4 +1,4 @@
-import { EntityState } from "../types/Entity"
+import { EntityState } from "@/types/Entity"
 import { twMerge } from "tailwind-merge"
 
 const Badge: React.FC<{ state: EntityState }> = ({ state }) => {
