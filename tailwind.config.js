@@ -10,6 +10,8 @@ export default {
         yellow: "#FFC038",
         red: "#EA6060",
         gray: "#F2F2F2",
+        "gray-2": "#9F9FA9",
+        "gray-3": "#18181B",
       },
     },
   },

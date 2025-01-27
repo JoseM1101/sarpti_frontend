@@ -8,6 +8,7 @@ interface EntityProduct {
 
 export default interface Entity {
   title: string
+  description: string
   authors: string[]
   tutors: string[]
   relatedProducts: EntityProduct[]

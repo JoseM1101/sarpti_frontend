@@ -3,6 +3,8 @@ import Entity from "../types/Entity"
 const projects: Entity[] = [
   {
     title: "Smart Agriculture System",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish.",
     authors: ["Alice Johnson", "Bob Smith"],
     tutors: ["Dr. Emily White"],
     relatedProducts: [
@@ -20,6 +22,8 @@ const projects: Entity[] = [
   },
   {
     title: "AI-Powered Educational Tools",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Catherine Blake", "Derek Lee"],
     tutors: ["Dr. Henry Adams", "Dr. Rachel Ford"],
     relatedProducts: [
@@ -38,6 +42,8 @@ const projects: Entity[] = [
   {
     title:
       "Renewable Energy Optimization Renewable Energy Optimization Renewable Energy Optimization Renewable Energy Optimization Renewable Energy Optimization",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Sarah Green", "Tom Davis"],
     tutors: ["Dr. Oliver Black"],
     relatedProducts: [
@@ -56,6 +62,8 @@ const projects: Entity[] = [
   {
     title:
       "Urban Mobility Solutions Urban Mobility Solutions Urban Mobility Solutions Urban Mobility Solutions",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Nina Brown", "James Wilson"],
     tutors: ["Dr. Clara Evans"],
     relatedProducts: [
@@ -73,6 +81,8 @@ const projects: Entity[] = [
   },
   {
     title: "Blockchain for Healthcare",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Olivia Taylor", "Liam Johnson"],
     tutors: ["Dr. Samuel Edwards"],
     relatedProducts: [
@@ -90,6 +100,8 @@ const projects: Entity[] = [
   },
   {
     title: "Autonomous Drone Delivery",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Sophia Harris", "Noah Martinez"],
     tutors: ["Dr. Martin Hughes"],
     relatedProducts: [
@@ -107,6 +119,8 @@ const projects: Entity[] = [
   },
   {
     title: "Water Purification with Nanotechnology",
+    description:
+      "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains",
     authors: ["Isabella Moore", "Ethan Walker"],
     tutors: ["Dr. Fiona Turner"],
     relatedProducts: [

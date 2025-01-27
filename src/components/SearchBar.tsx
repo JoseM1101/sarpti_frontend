@@ -30,7 +30,7 @@ const SearchBar = <T,>({
   return (
     <div
       className={twMerge(
-        "px-4 py-2 border-2 border-zinc-400 rounded-3xl gap-2",
+        "px-4 py-2 border-2 border-gray-2 rounded-3xl gap-2",
         className
       )}
     >
