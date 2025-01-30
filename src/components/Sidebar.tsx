@@ -1,6 +1,37 @@
 import logo from "../assets/images/logo.png"
 import { twMerge } from "tailwind-merge"
 import { Link } from "react-router-dom"
+import panel_de_control from "../assets/icons/panel_de_control.png"
+import investigaciones from "../assets/icons/investigaciones.png"
+import administracion from "../assets/icons/administracion.png"
+import perfil from "../assets/icons/perfil.png"
+
+const linksFirst = [
+  {
+    icon: panel_de_control,
+    text: "Panel de control",
+  },
+  {
+    icon: investigaciones,
+    text: "Investigaciones",
+  },
+]
+
+const linksSecond = [
+  {
+    icon: administracion,
+    text: "Administracion",
+  },
+]
+
+const LinkRenderer = ({ icon, text }: { icon: string; text: string }) => {
+  return (
+    <div className="flex gap-2">
+      <img className="object-contain" src={icon} alt="" />
+      <p className="text-gray-3 font-semibold text-xl font-normal">{text}</p>
+    </div>
+  )
+}
 
 const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
   return (
@@ -11,7 +42,6 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
       )}
     >
       <Link to="/">
-        {" "}
         <img
           src={logo}
           className="absolute top-0 left-0 bg-darkblue p-8 rounded-br-3xl shadow-md"
@@ -22,15 +52,18 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         <h2 className="text-5xl text-gray-3">CIDETIU</h2>
         <span className="h-px bg-gray-2 w-full my-8"></span>
         <div className="flex flex-col gap-8">
-          <p className="text-gray-3 text-xl font-normal">Panel de control</p>
-          <p className="text-gray-3 text-xl font-normal">Investigaciones</p>
+          {linksFirst.map((link) => (
+            <LinkRenderer key={link.text} {...link} />
+          ))}
         </div>
         <span className="h-px bg-gray-2 w-full my-8"></span>
-        <p className="text-gray-3 text-xl font-normal">Administracion</p>
+        {linksSecond.map((link) => (
+          <LinkRenderer key={link.text} {...link} />
+        ))}
         <span className="h-px bg-gray-2 w-full my-8"></span>
       </div>
       <div className="absolute left-10 bottom-5">
-        <p className="text-gray-3 text-xl font-normal">Perfil</p>
+        <LinkRenderer icon={perfil} text="Perfil" />
       </div>
     </aside>
   )

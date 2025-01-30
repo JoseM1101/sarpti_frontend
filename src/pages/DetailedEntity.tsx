@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import EntityDetailCard from "../components/EntityDetailCard"
+import EntityDetailCard from "../components/entity/EntityDetailCard"
 import projects from "../data/projects"
 
 const DetailedEntity: React.FC = () => {
