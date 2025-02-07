@@ -1,6 +1,6 @@
 import Card from "../common/Card"
 import { twMerge } from "tailwind-merge"
-import Entity from "../../types/Entity"
+import { Entity } from "../../types/Entity"
 import Badge from "./Badge"
 import EntityCard from "./EntityCard"
 
@@ -18,13 +18,13 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
 
   return (
     <Card className={mergedClasses}>
-      <Badge state={entity.currentState} />
+      <Badge state={entity.estatus} />
       <div className="p-2 flex">
         <div className="w-8/12">
           <EntityCard.Title
             className={twMerge("text-lg", truncateCharsClassName)}
           >
-            {entity.title}
+            {entity.titulo}
           </EntityCard.Title>
           <div className="flex justify-between gap-6 mt-2">
             <div className="flex flex-col w-1/2">
@@ -34,7 +34,7 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
                 </p>
                 <EntityCard.Authors
                   className={twMerge("text-sm", truncateCharsClassName)}
-                  authors={entity.authors}
+                  authors={entity.autores}
                 />
               </div>
               <div className="flex">
@@ -43,7 +43,7 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
                 </p>
                 <EntityCard.Tutors
                   className={twMerge("text-sm", truncateCharsClassName)}
-                  tutors={entity.tutors}
+                  tutors={entity.tutores}
                 />
               </div>
             </div>
@@ -54,7 +54,7 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
                 </p>
                 <EntityCard.RelatedProducts
                   className={twMerge("text-sm", truncateCharsClassName)}
-                  products={entity.relatedProducts}
+                  products={entity.productos}
                 />
               </div>
               <div className="flex">
@@ -66,7 +66,7 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
                     "text-sm font-semibold",
                     truncateCharsClassName
                   )}
-                  investment={entity.investment}
+                  investment={entity.inversion}
                 />
               </div>
             </div>
@@ -75,8 +75,8 @@ const EntityMenuCard = ({ className, entity }: EntityMenuCardProps) => {
         <span className="mx-3 h-auto bg-black w-px"></span>
         <div className="flex-grow">
           <EntityCard.Dates
-            startDate={entity.startDate}
-            endDate={entity.endDate}
+            startDate={entity.fecha_inicio}
+            endDate={entity.fecha_culminacion}
             className="text-sm"
           />
           <div className={twMerge("flex flex-col", className)}></div>

@@ -6,10 +6,10 @@ const Badge: React.FC<{ state: EntityState; className?: string }> = ({
   className,
 }) => {
   const colors: Record<EntityState, string> = {
-    Finished: "bg-darkblue",
-    "In Progress": "bg-green",
-    Inactive: "bg-yellow",
-    Cancelled: "bg-red",
+    [EntityState.INACTIVE]: "bg-yellow",
+    [EntityState.ACTIVE]: "bg-green",
+    [EntityState.FINISHED]: "bg-darkblue",
+    [EntityState.CANCELLED]: "bg-red",
   }
 
   return (

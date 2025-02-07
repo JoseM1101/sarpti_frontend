@@ -8,6 +8,7 @@ import {
 import Home from "./pages/Home"
 import DetailedEntity from "./pages/DetailedEntity"
 import Layout from "./components/Layout"
+import "./config/axiosConfig"
 
 const App: React.FC = () => {
   return (
@@ -16,7 +17,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home />} />
-          <Route path="/:title" element={<DetailedEntity />} />
+          <Route path="/:id" element={<DetailedEntity />} />
         </Route>
       </Routes>
     </Router>

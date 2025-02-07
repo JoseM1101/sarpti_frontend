@@ -1,20 +1,20 @@
 import { twMerge } from "tailwind-merge"
-import Entity from "../../types/Entity"
+import { Entity, Person } from "../../types/Entity"
 import fecha_de_inicio from "../../assets/icons/fecha_de_inicio.png"
 import fecha_de_culminacion from "../../assets/icons/fecha_de_culminacion.png"
 
-const formatList = (items: string[], separator = "; ") => {
-  return items.map((item, index) =>
-    index !== items.length - 1 ? `${item}${separator}` : item
+const formatNames = (persons: Person[], separator = "; ") => {
+  return persons.map((person, index) =>
+    index !== persons.length - 1
+      ? `${person.nombre} ${person.apellido}${separator}`
+      : `${person.nombre} ${person.apellido}`
   )
 }
 
-const formatLinks = (items: Entity["relatedProducts"], separator = "; ") => {
+const formatLinks = (items: Entity["productos"], separator = "; ") => {
   return items.map(
     (item, index) =>
-      `${item.title} (${item.type})${
-        index !== items.length - 1 ? separator : ""
-      }`
+      `${item.titulo}${index !== items.length - 1 ? separator : ""}`
   )
 }
 
@@ -50,11 +50,11 @@ EntityCard.Authors = ({
   authors,
   className,
 }: {
-  authors: Entity["authors"]
+  authors: Entity["autores"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
-    {formatList(authors)}
+    {formatNames(authors)}
   </p>
 )
 
@@ -62,11 +62,11 @@ EntityCard.Tutors = ({
   tutors,
   className,
 }: {
-  tutors: Entity["tutors"]
+  tutors: Entity["tutores"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
-    {formatList(tutors)}
+    {formatNames(tutors)}
   </p>
 )
 
@@ -74,7 +74,7 @@ EntityCard.RelatedProducts = ({
   products,
   className,
 }: {
-  products: Entity["relatedProducts"]
+  products: Entity["productos"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -86,7 +86,7 @@ EntityCard.Investment = ({
   investment,
   className,
 }: {
-  investment: Entity["investment"]
+  investment: Entity["inversion"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -100,8 +100,8 @@ EntityCard.Dates = ({
   className,
   icons = false,
 }: {
-  startDate: Entity["startDate"]
-  endDate?: Entity["endDate"]
+  startDate: Entity["fecha_inicio"]
+  endDate?: Entity["fecha_culminacion"]
   className?: string
   icons?: boolean
 }) => (
