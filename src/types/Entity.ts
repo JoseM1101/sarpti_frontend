@@ -25,6 +25,26 @@ export interface Person {
   apellido: string
   correo: string
 }
+export enum UserStatus {
+  ONLINE = 0,
+  AWAY = 1,
+  OFFLINE = 2,
+} 
+
+export type CardPosition = "left" | "center" | "right";
+
+export interface User {
+  id: string
+  firstName: string
+  lastName: string
+  education: string
+  age: number
+  gender: "M" | "F"
+  status: UserStatus
+  avatarUrl?: string
+  location?: string
+}
+
 
 export interface Entity {
   id: string

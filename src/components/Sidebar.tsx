@@ -5,15 +5,23 @@ import panel_de_control from "../assets/icons/panel_de_control.png"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
 import perfil from "../assets/icons/perfil.png"
+import investigadores from "../assets/icons/tutores.png"
 
 const linksFirst = [
   {
     icon: panel_de_control,
     text: "Panel de control",
+    to: "/",
   },
   {
     icon: investigaciones,
     text: "Investigaciones",
+    to: "/investigaciones",
+  },
+  {
+    icon: investigadores,
+    text: "Investigadores",
+    to: "/investigadores",
   },
 ]
 
@@ -21,15 +29,16 @@ const linksSecond = [
   {
     icon: administracion,
     text: "Administracion",
+    to: "/administracion",
   },
 ]
 
-const LinkRenderer = ({ icon, text }: { icon: string; text: string }) => {
+const LinkRenderer = ({ icon, text, to }: { icon: string; text: string; to: string }) => {
   return (
-    <div className="flex gap-2">
+    <Link to={to} className="flex gap-2">
       <img className="object-contain" src={icon} alt="" />
-      <p className="text-gray-3 font-semibold text-xl font-normal">{text}</p>
-    </div>
+      <p className="text-gray-3 text-xl font-normal">{text}</p>
+    </Link>
   )
 }
 
@@ -63,7 +72,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         <span className="h-px bg-gray-2 w-full my-8"></span>
       </div>
       <div className="absolute left-10 bottom-5">
-        <LinkRenderer icon={perfil} text="Perfil" />
+        <LinkRenderer icon={perfil} text="Perfil" to="/perfil" />
       </div>
     </aside>
   )

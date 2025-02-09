@@ -9,6 +9,7 @@ import Home from "./pages/Home"
 import DetailedEntity from "./pages/DetailedEntity"
 import Layout from "./components/Layout"
 import "./config/axiosConfig"
+import UserGrid from "./components/lib/user-grid"
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home />} />
           <Route path="/:id" element={<DetailedEntity />} />
+          <Route path="/investigadores" element={<UserGrid />} />
         </Route>
       </Routes>
     </Router>
