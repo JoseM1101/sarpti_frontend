@@ -11,17 +11,17 @@ const linksFirst = [
   {
     icon: panel_de_control,
     text: "Panel de control",
-    to: "/",
+    to: "/home",  // updated path
   },
   {
     icon: investigaciones,
     text: "Investigaciones",
-    to: "/investigaciones",
+    to: "/home/investigaciones",  // updated path, create route if needed
   },
   {
     icon: investigadores,
     text: "Investigadores",
-    to: "/investigadores",
+    to: "/home/investigadores",  // updated path
   },
 ]
 

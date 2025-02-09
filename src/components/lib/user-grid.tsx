@@ -77,7 +77,7 @@ export default function UserGrid() {
 
   return (
     <div className="container ml-0 px-4 py-4">
-      <div className="w-fit mx-auto lg:ml-0 lg:mr-20">
+      <div className="w-fit mx-auto">
         <div className="flex flex-col sm:flex-row justify-end items-center mb-5 gap-4">
           <SearchBar<User>
             data={users}
