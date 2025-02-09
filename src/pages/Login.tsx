@@ -3,12 +3,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.jpg'
 
-// const DOMAIN = "@urbe.edu.ve" // Default domain logic commented out
-
 const Login: React.FC = () => {
     const [emailLocal, setEmailLocal] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const navigate = useNavigate() // <-- add useNavigate hook
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -18,9 +16,8 @@ const Login: React.FC = () => {
                 clave: password
             })
             console.log('Login successful:', response.data)
-            // Optionally store the token here
-            // localStorage.setItem('token', response.data.token)
-            navigate("/home") // Redirect to homepage after successful login
+            localStorage.setItem('userEmail', response.data.correo)
+            navigate("/home")
         } catch (error) {
             console.error('Login error:', error)
         }

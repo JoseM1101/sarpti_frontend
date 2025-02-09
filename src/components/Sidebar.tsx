@@ -1,6 +1,7 @@
+import { Link, useNavigate } from "react-router-dom"
+import axios from "axios"
 import logo from "../assets/images/logo.png"
 import { twMerge } from "tailwind-merge"
-import { Link } from "react-router-dom"
 import panel_de_control from "../assets/icons/panel_de_control.png"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
@@ -11,17 +12,17 @@ const linksFirst = [
   {
     icon: panel_de_control,
     text: "Panel de control",
-    to: "/home",  // updated path
+    to: "/",
   },
   {
     icon: investigaciones,
     text: "Investigaciones",
-    to: "/home/investigaciones",  // updated path, create route if needed
+    to: "/investigaciones",
   },
   {
     icon: investigadores,
     text: "Investigadores",
-    to: "/home/investigadores",  // updated path
+    to: "/investigadores",
   },
 ]
 
@@ -43,11 +44,43 @@ const LinkRenderer = ({ icon, text, to }: { icon: string; text: string; to: stri
 }
 
 const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    const userEmail = localStorage.getItem("userEmail")
+    if (!userEmail) {
+      console.error("User email not found in localStorage")
+      return
+    }
+
+    try {
+      const usuariosResponse = await axios.get("/usuarios")
+      const responseData = usuariosResponse.data;
+
+      if (responseData && Array.isArray(responseData.list)) {
+        const matchedUser = responseData.list.find((user: { correo: string }) => user.correo === userEmail)
+
+        if (matchedUser) {
+          const userId = matchedUser.id
+          await axios.post(`/logout/${userId}`)
+          localStorage.removeItem("userEmail")
+          navigate("/login")
+        } else {
+          console.error("No matching user found in /usuarios")
+        }
+      } else {
+        console.error("The /usuarios endpoint did not return a valid object with a 'list' array")
+      }
+    } catch (error) {
+      console.error("Error logging out:", error)
+    }
+  }
+
   return (
     <aside
       className={twMerge(
         className,
-        "fixed left-0 top-0 z-10 bg-white h-screen lg:w-72 shadow-lg flex items-center"
+        "fixed left-0 top-0 z-10 bg-white h-screen lg:w- shadow-lg flex items-center"
       )}
     >
       <Link to="/">
@@ -70,6 +103,15 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
           <LinkRenderer key={link.text} {...link} />
         ))}
         <span className="h-px bg-gray-2 w-full my-8"></span>
+      </div>
+      {/* Logout button added at the bottom */}
+      <div className="absolute left-10 bottom-16">
+        <button
+          onClick={handleLogout}
+          className="flex gap-2 items-center text-xl text-gray-600 hover:text-red-600 transition-colors"
+        >
+          Logout
+        </button>
       </div>
       <div className="absolute left-10 bottom-5">
         <LinkRenderer icon={perfil} text="Perfil" to="/perfil" />
