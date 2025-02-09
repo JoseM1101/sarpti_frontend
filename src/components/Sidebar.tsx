@@ -12,17 +12,17 @@ const linksFirst = [
   {
     icon: panel_de_control,
     text: "Panel de control",
-    to: "/",
+    to: "/home",
   },
   {
     icon: investigaciones,
     text: "Investigaciones",
-    to: "/investigaciones",
+    to: "/home/investigaciones",
   },
   {
     icon: investigadores,
     text: "Investigadores",
-    to: "/investigadores",
+    to: "/home/investigadores",
   },
 ]
 
@@ -30,7 +30,7 @@ const linksSecond = [
   {
     icon: administracion,
     text: "Administracion",
-    to: "/administracion",
+    to: "/home/administracion",
   },
 ]
 

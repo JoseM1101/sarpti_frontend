@@ -78,7 +78,7 @@ export default function UserGrid() {
   return (
     <div className="container ml-0 px-4 py-4">
       <div className="w-fit mx-auto">
-        <div className="flex flex-col sm:flex-row justify-end items-center mb-5 gap-4">
+        <div className="flex flex-col sm:flex-row justify-start items-center mb-5 gap-4">
           <SearchBar<User>
             data={users}
             onSearch={(filtered) => setFilteredUsers(filtered)}

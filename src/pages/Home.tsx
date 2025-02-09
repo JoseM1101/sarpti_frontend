@@ -39,7 +39,7 @@ const Home: React.FC = () => {
             <p>Error al cargar los datos</p>
           ) : (
             investigations.map((entity) => (
-              <Link key={entity.id} to={`/${entity.id}`}>
+              <Link key={entity.id} to={`/home/${entity.id}`}>
                 <EntityMenuCard entity={entity} />
               </Link>
             ))
