@@ -47,7 +47,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
     <aside
       className={twMerge(
         className,
-        "fixed left-0 top-0 z-10 bg-white h-screen shadow-lg flex items-center"
+        "fixed left-0 top-0 z-10 bg-white h-screen lg:w-72 shadow-lg flex items-center"
       )}
     >
       <Link to="/">

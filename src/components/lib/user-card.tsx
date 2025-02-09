@@ -1,40 +1,33 @@
 "use client"
 
 import { cn } from "../../utils"
-import { User, CardPosition, UserStatus } from "../../types/Entity"
+import { User, UserStatus } from "../../types/Entity"
 import Badge from "../../components/entity/Badge"
 
 interface UserCardProps {
   user: User
   onClick: () => void
-  position: CardPosition
   isExpanded?: boolean
+  status: UserStatus
 }
 
-export function UserCard({ user, onClick, position, isExpanded = false }: UserCardProps) {
-  // Use a column layout and center the content when expanded;
-  // otherwise, use a row layout.
-  const containerClasses = isExpanded ? "flex flex-col items-center" : "flex items-center"
-  
-  // When expanded, use a bottom margin on the image container,
-  // otherwise use the margin based on position.
-  const avatarMargin = isExpanded
-    ? "mb-4"
-    : position === "left"
-    ? "mr-4"
-    : position === "right"
-    ? "ml-4"
-    : "mr-4"
+export function UserCard({ user, onClick, isExpanded = false }: UserCardProps) {
+  const containerClasses = isExpanded ? "flex flex-col items-center" : "flex items-start"
 
-  // Avatar border color based on user status.
-  const statusBorderColor = user.status === UserStatus.ONLINE
-    ? "border-green-400"
-    : user.status === UserStatus.AWAY
-    ? "border-yellow-400"
-    : "border-red-400"
+  const avatarMargin = isExpanded ? "mb-4" : "mr-4"
 
-  // Card dimensions and avatar size change based on expanded state.
-  const cardDimensions = isExpanded ? "w-[264px] h-[280px]" : "w-[264px] h-[128px]"
+  // Compute border class for avatar based on user status
+  const statusBorderColor =
+    user.status === UserStatus.ONLINE
+      ? "border-green-400"
+      : user.status === UserStatus.AWAY
+      ? "border-yellow-400"
+      : "border-red-400"
+
+  // Responsive card dimensions and avatar size
+  const cardDimensions = isExpanded
+    ? "w-full max-w-[264px] h-[280px]"
+    : "w-full max-w-[264px] h-[128px]"
   const avatarSize = isExpanded ? "w-32 h-32" : "w-20 h-20"
 
   return (
@@ -45,12 +38,12 @@ export function UserCard({ user, onClick, position, isExpanded = false }: UserCa
       )}
       onClick={onClick}
     >
-      <div className="absolute left-0 top-0 -z-10">
-        <Badge state={user.status} badgeVariant="user" />
+      {/* Badge Positioned in top left inside the card */}
+      <div className="absolute left-0 top-0 z-10">
+        <Badge state={user.status} />
       </div>
 
       <div className={cn("h-full p-4", containerClasses)}>
-        {/* Avatar with Status Border */}
         <div className={cn("relative flex-shrink-0", avatarMargin)}>
           <div
             className={cn(
@@ -67,17 +60,10 @@ export function UserCard({ user, onClick, position, isExpanded = false }: UserCa
           </div>
         </div>
 
-        {/* User Info */}
         <div
           className={cn(
             "flex flex-col min-w-0",
-            isExpanded
-              ? "items-center text-center w-full"
-              : position === "center"
-              ? "items-center text-center w-full"
-              : position === "right"
-              ? "items-end text-right w-full"
-              : "items-start text-left"
+            isExpanded ? "items-center text-center w-full" : "items-start text-left"
           )}
         >
           <h3 className="font-medium md:text-xs lg:text-md text-gray-900 text-base leading-tight">

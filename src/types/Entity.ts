@@ -31,8 +31,6 @@ export enum UserStatus {
   OFFLINE = 2,
 } 
 
-export type CardPosition = "left" | "center" | "right";
-
 export interface User {
   id: string
   firstName: string
