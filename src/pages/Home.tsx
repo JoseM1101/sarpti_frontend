@@ -1,35 +1,53 @@
-import { useState, useCallback } from "react"
-import EntityCard from "../components/EntityCard"
-import projects from "../data/projects"
-import Button from "../components/ui/Button"
-import SearchBar from "../components/SearchBar"
-import Entity from "../types/Entity"
+import { useCallback } from "react"
+import EntityMenuCard from "../components/entity/EntityMenuCard"
+import Button from "../components/common/Button"
+import SearchBar from "../components/common/SearchBar"
+import { Entity } from "../types/Entity"
+import { Link } from "react-router-dom"
+import useModal from "../hooks/useModal"
+import InsertModal from "../components/InsertModal"
+import { useInvestigations } from "../hooks/useInvestigations"
 
 const Home: React.FC = () => {
-  const [data, setData] = useState<Entity[]>(projects)
+  const { investigations, error, isLoading } = useInvestigations()
+  const { isOpen, openModal } = useModal()
 
   const handleSearch = useCallback((filteredData: Entity[]) => {
-    setData(filteredData)
+    // setData(filteredData)
+    console.log(filteredData)
   }, [])
 
   return (
-    <div>
-      <div className="flex gap-2">
-        <SearchBar<Entity>
-          data={projects}
-          onSearch={handleSearch}
-          getLabel={(entity) => entity.title}
-          className="w-80"
-        />
-        <Button>Generar Reporte</Button>
-        <Button bgColor="green">Agregar</Button>
+    <>
+      <div>
+        <div className="flex gap-2">
+          <SearchBar<Entity>
+            data={investigations}
+            onSearch={handleSearch}
+            getLabel={(entity) => entity.titulo}
+            className="w-80"
+          />
+          <Button>Generar Reporte</Button>
+          <Button bgColor="green" onClick={openModal}>
+            Agregar
+          </Button>
+        </div>
+        <div className="flex flex-col gap-3 mt-5">
+          {isLoading ? (
+            <p>Cargando...</p>
+          ) : error ? (
+            <p>Error al cargar los datos</p>
+          ) : (
+            investigations.map((entity) => (
+              <Link key={entity.id} to={`/home/${entity.id}`}>
+                <EntityMenuCard entity={entity} />
+              </Link>
+            ))
+          )}
+        </div>
       </div>
-      <div className="flex flex-col gap-3 mt-5">
-        {data.map((d) => (
-          <EntityCard key={d.title} entity={d} />
-        ))}
-      </div>
-    </div>
+      <InsertModal isOpen={isOpen} />
+    </>
   )
 }
 
