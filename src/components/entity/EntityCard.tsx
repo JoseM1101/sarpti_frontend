@@ -1,5 +1,7 @@
 import { twMerge } from "tailwind-merge"
-import { Entity, Person } from "../../types/Entity"
+import { Entity } from "../../types/Entity"
+import { Investigation } from "@/types/Investigation"
+import { Person } from "../../types/Person"
 import fecha_de_inicio from "../../assets/icons/fecha_de_inicio.png"
 import fecha_de_culminacion from "../../assets/icons/fecha_de_culminacion.png"
 
@@ -10,8 +12,8 @@ const formatNames = (persons: Person[], separator = "; ") => {
       : `${person.nombre} ${person.apellido}`
   )
 }
-
-const formatLinks = (items: Entity["productos"], separator = "; ") => {
+//Refactor
+const formatLinks = (items: Investigation["productos"], separator = "; ") => {
   return items.map(
     (item, index) =>
       `${item.titulo}${index !== items.length - 1 ? separator : ""}`
@@ -50,7 +52,7 @@ EntityCard.Authors = ({
   authors,
   className,
 }: {
-  authors: Entity["autores"]
+  authors: Investigation["autores"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -62,7 +64,7 @@ EntityCard.Tutors = ({
   tutors,
   className,
 }: {
-  tutors: Entity["tutores"]
+  tutors: Investigation["tutores"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -74,7 +76,7 @@ EntityCard.RelatedProducts = ({
   products,
   className,
 }: {
-  products: Entity["productos"]
+  products: Investigation["productos"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -86,7 +88,7 @@ EntityCard.Investment = ({
   investment,
   className,
 }: {
-  investment: Entity["inversion"]
+  investment: Investigation["inversion"]
   className?: string
 }) => (
   <p className={twMerge("font-semibold text-gray-3", className)}>
@@ -100,8 +102,8 @@ EntityCard.Dates = ({
   className,
   icons = false,
 }: {
-  startDate: Entity["fecha_inicio"]
-  endDate?: Entity["fecha_culminacion"]
+  startDate: Investigation["fecha_inicio"]
+  endDate?: Investigation["fecha_culminacion"]
   className?: string
   icons?: boolean
 }) => (

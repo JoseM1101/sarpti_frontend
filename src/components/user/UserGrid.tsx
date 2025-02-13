@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { User, UserStatus } from "../../types/Entity"
+import { User, UserStatus } from "../../types/User"
 import { UserCard } from "./UserCard"
 import SearchBar from "../common/SearchBar"
+import { ApiResponse } from "@/types/ApiResponse"
 
 interface Persona {
   id: string
@@ -18,11 +19,6 @@ interface Persona {
   estatus: number
 }
 
-interface ApiResponse {
-  row: number
-  list: Persona[]
-}
-
 export default function UserGrid() {
   const [users, setUsers] = useState<User[]>([])
   const [filteredUsers, setFilteredUsers] = useState<User[]>([])
@@ -31,7 +27,7 @@ export default function UserGrid() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await axios.get<ApiResponse>("/personas")
+        const res = await axios.get<ApiResponse<Persona>>("/personas")
         const data = res.data
 
         const transformed = data.list.map((persona: Persona) => {

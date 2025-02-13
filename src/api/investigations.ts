@@ -1,9 +1,9 @@
 import axios from "axios"
-import { EntityState, EntityPostData } from "../types/Entity"
+import { EntityStatus, EntityPostData } from "../types/Entity"
 
 export const updateInvestigationState = async (
   id: string,
-  newState: EntityState
+  newState: EntityStatus
 ) => {
   const response = await axios.patch(`/investigaciones/${id}`, {
     estatus: newState,

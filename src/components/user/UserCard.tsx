@@ -1,5 +1,5 @@
 import { cn } from "../../utils"
-import { User, UserStatus } from "../../types/Entity"
+import { User, UserStatus } from "../../types/User"
 import Badge from "../../components/entity/Badge"
 
 interface UserCardProps {

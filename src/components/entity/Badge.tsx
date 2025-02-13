@@ -1,10 +1,10 @@
-import { EntityState, UserStatus } from "../../types/Entity"
+import { EntityStatus, UserStatus } from "../../types/Entity"
 import { twMerge } from "tailwind-merge"
 
 interface BadgeProps {
-  state?: UserStatus | EntityState;
-  badgeVariant?: "user" | "entity";
-  className?: string;
+  state?: UserStatus | EntityStatus
+  badgeVariant?: "user" | "entity"
+  className?: string
 }
 
 const Badge: React.FC<BadgeProps> = ({
@@ -13,7 +13,7 @@ const Badge: React.FC<BadgeProps> = ({
   className,
 }) => {
   let color = "bg-gray-400"
-  
+
   if (state !== undefined) {
     if (badgeVariant === "user") {
       const userColors: Record<UserStatus, string> = {
@@ -23,13 +23,13 @@ const Badge: React.FC<BadgeProps> = ({
       }
       color = userColors[state as UserStatus]
     } else {
-      const entityColors: Record<EntityState, string> = {
-        [EntityState.INACTIVE]: "bg-yellow",
-        [EntityState.ACTIVE]: "bg-green",
-        [EntityState.FINISHED]: "bg-darkblue",
-        [EntityState.CANCELLED]: "bg-red",
+      const entityColors: Record<EntityStatus, string> = {
+        [EntityStatus.INACTIVE]: "bg-yellow",
+        [EntityStatus.ACTIVE]: "bg-green",
+        [EntityStatus.FINISHED]: "bg-darkblue",
+        [EntityStatus.CANCELLED]: "bg-red",
       }
-      color = entityColors[state as EntityState]
+      color = entityColors[state as EntityStatus]
     }
   }
 

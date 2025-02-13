@@ -1,6 +1,6 @@
 import Card from "../common/Card"
 import { twMerge } from "tailwind-merge"
-import { Entity, EntityState } from "../../types/Entity"
+import { Entity, EntityStatus } from "../../types/Entity"
 import Badge from "./Badge"
 import EntityCard from "./EntityCard"
 import Button from "../common/Button"
@@ -102,7 +102,7 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
           <div className="flex gap-2 w-full">
             <img
               onClick={() =>
-                updateInvestigationState(entity.id, EntityState.CANCELLED)
+                updateInvestigationState(entity.id, EntityStatus.CANCELLED)
               }
               className="cursor-pointer"
               src={stop}
@@ -110,7 +110,7 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
             />
             <img
               onClick={() =>
-                updateInvestigationState(entity.id, EntityState.INACTIVE)
+                updateInvestigationState(entity.id, EntityStatus.INACTIVE)
               }
               className="cursor-pointer"
               src={pause}
@@ -118,7 +118,7 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
             />
             <Button
               onClick={() =>
-                updateInvestigationState(entity.id, EntityState.FINISHED)
+                updateInvestigationState(entity.id, EntityStatus.FINISHED)
               }
               className="w-full flex gap-2 items-center justify-center"
             >

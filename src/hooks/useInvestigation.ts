@@ -1,11 +1,11 @@
 import useSWR from "swr"
 import { fetcher } from "../api"
-import { Entity } from "../types/Entity"
+import { Investigation } from "@/types/Investigation"
 
 export const useInvestigation = (id: string | undefined) => {
-  const { data, error, isLoading } = useSWR<Entity>(
+  const { data, error, isLoading } = useSWR<Investigation>(
     id ? `/investigaciones/${id}` : null,
-    fetcher<Entity>
+    fetcher<Investigation>
   )
 
   return {

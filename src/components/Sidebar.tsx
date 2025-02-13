@@ -2,18 +2,12 @@ import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import logo from "../assets/images/logo.png"
 import { twMerge } from "tailwind-merge"
-import panel_de_control from "../assets/icons/panel_de_control.png"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
 import perfil from "../assets/icons/perfil.png"
 import investigadores from "../assets/icons/tutores.png"
 
 const linksFirst = [
-  {
-    icon: panel_de_control,
-    text: "Panel de control",
-    to: "/home",
-  },
   {
     icon: investigaciones,
     text: "Investigaciones",

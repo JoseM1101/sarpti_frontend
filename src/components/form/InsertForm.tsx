@@ -3,7 +3,7 @@ import Input from "./Input"
 import { fields } from "../../data/insertFields"
 import Button from "../common/Button"
 import { createInvestigation } from "../../api/investigations"
-import { EntityPostData } from "../../types/Entity"
+import { InvestigationPostData } from "../../types/Investigation"
 
 interface FormData {
   titulo: string
@@ -29,7 +29,7 @@ const InsertForm: React.FC = () => {
   } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
-    const formattedData: EntityPostData = {
+    const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
       keywords: [data["palabra-1"], data["palabra-2"], data["palabra-3"]],
