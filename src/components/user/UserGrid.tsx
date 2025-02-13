@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { User, UserStatus } from "../../types/Entity"
-import { UserCard } from "./user-card"
+import { User, UserStatus } from "@/types/Entity"
+import { UserCard } from "./UserCard"
 import SearchBar from "../common/SearchBar"
 
 interface Persona {
@@ -37,19 +37,19 @@ export default function UserGrid() {
         const data = res.data
 
         const transformed = data.list.map((persona: Persona) => {
-          let status: UserStatus;
+          let status: UserStatus
           switch (persona.estatus) {
             case 1:
-              status = UserStatus.ONLINE;
-              break;
+              status = UserStatus.ONLINE
+              break
             case 2:
-              status = UserStatus.AWAY;
-              break;
+              status = UserStatus.AWAY
+              break
             case 3:
-              status = UserStatus.OFFLINE;
-              break;
+              status = UserStatus.OFFLINE
+              break
             default:
-              status = UserStatus.OFFLINE; 
+              status = UserStatus.OFFLINE
           }
 
           return {
@@ -58,7 +58,9 @@ export default function UserGrid() {
             lastName: persona.apellidos,
             education: "",
             age: 25,
-            gender: persona.sexo.toLowerCase().includes("mas") ? "M" : "F" as "M" | "F",
+            gender: persona.sexo.toLowerCase().includes("mas")
+              ? "M"
+              : ("F" as "M" | "F"),
             location: persona.direccion,
             avatarUrl: "/placeholder.svg",
             status: status,
@@ -100,7 +102,9 @@ export default function UserGrid() {
                   isExpanded={expandedCardId === user.id}
                   status={user.status}
                   onClick={() =>
-                    setExpandedCardId(expandedCardId === user.id ? null : user.id)
+                    setExpandedCardId(
+                      expandedCardId === user.id ? null : user.id
+                    )
                   }
                 />
               </div>
@@ -111,4 +115,3 @@ export default function UserGrid() {
     </div>
   )
 }
-

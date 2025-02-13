@@ -1,8 +1,8 @@
 "use client"
 
-import { cn } from "../../utils"
-import { User, UserStatus } from "../../types/Entity"
-import Badge from "../../components/entity/Badge"
+import { cn } from "@/utils"
+import { User, UserStatus } from "@/types/Entity"
+import Badge from "@/components/entity/Badge"
 
 interface UserCardProps {
   user: User
@@ -12,7 +12,9 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, onClick, isExpanded = false }: UserCardProps) {
-  const containerClasses = isExpanded ? "flex flex-col items-center" : "flex items-start"
+  const containerClasses = isExpanded
+    ? "flex flex-col items-center"
+    : "flex items-start"
 
   const avatarMargin = isExpanded ? "mb-4" : "mr-4"
 
@@ -63,7 +65,9 @@ export function UserCard({ user, onClick, isExpanded = false }: UserCardProps) {
         <div
           className={cn(
             "flex flex-col min-w-0",
-            isExpanded ? "items-center text-center w-full" : "items-start text-left"
+            isExpanded
+              ? "items-center text-center w-full"
+              : "items-start text-left"
           )}
         >
           <h3 className="font-medium md:text-xs lg:text-md text-gray-900 text-base leading-tight">
@@ -85,4 +89,3 @@ export function UserCard({ user, onClick, isExpanded = false }: UserCardProps) {
     </div>
   )
 }
-

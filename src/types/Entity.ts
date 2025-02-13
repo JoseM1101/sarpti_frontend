@@ -25,11 +25,12 @@ export interface Person {
   apellido: string
   correo: string
 }
+
 export enum UserStatus {
   ONLINE = 0,
   AWAY = 1,
   OFFLINE = 2,
-} 
+}
 
 export interface User {
   id: string
@@ -42,7 +43,6 @@ export interface User {
   avatarUrl?: string
   location?: string
 }
-
 
 export interface Entity {
   id: string
