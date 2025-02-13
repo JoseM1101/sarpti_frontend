@@ -1,8 +1,6 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { User, UserStatus } from "@/types/Entity"
+import { User, UserStatus } from "../../types/Entity"
 import { UserCard } from "./UserCard"
 import SearchBar from "../common/SearchBar"
 

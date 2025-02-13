@@ -1,8 +1,6 @@
-"use client"
-
-import { cn } from "@/utils"
-import { User, UserStatus } from "@/types/Entity"
-import Badge from "@/components/entity/Badge"
+import { cn } from "../../utils"
+import { User, UserStatus } from "../../types/Entity"
+import Badge from "../../components/entity/Badge"
 
 interface UserCardProps {
   user: User

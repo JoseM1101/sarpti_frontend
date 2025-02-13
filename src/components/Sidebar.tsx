@@ -34,7 +34,15 @@ const linksSecond = [
   },
 ]
 
-const LinkRenderer = ({ icon, text, to }: { icon: string; text: string; to: string }) => {
+const LinkRenderer = ({
+  icon,
+  text,
+  to,
+}: {
+  icon: string
+  text: string
+  to: string
+}) => {
   return (
     <Link to={to} className="flex gap-2">
       <img className="object-contain" src={icon} alt="" />
@@ -55,10 +63,12 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
 
     try {
       const usuariosResponse = await axios.get("/usuarios")
-      const responseData = usuariosResponse.data;
+      const responseData = usuariosResponse.data
 
       if (responseData && Array.isArray(responseData.list)) {
-        const matchedUser = responseData.list.find((user: { correo: string }) => user.correo === userEmail)
+        const matchedUser = responseData.list.find(
+          (user: { correo: string }) => user.correo === userEmail
+        )
 
         if (matchedUser) {
           const userId = matchedUser.id
@@ -69,7 +79,9 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
           console.error("No matching user found in /usuarios")
         }
       } else {
-        console.error("The /usuarios endpoint did not return a valid object with a 'list' array")
+        console.error(
+          "The /usuarios endpoint did not return a valid object with a 'list' array"
+        )
       }
     } catch (error) {
       console.error("Error logging out:", error)
@@ -80,7 +92,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
     <aside
       className={twMerge(
         className,
-        "fixed left-0 top-0 z-10 bg-white h-screen lg:w- shadow-lg flex items-center"
+        "fixed left-0 top-0 z-10 bg-white h-screen shadow-lg flex items-center"
       )}
     >
       <Link to="/">
