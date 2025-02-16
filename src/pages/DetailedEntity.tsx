@@ -1,6 +1,11 @@
 import { useParams } from "react-router-dom"
-import EntityDetailCard from "../components/entity/EntityDetailCard"
+import InvestigationDetailCard from "../components/investigation/InvestigationDetailCard"
 import { useInvestigation } from "../hooks/useInvestigation"
+
+const detailMap = {
+  investigacion: InvestigationDetailCard,
+  proyecto: InvestigationDetailCard,
+}
 
 const DetailedEntity: React.FC = () => {
   const { id } = useParams()
@@ -12,7 +17,7 @@ const DetailedEntity: React.FC = () => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <EntityDetailCard entity={investigation} />
+      {/* <EntityDetailCard entity={investigation} /> */}
     </div>
   )
 }

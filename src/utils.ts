@@ -16,3 +16,14 @@ export function debounce<T extends (...args: unknown[]) => void>(
     timeoutId = setTimeout(() => func(...args), delay)
   }
 }
+
+export function formatItems<T>(
+  items: T[],
+  formatter: (item: T) => string,
+  separator = "; "
+): string[] {
+  return items.map(
+    (item, index) =>
+      `${formatter(item)}${index !== items.length - 1 ? separator : ""}`
+  )
+}

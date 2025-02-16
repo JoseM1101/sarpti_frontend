@@ -1,6 +1,6 @@
 import { cn } from "../../utils"
 import { User, UserStatus } from "../../types/User"
-import Badge from "../../components/entity/Badge"
+// import Badge from "../../components/entity/Badge"
 
 interface UserCardProps {
   user: User
@@ -40,7 +40,7 @@ export function UserCard({ user, onClick, isExpanded = false }: UserCardProps) {
     >
       {/* Badge Positioned in top left inside the card */}
       <div className="absolute left-0 top-0 z-10">
-        <Badge state={user.status} />
+        {/* <Badge state={user.status} /> */}
       </div>
 
       <div className={cn("h-full p-4", containerClasses)}>

@@ -1,5 +1,6 @@
 import axios from "axios"
-import { EntityStatus, EntityPostData } from "../types/Entity"
+import { EntityStatus } from "../types/Entity"
+import { InvestigationPostData } from "../types/Investigation"
 
 export const updateInvestigationState = async (
   id: string,
@@ -11,7 +12,7 @@ export const updateInvestigationState = async (
   return response.data
 }
 
-export const createInvestigation = async (data: EntityPostData) => {
+export const createInvestigation = async (data: InvestigationPostData) => {
   const response = await axios.post("/investigaciones", data)
   return response.data
 }

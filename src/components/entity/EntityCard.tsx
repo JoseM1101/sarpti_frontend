@@ -1,115 +1,169 @@
+import { createContext, useContext } from "react"
 import { twMerge } from "tailwind-merge"
-import { Entity } from "../../types/Entity"
-import { Investigation } from "@/types/Investigation"
-import { Person } from "../../types/Person"
+import Badge from "./Badge"
 import fecha_de_inicio from "../../assets/icons/fecha_de_inicio.png"
 import fecha_de_culminacion from "../../assets/icons/fecha_de_culminacion.png"
+import { Person } from "../../types/Person"
+import { Entity, EntityProduct } from "../../types/Entity"
+import { StartDate, EndDate, Keywords } from "../../types/Investigation"
+import Card from "../common/Card"
+import { formatItems } from "../../utils"
 
-const formatNames = (persons: Person[], separator = "; ") => {
-  return persons.map((person, index) =>
-    index !== persons.length - 1
-      ? `${person.nombre} ${person.apellido}${separator}`
-      : `${person.nombre} ${person.apellido}`
+type EntityCardContext = {
+  entity: Entity
+}
+
+const EntityCardContext = createContext<EntityCardContext | undefined>(
+  undefined
+)
+
+function useEntityCardContext() {
+  const context = useContext(EntityCardContext)
+
+  if (!context) {
+    throw new Error(
+      "useEntityCardContext must be used within an EntityCardProvider"
+    )
+  }
+
+  return context
+}
+
+interface EntityCardProps<T extends Entity> {
+  entity: T
+  className?: string
+  children: React.ReactNode
+}
+function EntityCard<T extends Entity>({
+  entity,
+  className,
+  children,
+}: EntityCardProps<T>) {
+  return (
+    <EntityCardContext.Provider value={{ entity }}>
+      <Card className={twMerge("bg-gray", className)}>
+        <Badge state={entity.estatus} />
+        {children}
+      </Card>
+    </EntityCardContext.Provider>
   )
 }
-//Refactor
-const formatLinks = (items: Investigation["productos"], separator = "; ") => {
-  return items.map(
-    (item, index) =>
-      `${item.titulo}${index !== items.length - 1 ? separator : ""}`
+
+EntityCard.Title = function EntityCardTitle({
+  className,
+}: {
+  className?: string
+}) {
+  const { entity } = useEntityCardContext()
+
+  return (
+    <h3 className={twMerge("text-lg font-semibold text-gray-3", className)}>
+      {entity.titulo}
+    </h3>
   )
 }
 
-const EntityCard = () => {
-  return null
+EntityCard.Description = function EntityCardDescription({
+  className,
+}: {
+  className?: string
+}) {
+  const { entity } = useEntityCardContext()
+
+  return (
+    <h3 className={twMerge("text-sm font-semibold text-gray-3", className)}>
+      {entity.descripcion}
+    </h3>
+  )
 }
 
-EntityCard.Title = ({
-  children,
+EntityCard.Keywords = function EntityCardKeywords({
+  keywords,
   className,
 }: {
-  children: React.ReactNode
+  keywords: Keywords
   className?: string
-}) => (
-  <h3 className={twMerge("font-semibold text-gray-3", className)}>
-    {children}
-  </h3>
-)
+}) {
+  return (
+    <div className="flex gap-2">
+      {keywords.map((keyword, index) => (
+        <div
+          key={index}
+          className={twMerge(
+            "text-xs border border-lightblue p-1 rounded-md",
+            className
+          )}
+        >
+          <p>{keyword}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
 
-EntityCard.Description = ({
-  children,
+EntityCard.RelatedPeople = function EntityCardRelatedPeople({
+  namespace,
+  people,
   className,
 }: {
-  children: React.ReactNode
+  namespace?: string
+  people: Person[]
   className?: string
-}) => (
-  <h3 className={twMerge("font-semibold text-gray-3", className)}>
-    {children}
-  </h3>
-)
+}) {
+  return (
+    <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
+      <span className="text-gray-2">{namespace}: </span>
+      {formatItems(people, (person) => `${person.nombre} ${person.apellido}`)}
+    </p>
+  )
+}
 
-EntityCard.Authors = ({
-  authors,
-  className,
-}: {
-  authors: Investigation["autores"]
-  className?: string
-}) => (
-  <p className={twMerge("font-semibold text-gray-3", className)}>
-    {formatNames(authors)}
-  </p>
-)
-
-EntityCard.Tutors = ({
-  tutors,
-  className,
-}: {
-  tutors: Investigation["tutores"]
-  className?: string
-}) => (
-  <p className={twMerge("font-semibold text-gray-3", className)}>
-    {formatNames(tutors)}
-  </p>
-)
-
-EntityCard.RelatedProducts = ({
+EntityCard.Products = function EntityCardRelatedProducts({
   products,
   className,
 }: {
-  products: Investigation["productos"]
+  products: EntityProduct[]
   className?: string
-}) => (
-  <p className={twMerge("font-semibold text-gray-3", className)}>
-    {formatLinks(products)}
-  </p>
-)
+}) {
+  return (
+    <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
+      <span className="text-gray-2">Productos: </span>
+      {formatItems(products, (product) => product.titulo)}
+    </p>
+  )
+}
 
-EntityCard.Investment = ({
+EntityCard.Investment = function EntityCardInvestment({
   investment,
   className,
 }: {
-  investment: Investigation["inversion"]
+  investment: number
   className?: string
-}) => (
-  <p className={twMerge("font-semibold text-gray-3", className)}>
-    ${investment}
-  </p>
-)
+}) {
+  return (
+    <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
+      <span className="text-gray-2">Inversión: </span>${investment}
+    </p>
+  )
+}
 
-EntityCard.Dates = ({
+EntityCard.StartDate = function EntityCardStartDate({
   startDate,
-  endDate,
   className,
-  icons = false,
+  icon = false,
 }: {
-  startDate: Investigation["fecha_inicio"]
-  endDate?: Investigation["fecha_culminacion"]
+  startDate: StartDate
   className?: string
-  icons?: boolean
-}) => (
-  <div className={twMerge("flex flex-col font-semibold", className)}>
-    <div className="flex gap-2 items-center">
-      {icons && (
+  icon?: boolean
+}) {
+  return (
+    <div
+      className={twMerge(
+        "text-sm flex gap-2 items-center font-semibold",
+        className
+      )}
+    >
+      {icon && (
         <img
           className="object-contain"
           src={fecha_de_inicio}
@@ -121,8 +175,26 @@ EntityCard.Dates = ({
         <span className="text-gray-3">{startDate}</span>
       </p>
     </div>
-    <div className="flex gap-2 items-center">
-      {icons && (
+  )
+}
+
+EntityCard.EndDate = function EntityCardEndDate({
+  endDate,
+  className,
+  icon = false,
+}: {
+  endDate?: EndDate
+  className?: string
+  icon?: boolean
+}) {
+  return (
+    <div
+      className={twMerge(
+        "text-sm flex gap-2 items-center font-semibold",
+        className
+      )}
+    >
+      {icon && (
         <img
           className="object-contain"
           src={fecha_de_culminacion}
@@ -134,26 +206,7 @@ EntityCard.Dates = ({
         <span className="text-gray-3">{endDate || "--"}</span>
       </p>
     </div>
-  </div>
-)
-
-EntityCard.Keywords = ({
-  keywords,
-  className,
-}: {
-  keywords: Entity["keywords"]
-  className?: string
-}) => (
-  <>
-    {keywords.map((keyword, index) => (
-      <div
-        key={index}
-        className={twMerge("border border-lightblue p-1 rounded-md", className)}
-      >
-        <p>{keyword}</p>
-      </div>
-    ))}
-  </>
-)
+  )
+}
 
 export default EntityCard

@@ -1,8 +1,6 @@
-import Card from "../common/Card"
 import { twMerge } from "tailwind-merge"
-import { Entity, EntityStatus } from "../../types/Entity"
-import Badge from "./Badge"
-import EntityCard from "./EntityCard"
+import { Investigation } from "../../types/Investigation"
+import EntityCard from "../entity/EntityCard"
 import Button from "../common/Button"
 import pause from "../../assets/images/pause.png"
 import stop from "../../assets/images/stop.png"
@@ -13,11 +11,12 @@ import productos from "../../assets/icons/productos.png"
 import inversion from "../../assets/icons/inversion.png"
 import check from "../../assets/icons/check.png"
 import { updateInvestigationState } from "../../api/investigations"
+import { EntityStatus } from "../../types/Entity"
 
 interface EntityDetailCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   className?: string
-  entity: Entity
+  investigation: Investigation
 }
 
 const itemHeader = (icon: string, text: string) => {
@@ -42,18 +41,21 @@ const renderItem = (
   )
 }
 
-const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
+const InvestigationDetailCard = ({
+  className,
+  investigation,
+}: EntityDetailCardProps) => {
   const baseClasses =
     "w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
 
   return (
-    <Card className={mergedClasses}>
-      <Badge state={entity.estatus} className="w-7 h-7 rounded-br-3xl" />
-      <EntityCard.Title className="text-3xl">{entity.titulo}</EntityCard.Title>
+    <EntityCard className={mergedClasses} entity={investigation}>
+      {/* <Badge state={investigation.estatus} className="w-7 h-7 rounded-br-3xl" /> */}
+      <EntityCard.Title className="text-3xl" />
       <div className="flex gap-2 flex-wrap mt-3">
         <EntityCard.Keywords
-          keywords={entity.keywords}
+          keywords={investigation.keywords}
           className="rounded-sm text-lightblue font-medium text-sm p-2"
         />
         <div className="border border-gray-2 p-2 flex items-center justify-center">
@@ -67,42 +69,41 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
         <div className="flex flex-col gap-3 w-3/5">
           {renderItem(
             itemHeader(descripcion, "Descripción"),
-            <EntityCard.Description>
-              {entity.descripcion}
-            </EntityCard.Description>
+            <EntityCard.Description />
           )}
           {renderItem(
             itemHeader(autores, "Autores"),
-            <EntityCard.Authors authors={entity.autores} />
+            <EntityCard.RelatedPeople people={investigation.autores} />
           )}
           {renderItem(
             itemHeader(tutores, "Tutores"),
-            <EntityCard.Tutors tutors={entity.tutores} />
+            <EntityCard.RelatedPeople people={investigation.tutores} />
           )}
         </div>
         <span className="mx-3 h-auto bg-black w-px"></span>
         <div className="w-2/5 flex flex-col gap-3 justify-between">
-          <EntityCard.Dates
-            startDate={entity.fecha_inicio}
-            endDate={entity.fecha_culminacion}
-            icons
-          />
-          {renderItem(
-            itemHeader(productos, "Productos"),
-            <EntityCard.RelatedProducts
-              className="text-lightblue"
-              products={entity.productos}
-            />
-          )}
+          <EntityCard.StartDate startDate={investigation.fecha_inicio} icon />
+          <EntityCard.EndDate endDate={investigation.fecha_culminacion} icon />
+          {investigation.productos &&
+            renderItem(
+              itemHeader(productos, "Productos"),
+              <EntityCard.Products
+                className="text-lightblue"
+                products={investigation.productos}
+              />
+            )}
           {renderItem(
             itemHeader(inversion, "Inversion:"),
-            <EntityCard.Investment investment={entity.inversion} />,
+            <EntityCard.Investment investment={investigation.inversion} />,
             "flex-row"
           )}
           <div className="flex gap-2 w-full">
             <img
               onClick={() =>
-                updateInvestigationState(entity.id, EntityStatus.CANCELLED)
+                updateInvestigationState(
+                  investigation.id,
+                  EntityStatus.CANCELLED
+                )
               }
               className="cursor-pointer"
               src={stop}
@@ -110,7 +111,10 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
             />
             <img
               onClick={() =>
-                updateInvestigationState(entity.id, EntityStatus.INACTIVE)
+                updateInvestigationState(
+                  investigation.id,
+                  EntityStatus.INACTIVE
+                )
               }
               className="cursor-pointer"
               src={pause}
@@ -118,7 +122,10 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
             />
             <Button
               onClick={() =>
-                updateInvestigationState(entity.id, EntityStatus.FINISHED)
+                updateInvestigationState(
+                  investigation.id,
+                  EntityStatus.FINISHED
+                )
               }
               className="w-full flex gap-2 items-center justify-center"
             >
@@ -128,8 +135,8 @@ const EntityDetailCard = ({ className, entity }: EntityDetailCardProps) => {
           </div>
         </div>
       </div>
-    </Card>
+    </EntityCard>
   )
 }
 
-export default EntityDetailCard
+export default InvestigationDetailCard

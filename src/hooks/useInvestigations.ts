@@ -10,7 +10,7 @@ export const useInvestigations = () => {
   )
 
   return {
-    investigations: data?.list || [],
+    investigations: data?.data.list || [],
     error,
     isLoading,
   }

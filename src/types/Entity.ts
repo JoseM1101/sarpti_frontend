@@ -5,25 +5,17 @@ export enum EntityStatus {
   CANCELLED = 3,
 }
 
-export enum EntityLevel {
-  PREGRADO = 1,
-  ESPECIALIZACION = 2,
-  MAESTRIA = 3,
-  DOCTORADO = 4,
-}
-
 export interface EntityProduct {
   id: string
   titulo: string
   descripcion: string
-  url: string
-  estatus: number
+  url: URL
+  estatus: EntityStatus
 }
 
 export interface Entity {
   id: string
   titulo: string
   descripcion: string
-  keywords: string[]
   estatus: EntityStatus
 }

@@ -1,11 +1,21 @@
-import { Entity, EntityLevel, EntityProduct } from "./Entity"
+import { Entity, EntityProduct } from "./Entity"
 import { Person } from "./Person"
 
+export type StartDate = string
+export type EndDate = string | null
+export type Keywords = string[]
+
+export enum InvestigationLevel {
+  PREGRADO = 1,
+  ESPECIALIZACION = 2,
+  MAESTRIA = 3,
+  DOCTORADO = 4,
+}
 export interface InvestigationPostData {
   titulo: string
   descripcion: string
   keywords: string[]
-  nivel: EntityLevel
+  nivel: InvestigationLevel
   proyecto_id: string
   inversion: number
   autores: string[]
@@ -14,12 +24,13 @@ export interface InvestigationPostData {
 }
 
 export interface Investigation extends Entity {
-  fecha_inicio: string
-  fecha_culminacion: string | null
-  nivel: EntityLevel
+  fecha_inicio: StartDate
+  fecha_culminacion: EndDate
+  nivel: InvestigationLevel
   proyecto: string
   inversion: number
   autores: Person[]
   tutores: Person[]
-  productos: EntityProduct[]
+  keywords: Keywords
+  productos: EntityProduct[] | null
 }

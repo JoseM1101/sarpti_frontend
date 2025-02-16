@@ -1,15 +1,16 @@
 import useSWR from "swr"
 import { fetcher } from "../api"
-import { EntityRequestResponse } from "../types/Entity"
+import { ApiResponse } from "../types/ApiResponse"
+import { User } from "../types/User"
 
-export const useInvestigations = () => {
-  const { data, error, isLoading } = useSWR<EntityRequestResponse>(
-    "/investigaciones",
-    fetcher<EntityRequestResponse>
+export const useUsers = () => {
+  const { data, error, isLoading } = useSWR<ApiResponse<User>>(
+    "/usuarios",
+    fetcher<ApiResponse<User>>
   )
 
   return {
-    investigations: data?.list || [],
+    users: data?.data.list || [],
     error,
     isLoading,
   }

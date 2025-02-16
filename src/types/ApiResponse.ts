@@ -1,4 +1,10 @@
 export interface ApiResponse<T> {
-  row: number
-  list: T[]
+  success: boolean
+  statusCode: number
+  error: boolean
+  message: string
+  data: {
+    row: number
+    list: T[]
+  }
 }

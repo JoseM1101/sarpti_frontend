@@ -1,17 +1,22 @@
+import { Person } from "./Person"
+
 export enum UserStatus {
   ONLINE = 0,
   AWAY = 1,
   OFFLINE = 2,
 }
 
-export interface User {
+enum UserRole {
+  INVESTIGADOR = 1,
+  DIRECTOR = 2,
+  DECANO = 3,
+}
+
+export interface User extends Person {
   id: string
-  firstName: string
-  lastName: string
-  education: string
-  age: number
-  gender: "M" | "F"
-  status: UserStatus
-  avatarUrl?: string
-  location?: string
+  ultima_conexion: Date | null
+  conectado: boolean
+  token: string | null
+  rol: UserRole
+  estatus: UserStatus
 }

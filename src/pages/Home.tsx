@@ -1,16 +1,31 @@
-import { useCallback } from "react"
-import EntityMenuCard from "../components/entity/EntityMenuCard"
+import { useState, useCallback } from "react"
 import Button from "../components/common/Button"
 import SearchBar from "../components/common/SearchBar"
+import InvestigationsList from "../components/investigation/InvestigationsList"
+import ProjectsList from "../components/projects/ProjectsList"
 import { Entity } from "../types/Entity"
-import { Link } from "react-router-dom"
 import useModal from "../hooks/useModal"
 import InsertModal from "../components/InsertModal"
-import { useInvestigations } from "../hooks/useInvestigations"
+import investigaciones from "../assets/icons/investigaciones.png"
+
+type Modes = "Proyectos" | "Investigaciones"
+
+const ListModeMap = {
+  Proyectos: ProjectsList,
+  Investigaciones: InvestigationsList,
+}
 
 const Home: React.FC = () => {
-  const { investigations, error, isLoading } = useInvestigations()
+  const [mode, setMode] = useState<Modes>("Investigaciones")
   const { isOpen, openModal } = useModal()
+
+  const ListComponent = ListModeMap[mode]
+
+  const toggleMode = () => {
+    setMode((prevMode) =>
+      prevMode === "Proyectos" ? "Investigaciones" : "Proyectos"
+    )
+  }
 
   const handleSearch = useCallback((filteredData: Entity[]) => {
     // setData(filteredData)
@@ -20,9 +35,16 @@ const Home: React.FC = () => {
   return (
     <>
       <div>
-        <div className="flex gap-2">
+        <div className="flex gap-5">
+          <div
+            className="flex gap-3 items-center cursor-pointer"
+            onClick={toggleMode}
+          >
+            <img className="object-contain" src={investigaciones} alt="" />
+            <p className="text-gray-3 text-xl font-semibold">{mode}</p>
+          </div>
           <SearchBar<Entity>
-            data={investigations}
+            data={[]}
             onSearch={handleSearch}
             getLabel={(entity) => entity.titulo}
             className="w-80"
@@ -32,19 +54,7 @@ const Home: React.FC = () => {
             Agregar
           </Button>
         </div>
-        <div className="flex flex-col gap-3 mt-5">
-          {isLoading ? (
-            <p>Cargando...</p>
-          ) : error ? (
-            <p>Error al cargar los datos</p>
-          ) : (
-            investigations.map((entity) => (
-              <Link key={entity.id} to={`/home/${entity.id}`}>
-                <EntityMenuCard entity={entity} />
-              </Link>
-            ))
-          )}
-        </div>
+        <ListComponent />
       </div>
       <InsertModal isOpen={isOpen} />
     </>

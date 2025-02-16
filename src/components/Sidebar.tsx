@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
 import perfil from "../assets/icons/perfil.png"
-import investigadores from "../assets/icons/tutores.png"
+import investigadores from "../assets/icons/investigadores.png"
 
 const linksFirst = [
   {
@@ -89,7 +89,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         "fixed left-0 top-0 z-10 bg-white h-screen shadow-lg flex items-center"
       )}
     >
-      <Link to="/">
+      <Link to="/home">
         <img
           src={logo}
           className="absolute top-0 left-0 bg-darkblue p-8 rounded-br-3xl shadow-md"

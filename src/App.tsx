@@ -16,20 +16,13 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Default route redirects to Login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-
-        {/* Public route */}
         <Route path="/login" element={<Login />} />
-
-        {/* Routes available once logged in */}
         <Route path="/home" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path=":id" element={<DetailedEntity />} />
+          <Route path=":type/:id" element={<DetailedEntity />} />
           <Route path="investigadores" element={<UserGrid />} />
         </Route>
-
-        {/* Fallback redirects to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
