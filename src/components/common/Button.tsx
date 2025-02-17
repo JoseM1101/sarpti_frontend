@@ -7,6 +7,7 @@ const buttonVariants = cva("text-white rounded-sm py-1 px-3", {
     bgColor: {
       lightblue: "bg-lightblue",
       green: "bg-green",
+      red: "bg-red",
     },
   },
   defaultVariants: {

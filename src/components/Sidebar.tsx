@@ -11,12 +11,12 @@ const linksFirst = [
   {
     icon: investigaciones,
     text: "Investigaciones",
-    to: "/home/investigaciones",
+    to: "/",
   },
   {
     icon: investigadores,
     text: "Investigadores",
-    to: "/home/investigadores",
+    to: "/investigadores",
   },
 ]
 
@@ -24,7 +24,7 @@ const linksSecond = [
   {
     icon: administracion,
     text: "Administracion",
-    to: "/home/administracion",
+    to: "/administracion",
   },
 ]
 
@@ -89,7 +89,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         "fixed left-0 top-0 z-10 bg-white h-screen shadow-lg flex items-center"
       )}
     >
-      <Link to="/home">
+      <Link to="/">
         <img
           src={logo}
           className="absolute top-0 left-0 bg-darkblue p-8 rounded-br-3xl shadow-md"

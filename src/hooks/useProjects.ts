@@ -5,7 +5,7 @@ import { Project } from "../types/Project"
 
 export const useProjects = () => {
   const { data, error, isLoading } = useSWR<ApiResponse<Project>>(
-    "/investigaciones",
+    "/proyectos",
     fetcher<ApiResponse<Project>>
   )
 

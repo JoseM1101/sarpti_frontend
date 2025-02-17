@@ -13,10 +13,10 @@ import check from "../../assets/icons/check.png"
 import { updateInvestigationState } from "../../api/investigations"
 import { EntityStatus } from "../../types/Entity"
 
-interface EntityDetailCardProps
+interface InvestigationDetailCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   className?: string
-  investigation: Investigation
+  entity: Investigation
 }
 
 const itemHeader = (icon: string, text: string) => {
@@ -43,19 +43,19 @@ const renderItem = (
 
 const InvestigationDetailCard = ({
   className,
-  investigation,
-}: EntityDetailCardProps) => {
+  entity,
+}: InvestigationDetailCardProps) => {
   const baseClasses =
     "w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
 
   return (
-    <EntityCard className={mergedClasses} entity={investigation}>
-      {/* <Badge state={investigation.estatus} className="w-7 h-7 rounded-br-3xl" /> */}
+    <EntityCard className={mergedClasses} entity={entity}>
+      <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />
       <EntityCard.Title className="text-3xl" />
       <div className="flex gap-2 flex-wrap mt-3">
         <EntityCard.Keywords
-          keywords={investigation.keywords}
+          keywords={entity.keywords}
           className="rounded-sm text-lightblue font-medium text-sm p-2"
         />
         <div className="border border-gray-2 p-2 flex items-center justify-center">
@@ -73,65 +73,89 @@ const InvestigationDetailCard = ({
           )}
           {renderItem(
             itemHeader(autores, "Autores"),
-            <EntityCard.RelatedPeople people={investigation.autores} />
+            <EntityCard.RelatedPeople
+              people={entity.autores}
+              showText={false}
+            />
           )}
           {renderItem(
             itemHeader(tutores, "Tutores"),
-            <EntityCard.RelatedPeople people={investigation.tutores} />
+            <EntityCard.RelatedPeople
+              people={entity.tutores}
+              showText={false}
+            />
           )}
         </div>
         <span className="mx-3 h-auto bg-black w-px"></span>
         <div className="w-2/5 flex flex-col gap-3 justify-between">
-          <EntityCard.StartDate startDate={investigation.fecha_inicio} icon />
-          <EntityCard.EndDate endDate={investigation.fecha_culminacion} icon />
-          {investigation.productos &&
+          <EntityCard.StartDate
+            className="text-base"
+            startDate={entity.fecha_inicio}
+            icon
+          />
+          <EntityCard.EndDate
+            className="text-base"
+            endDate={entity.fecha_culminacion}
+            icon
+          />
+          {entity.productos &&
             renderItem(
               itemHeader(productos, "Productos"),
               <EntityCard.Products
-                className="text-lightblue"
-                products={investigation.productos}
+                showText={false}
+                className="text-base text-lightblue"
+                products={entity.productos}
               />
             )}
           {renderItem(
             itemHeader(inversion, "Inversion:"),
-            <EntityCard.Investment investment={investigation.inversion} />,
+            <EntityCard.Investment
+              className="text-base"
+              investment={entity.inversion}
+              showText={false}
+            />,
             "flex-row"
           )}
           <div className="flex gap-2 w-full">
-            <img
-              onClick={() =>
-                updateInvestigationState(
-                  investigation.id,
-                  EntityStatus.CANCELLED
-                )
-              }
-              className="cursor-pointer"
-              src={stop}
-              alt=""
-            />
-            <img
-              onClick={() =>
-                updateInvestigationState(
-                  investigation.id,
-                  EntityStatus.INACTIVE
-                )
-              }
-              className="cursor-pointer"
-              src={pause}
-              alt=""
-            />
-            <Button
-              onClick={() =>
-                updateInvestigationState(
-                  investigation.id,
-                  EntityStatus.FINISHED
-                )
-              }
-              className="w-full flex gap-2 items-center justify-center"
-            >
-              <img src={check} alt="" />
-              Finalizar Investigacion
-            </Button>
+            {entity.estatus === EntityStatus.ACTIVE ? (
+              <>
+                <img
+                  onClick={() =>
+                    updateInvestigationState(entity.id, EntityStatus.CANCELLED)
+                  }
+                  className="cursor-pointer"
+                  src={stop}
+                  alt=""
+                />
+                <img
+                  onClick={() =>
+                    updateInvestigationState(entity.id, EntityStatus.INACTIVE)
+                  }
+                  className="cursor-pointer"
+                  src={pause}
+                  alt=""
+                />
+                <Button
+                  onClick={() =>
+                    updateInvestigationState(entity.id, EntityStatus.FINISHED)
+                  }
+                  className="w-full flex gap-2 items-center justify-center"
+                >
+                  <img src={check} alt="" />
+                  Finalizar Investigacion
+                </Button>
+              </>
+            ) : (
+              <Button
+                bgColor="green"
+                onClick={() =>
+                  updateInvestigationState(entity.id, EntityStatus.ACTIVE)
+                }
+                className="w-full flex gap-2 items-center justify-center"
+              >
+                Reactivar Investigacion
+              </Button>
+            )}
           </div>
         </div>
       </div>

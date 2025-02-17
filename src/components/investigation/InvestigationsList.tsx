@@ -16,7 +16,7 @@ const InvestigationsList: React.FC = () => {
         investigations.map((investigation) => (
           <Link
             key={investigation.id}
-            to={`/investigacion/${investigation.id}`}
+            to={`/investigaciones/${investigation.id}`}
           >
             <InvestigationMenuCard investigation={investigation} />
           </Link>

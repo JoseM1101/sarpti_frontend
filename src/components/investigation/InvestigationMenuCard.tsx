@@ -18,6 +18,7 @@ const InvestigationMenuCard: React.FC<InvestigationMenuCardProps> = ({
 
   return (
     <EntityCard className={mergedClasses} entity={investigation}>
+      <EntityCard.Badge />
       <div className="flex">
         <div className="w-8/12">
           <EntityCard.Title className={truncateCharsClassName} />
@@ -34,10 +35,13 @@ const InvestigationMenuCard: React.FC<InvestigationMenuCardProps> = ({
                 className={truncateCharsClassName}
               />
             </div>
-            <div className="w-4/12">
-              {/* {investigation.productos && (
-            <EntityCard.Products products={investigation.productos} />
-          )} */}
+            <div className="w-4/12 overflow-hidden">
+              {investigation.productos && (
+                <EntityCard.Products
+                  className={truncateCharsClassName}
+                  products={investigation.productos}
+                />
+              )}
               <EntityCard.Investment investment={investigation.inversion} />
             </div>
           </div>

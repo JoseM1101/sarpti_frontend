@@ -1,23 +1,26 @@
 import { useParams } from "react-router-dom"
 import InvestigationDetailCard from "../components/investigation/InvestigationDetailCard"
-import { useInvestigation } from "../hooks/useInvestigation"
-
-const detailMap = {
-  investigacion: InvestigationDetailCard,
-  proyecto: InvestigationDetailCard,
-}
+import ProjectDetailCard from "../components/projects/ProjectDetailCard"
+import { useEntity } from "../hooks/useEntity"
+import { EntityTypes } from "../types/Entity"
+import { Investigation } from "../types/Investigation"
+import { Project } from "../types/Project"
 
 const DetailedEntity: React.FC = () => {
-  const { id } = useParams()
-  const { investigation } = useInvestigation(id)
+  const { type, id } = useParams()
+  const { data } = useEntity(type as EntityTypes, id)
 
-  if (!investigation) {
+  if (!data) {
     return null
   }
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      {/* <EntityDetailCard entity={investigation} /> */}
+      {type === EntityTypes.INVESTIGATION ? (
+        <InvestigationDetailCard entity={data as Investigation} />
+      ) : (
+        <ProjectDetailCard entity={data as Project} />
+      )}
     </div>
   )
 }

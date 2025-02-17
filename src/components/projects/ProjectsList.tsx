@@ -6,6 +6,8 @@ import ProjectMenuCard from "./ProjectMenuCard"
 const ProjectsList: React.FC = () => {
   const { projects, error, isLoading } = useProjects()
 
+  console.log(projects)
+
   return (
     <ListView>
       {isLoading ? (
@@ -14,7 +16,7 @@ const ProjectsList: React.FC = () => {
         <p>Error al cargar los datos</p>
       ) : (
         projects.map((project) => (
-          <Link key={project.id} to={`/proyecto/${project.id}`}>
+          <Link key={project.id} to={`/proyectos/${project.id}`}>
             <ProjectMenuCard project={project} />
           </Link>
         ))
