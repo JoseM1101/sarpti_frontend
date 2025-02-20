@@ -17,7 +17,7 @@ const Login: React.FC = () => {
       })
       console.log("Login successful:", response.data)
       localStorage.setItem("userEmail", response.data.correo)
-      navigate("/")
+      navigate("/investigaciones")
     } catch (error) {
       console.error("Login error:", error)
     }

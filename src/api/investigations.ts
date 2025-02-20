@@ -1,7 +1,7 @@
 import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
-import { InvestigationPostData } from "../types/Investigation"
+import { ApiResponse } from "../types/ApiResponse"
 
 export const updateInvestigationState = async (
   id: string,
@@ -32,7 +32,19 @@ export const updateInvestigationState = async (
   }
 }
 
-export const createInvestigation = async (data: InvestigationPostData) => {
-  const response = await axios.post("/investigaciones", data)
-  return response.data
+export async function fetchFilteredData<T>(
+  endpoint: string,
+  queryValue: string
+): Promise<ApiResponse<T>> {
+  try {
+    const response = await axios.get<ApiResponse<T>>(
+      `${endpoint}?titulo=${encodeURIComponent(queryValue)}`
+    )
+
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    throw new Error("Error fetching data")
+  }
 }

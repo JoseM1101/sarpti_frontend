@@ -37,7 +37,7 @@ const renderItem = (
 
 const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
   const baseClasses =
-    "w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
+    "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
 
   return (
@@ -45,7 +45,7 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />
       <EntityCard.Title className="text-3xl" />
       <div className="flex mt-3">
-        <div className="w-4/6 flex flex-col">
+        <div className="w-3/6 flex flex-col">
           {renderItem(
             itemHeader(descripcion, "Descripción"),
             <p className="text-gray-2 font-semibold">{entity.descripcion}</p>
@@ -60,7 +60,7 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
           )}
         </div>
         <span className="mx-3 h-auto bg-black w-px"></span>
-        <div className="w-2/6 flex flex-col justify-between gap-2 w-full">
+        <div className="w-3/6 flex flex-col justify-between gap-2">
           <EntityCard.StartDate
             className="text-base"
             startDate={entity.fecha_creacion}

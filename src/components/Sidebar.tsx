@@ -11,7 +11,7 @@ const linksFirst = [
   {
     icon: investigaciones,
     text: "Investigaciones",
-    to: "/",
+    to: "/investigaciones",
   },
   {
     icon: investigadores,
@@ -89,7 +89,7 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         "fixed left-0 top-0 z-10 bg-white h-screen shadow-lg flex items-center"
       )}
     >
-      <Link to="/">
+      <Link to="/investigaciones">
         <img
           src={logo}
           className="absolute top-0 left-0 bg-darkblue p-8 rounded-br-3xl shadow-md"
@@ -110,7 +110,6 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         ))}
         <span className="h-px bg-gray-2 w-full my-8"></span>
       </div>
-      {/* Logout button added at the bottom */}
       <div className="absolute left-10 bottom-16">
         <button
           onClick={handleLogout}
