@@ -17,7 +17,7 @@ const ListModeMap = {
 
 const Home: React.FC = () => {
   const [mode, setMode] = useState<Modes>("Investigaciones")
-  const { isOpen, openModal } = useModal()
+  const { isOpen, openModal, closeModal} = useModal()
 
   const ListComponent = ListModeMap[mode]
 
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
         </div>
         <ListComponent />
       </div>
-      <InsertModal isOpen={isOpen} />
+      <InsertModal isOpen={isOpen} onClose={closeModal}/>
     </>
   )
 }

@@ -10,18 +10,22 @@ interface FormData {
   descripcion: string
   "palabra-1": string
   "palabra-2": string
-  "palabra-3": string
+/*   "palabra-3": string */
   "cedula-1": string
   "cedula-2": string
   "cedula-3": string
   "cedula-4": string
   "cedula-5": string
-  "cedula-6": string
+ /*  "cedula-6": string */
   inversion: number
   inversionista: string
 }
 
-const InsertForm: React.FC = () => {
+interface InsertFormProps {
+  onClose: () => void
+}
+
+const InsertForm: React.FC<InsertFormProps> = ({onClose}) => {
   const {
     register,
     handleSubmit,
@@ -29,34 +33,30 @@ const InsertForm: React.FC = () => {
   } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
+
+    console.log( "Primera data:",data)
     const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
-      keywords: [data["palabra-1"], data["palabra-2"], data["palabra-3"]],
+      keywords: [data["palabra-1"], data["palabra-2"]],
       nivel: 2,
-      proyecto_id: "pro-ymx-uUuH",
+      proyecto_id: "pro-bdOVBNaY",
       inversion: Number(data.inversion),
-      autores: [data["cedula-1"], data["cedula-2"], data["cedula-3"]],
-      tutores: [data["cedula-4"], data["cedula-5"], data["cedula-6"]],
+      autores: [data["cedula-1"], data["cedula-2"]],
+      tutores: [data["cedula-4"], data["cedula-5"]],
       productos: [
-        {
-          titulo: "pagina de prueba",
-          descripcion: "pagina web de la investigacion de prueba.",
-          url: "www.investigaciondeprueba.com",
-        },
-        {
-          titulo: "reporte de prueba",
-          descripcion: "reporte de la investigacion de prueba.",
-          url: "",
-        },
       ],
     }
 
     try {
       await createInvestigation(formattedData)
+      console.log("Prueba", data)
+      onClose()
     } catch (error) {
       console.error(error)
+      console.log("Error al crear la investigacion", data)
     }
+
   }
 
   return (
