@@ -18,18 +18,25 @@ const ProjectMenuCard: React.FC<ProjectMenuCardProps> = ({
 
   return (
     <EntityCard className={mergedClasses} entity={project}>
+      <EntityCard.Badge />
       <div className="flex">
         <div className="w-8/12">
           <EntityCard.Title className={truncateCharsClassName} />
-          <EntityCard.Description className={truncateCharsClassName} />
+          <EntityCard.Description
+            className={twMerge("text-base", truncateCharsClassName)}
+          />
         </div>
         <span className="mx-3 h-auto bg-black w-px"></span>
         <div className="flex-grow flex flex-col justify-between">
           <EntityCard.StartDate startDate={project.fecha_creacion} />
-          {/* <EntityCard.RelatedPeople
-            namespace="Responsable"
-            people={project.responsable}
-          /> */}
+          <p className="text-gray-3 text-sm font-semibold">
+            <span className="text-gray-2">Responsable:</span>{" "}
+            {project.responsable}
+          </p>
+          <p className="text-gray-3 text-sm font-semibold">
+            <span className="text-gray-2">Area tematica:</span>{" "}
+            {project.areas_tematicas}
+          </p>
         </div>
       </div>
     </EntityCard>

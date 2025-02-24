@@ -1,13 +1,12 @@
 import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
-import { InvestigationPostData } from "../types/Investigation"
 
-export const updateInvestigationState = async (
+export const updateProjectState = async (
   id: string,
   newState: EntityStatus
 ) => {
-  const key = `/investigaciones/${id}`
+  const key = `/proyectos/${id}`
 
   mutate(
     key,
@@ -25,14 +24,9 @@ export const updateInvestigationState = async (
 
     return response.data
   } catch (error) {
-    console.error("Error updating investigation state:", error)
+    console.error("Error updating project state:", error)
     mutate(key)
 
     throw error
   }
-}
-
-export const createInvestigation = async (data: InvestigationPostData) => {
-  const response = await axios.post("/investigaciones", data)
-  return response.data
 }

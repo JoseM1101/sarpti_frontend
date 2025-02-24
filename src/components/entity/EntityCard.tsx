@@ -41,12 +41,19 @@ function EntityCard<T extends Entity>({
 }: EntityCardProps<T>) {
   return (
     <EntityCardContext.Provider value={{ entity }}>
-      <Card className={twMerge("bg-gray", className)}>
-        <Badge state={entity.estatus} />
-        {children}
-      </Card>
+      <Card className={twMerge("bg-gray", className)}>{children}</Card>
     </EntityCardContext.Provider>
   )
+}
+
+EntityCard.Badge = function EntityCardBadge({
+  className,
+}: {
+  className?: string
+}) {
+  const { entity } = useEntityCardContext()
+
+  return <Badge className={className} state={entity.estatus} />
 }
 
 EntityCard.Title = function EntityCardTitle({
@@ -105,14 +112,16 @@ EntityCard.RelatedPeople = function EntityCardRelatedPeople({
   namespace,
   people,
   className,
+  showText = true,
 }: {
   namespace?: string
+  showText?: boolean
   people: Person[]
   className?: string
 }) {
   return (
     <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
-      <span className="text-gray-2">{namespace}: </span>
+      {showText && <span className="text-gray-2">{namespace}: </span>}
       {formatItems(people, (person) => `${person.nombre} ${person.apellido}`)}
     </p>
   )
@@ -121,13 +130,15 @@ EntityCard.RelatedPeople = function EntityCardRelatedPeople({
 EntityCard.Products = function EntityCardRelatedProducts({
   products,
   className,
+  showText = true,
 }: {
   products: EntityProduct[]
   className?: string
+  showText?: boolean
 }) {
   return (
     <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
-      <span className="text-gray-2">Productos: </span>
+      {showText && <span className="text-gray-2">Productos: </span>}
       {formatItems(products, (product) => product.titulo)}
     </p>
   )
@@ -136,13 +147,16 @@ EntityCard.Products = function EntityCardRelatedProducts({
 EntityCard.Investment = function EntityCardInvestment({
   investment,
   className,
+  showText = true,
 }: {
   investment: number
   className?: string
+  showText?: boolean
 }) {
   return (
     <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
-      <span className="text-gray-2">Inversión: </span>${investment}
+      {showText && <span className="text-gray-2">Inversión: </span>}$
+      {investment}
     </p>
   )
 }

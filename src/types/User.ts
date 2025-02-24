@@ -6,7 +6,7 @@ export enum UserStatus {
   OFFLINE = 2,
 }
 
-enum UserRole {
+export enum UserRole {
   INVESTIGADOR = 1,
   DIRECTOR = 2,
   DECANO = 3,
@@ -14,9 +14,10 @@ enum UserRole {
 
 export interface User extends Person {
   id: string
+  usuario: string
   ultima_conexion: Date | null
   conectado: boolean
   token: string | null
-  rol: UserRole
+  nivel: UserRole
   estatus: UserStatus
 }
