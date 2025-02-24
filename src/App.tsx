@@ -26,7 +26,7 @@ const App: React.FC = () => {
           <Route path="/investigadores" element={<UserGrid />} />
           <Route path="/administracion" element={<Administration />} />
         </Route>
-        <Route path="*" element={<Navigate to="/investigaciones" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   )

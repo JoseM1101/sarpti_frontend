@@ -7,11 +7,14 @@ import investigaciones from "../assets/icons/investigaciones.png"
 import { fetchFilteredData } from "../api/investigations"
 import { debounce } from "../utils"
 import { Link } from "react-router-dom"
+import useModal from "../hooks/useModal"
+import InsertModal from "../components/InsertModal"
 
 const InvestigationsPage: React.FC = () => {
   const [filteredInvestigations, setFilteredInvestigations] = useState<
     Investigation[]
   >([])
+  const { isOpen, openModal, closeModal } = useModal()
 
   const debouncedSearch = useMemo(
     () =>
@@ -41,11 +44,16 @@ const InvestigationsPage: React.FC = () => {
           className="w-80"
         />
         <Button>Generar Reporte</Button>
-        <Button bgColor="green" onClick={() => console.log("Agregar")}>
+        <Button bgColor="green" onClick={openModal}>
           Agregar
         </Button>
       </div>
       <InvestigationsList filteredInvestigations={filteredInvestigations} />
+      <InsertModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        mode="Investigaciones"
+      />
     </>
   )
 }

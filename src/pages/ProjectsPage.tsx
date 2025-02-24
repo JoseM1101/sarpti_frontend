@@ -7,9 +7,12 @@ import ProjectsList from "../components/projects/ProjectsList"
 import { fetchFilteredData } from "../api/investigations"
 import { debounce } from "../utils"
 import { Link } from "react-router-dom"
+import useModal from "../hooks/useModal"
+import InsertModal from "../components/InsertModal"
 
 const ProjectsPage: React.FC = () => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
+  const { isOpen, openModal, closeModal } = useModal()
 
   const debouncedSearch = useMemo(
     () =>
@@ -39,11 +42,12 @@ const ProjectsPage: React.FC = () => {
           className="w-80"
         />
         <Button>Generar Reporte</Button>
-        <Button bgColor="green" onClick={() => console.log("Agregar")}>
+        <Button bgColor="green" onClick={openModal}>
           Agregar
         </Button>
       </div>
       <ProjectsList filteredProjects={filteredProjects} />
+      <InsertModal isOpen={isOpen} closeModal={closeModal} mode="Proyectos" />
     </>
   )
 }
