@@ -56,7 +56,7 @@ const Home: React.FC = () => {
         </div>
         <ListComponent />
       </div>
-      <InsertModal isOpen={isOpen} onClose={closeModal}/>
+      <InsertModal isOpen={isOpen} closeModal={closeModal} mode={mode}/>
     </>
   )
 }

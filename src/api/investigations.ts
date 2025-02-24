@@ -11,7 +11,7 @@ export const updateInvestigationState = async (
 
   mutate(
     key,
-    async (currentData) => {
+    async (currentData: any) => {
       if (!currentData) return currentData
 
       return { ...currentData, estatus: newState }

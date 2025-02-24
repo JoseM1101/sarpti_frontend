@@ -23,6 +23,20 @@ export interface InvestigationPostData {
   productos: Partial<EntityProduct>[]
 }
 
+export interface ProjectPostData {
+  titulo: string;
+  descripcion: string;
+  fecha_creacion: string; 
+  estatus: number; 
+  responsable: string;
+  creador: string;
+  areas_tematicas: string;
+  autores: string[]; 
+  tutores: string[]; 
+  inversion: number;
+  inversionista: string;
+}
+
 export interface Investigation extends Entity {
   fecha_inicio: StartDate
   fecha_culminacion: EndDate
