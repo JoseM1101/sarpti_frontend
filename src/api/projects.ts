@@ -1,6 +1,7 @@
 import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
+import { ProjectPostData } from "../types/Investigation"
 
 export const updateProjectState = async (
   id: string,
@@ -10,7 +11,7 @@ export const updateProjectState = async (
 
   mutate(
     key,
-    async (currentData) => {
+    async (currentData: any) => {
       if (!currentData) return currentData
 
       return { ...currentData, estatus: newState }
@@ -30,3 +31,7 @@ export const updateProjectState = async (
     throw error
   }
 }
+export const createProject = async (data: ProjectPostData) => {
+  const response = await axios.post("/proyectos", data);
+  return response.data;
+};

@@ -33,12 +33,12 @@ export const fields: Record<number, FieldType[]> = {
       required: true,
       type: "text",
     },
-    {
+    /*  {
       name: "cedula-3",
       placeholder: "Cédula",
       required: true,
       type: "text",
-    },
+    }, */
   ],
   3: [
     {
@@ -53,12 +53,12 @@ export const fields: Record<number, FieldType[]> = {
       required: true,
       type: "text",
     },
-    {
+    /*    {
       name: "cedula-6",
       placeholder: "Cédula",
       required: true,
       type: "text",
-    },
+    }, */
   ],
   4: [
     {
@@ -87,5 +87,11 @@ export const fields: Record<number, FieldType[]> = {
       required: false,
       type: "number",
     },
+    /*  {
+      name: "inversionista",
+      placeholder: "Inversionista",
+      required: false,
+      type: "text",
+    }, */
   ],
 }
