@@ -48,3 +48,8 @@ export async function fetchFilteredData<T>(
     throw new Error("Error fetching data")
   }
 }
+
+export const createInvestigation = async (data: InvestigationPostData) => {
+  const response = await axios.post("/investigaciones", data)
+  return response.data
+}
