@@ -1,30 +1,19 @@
 import { useState, ChangeEvent } from "react"
 import { twMerge } from "tailwind-merge"
 
-interface SearchBarProps<T> {
-  data: T[]
-  onSearch: (filteredData: T[], query: string) => void
-  getLabel: (item: T) => string
+interface SearchBarProps {
+  onSearch: (query: string) => void
   className?: string
 }
 
-const SearchBar = <T,>({
-  data,
-  onSearch,
-  getLabel,
-  className,
-}: SearchBarProps<T>) => {
+const SearchBar = ({ onSearch, className }: SearchBarProps) => {
   const [query, setQuery] = useState<string>("")
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setQuery(value)
 
-    const filteredData = data.filter((item) =>
-      getLabel(item).toLowerCase().includes(value.toLowerCase())
-    )
-
-    onSearch(filteredData, value)
+    onSearch(value)
   }
 
   return (

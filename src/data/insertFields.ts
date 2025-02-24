@@ -87,11 +87,5 @@ export const fields: Record<number, FieldType[]> = {
       required: false,
       type: "number",
     },
-    {
-      name: "inversionista",
-      placeholder: "Inversionista",
-      required: false,
-      type: "text",
-    },
   ],
 }

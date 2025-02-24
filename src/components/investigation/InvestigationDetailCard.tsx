@@ -46,7 +46,7 @@ const InvestigationDetailCard = ({
   entity,
 }: InvestigationDetailCardProps) => {
   const baseClasses =
-    "w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
+    "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
 
   return (

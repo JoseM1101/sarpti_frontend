@@ -1,27 +1,36 @@
-import { useProjects } from "../../hooks/useProjects"
-import ListView from "../common/ListView"
 import { Link } from "react-router-dom"
+import { useProjects } from "../../hooks/useProjects"
 import ProjectMenuCard from "./ProjectMenuCard"
+import EntityList from "../entity/EntityList"
+import { Project } from "../../types/Project"
+interface ProjectListProps {
+  filteredProjects: Project[]
+}
 
-const ProjectsList: React.FC = () => {
+const renderFunction = (entity: Project) => {
+  return (
+    <Link to={`/proyectos/${entity.id}`}>
+      <ProjectMenuCard project={entity} />
+    </Link>
+  )
+}
+
+const ProjectsList: React.FC<ProjectListProps> = ({ filteredProjects }) => {
   const { projects, error, isLoading } = useProjects()
 
-  console.log(projects)
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <ListView>
-      {isLoading ? (
-        <p>Cargando...</p>
-      ) : error ? (
-        <p>Error al cargar los datos</p>
-      ) : (
-        projects.map((project) => (
-          <Link key={project.id} to={`/proyectos/${project.id}`}>
-            <ProjectMenuCard project={project} />
-          </Link>
-        ))
-      )}
-    </ListView>
+    <EntityList<Project>
+      entities={filteredProjects.length > 0 ? filteredProjects : projects}
+      renderEntity={(entity) => renderFunction(entity)}
+    />
   )
 }
 

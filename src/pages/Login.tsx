@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import logo from "../assets/images/logo.jpg"
 
 const Login: React.FC = () => {
-  const [usuarioLocal, setUsuarioLocal] = useState<string>("")
+  const [emailLocal, setEmailLocal] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const navigate = useNavigate()
 
@@ -12,13 +12,12 @@ const Login: React.FC = () => {
     e.preventDefault()
     try {
       const response = await axios.post("/login", {
-        usuario: usuarioLocal,
+        correo: emailLocal,
         clave: password,
       })
       console.log("Login successful:", response.data)
-      document.cookie = `token=${response.data.token}; path=/;`
       localStorage.setItem("userEmail", response.data.correo)
-      navigate("/")
+      navigate("/investigaciones")
     } catch (error) {
       console.error("Login error:", error)
     }
@@ -46,8 +45,8 @@ const Login: React.FC = () => {
                 <input
                   id="email"
                   type="text"
-                  value={usuarioLocal}
-                  onChange={(e) => setUsuarioLocal(e.target.value)}
+                  value={emailLocal}
+                  onChange={(e) => setEmailLocal(e.target.value)}
                   className="w-full px-4 py-2 border border-[#CFD7E0] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   placeholder="Usuario"
                   required
