@@ -12,11 +12,11 @@ const Login: React.FC = () => {
     e.preventDefault()
     try {
       const response = await axios.post("/login", {
-        correo: emailLocal,
+        usuario: emailLocal,
         clave: password,
       })
       console.log("Login successful:", response.data)
-      localStorage.setItem("userEmail", response.data.correo)
+      localStorage.setItem("userEmail", response.data.usuario)
       navigate("/investigaciones")
     } catch (error) {
       console.error("Login error:", error)
