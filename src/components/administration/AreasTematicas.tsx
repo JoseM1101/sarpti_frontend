@@ -27,18 +27,27 @@ const AreasTematicas: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   // New state for dropdown options for lineas
-  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<Linea[]>([])
-  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<Linea[]>([])
+  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<
+    Linea[]
+  >([])
+  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<
+    Linea[]
+  >([])
 
   // Add a reusable function to fetch areas
   const fetchAreas = () => {
-    axios.get<ApiResponse<Area>>('/areas')
+    axios
+      .get<ApiResponse<Area>>("/areas")
       .then((response) => {
         const list = response.data.data.list || []
         setAreas(list)
       })
       .catch((error) => {
-        setErrorMessage(error?.response?.data?.message || error.message || "Error al cargar áreas")
+        setErrorMessage(
+          error?.response?.data?.message ||
+            error.message ||
+            "Error al cargar áreas"
+        )
       })
   }
 
@@ -47,25 +56,35 @@ const AreasTematicas: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    axios.get<ApiResponse<Linea>>('/lineas/matriciales')
+    axios
+      .get<ApiResponse<Linea>>("/lineas/matriciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasMatricialesOptions(list)
       })
       .catch((error) => {
-        setErrorMessage(error?.response?.data?.message || error.message || "Error fetching lineas matriciales")
+        setErrorMessage(
+          error?.response?.data?.message ||
+            error.message ||
+            "Error fetching lineas matriciales"
+        )
       })
   }, [])
 
   // Fetch options for lineas potenciales
   useEffect(() => {
-    axios.get<ApiResponse<Linea>>('/lineas/potenciales')
+    axios
+      .get<ApiResponse<Linea>>("/lineas/potenciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasPotencialesOptions(list)
       })
       .catch((error) => {
-        setErrorMessage(error?.response?.data?.message || error.message || "Error fetching lineas potenciales")
+        setErrorMessage(
+          error?.response?.data?.message ||
+            error.message ||
+            "Error fetching lineas potenciales"
+        )
       })
   }, [])
 
@@ -81,18 +100,23 @@ const AreasTematicas: React.FC = () => {
       descripcion: data.descripcion,
       estatus: data.estatus ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
       linea_matricial_id: data.linea_matricial_id,
-      linea_potencial_id: data.linea_potencial_id
+      linea_potencial_id: data.linea_potencial_id,
     }
     console.log(newArea)
-    axios.post<ApiResponse<Area>>('/areas', newArea)
+    axios
+      .post<ApiResponse<Area>>("/areas", newArea)
       .then((response) => {
         const createdArea = response.data.data as unknown as Area
-        setAreas(prev => [createdArea, ...prev])
+        setAreas((prev) => [createdArea, ...prev])
         setAddingArea(false)
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
-        setErrorMessage(error?.response?.data?.message || error.message || "Error creando área")
+        setErrorMessage(
+          error?.response?.data?.message ||
+            error.message ||
+            "Error creando área"
+        )
       })
   }
 
@@ -104,7 +128,11 @@ const AreasTematicas: React.FC = () => {
     setIsEditing(false)
     setEditingItem(null)
   }
-  const handleSaveEdit = (data: { titulo: string; descripcion: string; estatus: boolean }) => {
+  const handleSaveEdit = (data: {
+    titulo: string
+    descripcion: string
+    estatus: boolean
+  }) => {
     if (!editingItem) return
 
     interface EditableFields {
@@ -120,7 +148,9 @@ const AreasTematicas: React.FC = () => {
     if (data.descripcion !== editingItem.descripcion) {
       changedFields.descripcion = data.descripcion
     }
-    const newEstatus = data.estatus ? EntityStatus.ACTIVE : EntityStatus.INACTIVE
+    const newEstatus = data.estatus
+      ? EntityStatus.ACTIVE
+      : EntityStatus.INACTIVE
     if (newEstatus !== editingItem.estatus) {
       changedFields.estatus = newEstatus
     }
@@ -129,27 +159,37 @@ const AreasTematicas: React.FC = () => {
       return
     }
 
-    axios.patch<ApiResponse<Area>>(`/areas/${editingItem.id}`, changedFields)
+    axios
+      .patch<ApiResponse<Area>>(`/areas/${editingItem.id}`, changedFields)
       .then(() => {
         // Refetch areas after edit to ensure data consistency
         fetchAreas()
         setEditingItem(null)
       })
-      .catch(error => {
-        setErrorMessage(error?.response?.data?.message || error.message || "Error actualizando área")
+      .catch((error) => {
+        setErrorMessage(
+          error?.response?.data?.message ||
+            error.message ||
+            "Error actualizando área"
+        )
       })
   }
 
   const handleCardClick = (id: string) => {
     if (isEditing) {
-      axios.get<ApiResponse<Area>>(`/areas/${id}`)
+      axios
+        .get<ApiResponse<Area>>(`/areas/${id}`)
         .then((response) => {
           const item = response.data.data as unknown as Area
           setEditingItem(item)
           setIsEditing(false)
         })
         .catch((error) => {
-          setErrorMessage(error?.response?.data?.message || error.message || "Error fetching area")
+          setErrorMessage(
+            error?.response?.data?.message ||
+              error.message ||
+              "Error fetching area"
+          )
         })
     } else {
       setExpandedCard(expandedCard === id ? null : id)
@@ -168,14 +208,25 @@ const AreasTematicas: React.FC = () => {
     >
       <div
         className={`
-          rounded-sm shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden
+          rounded-sm shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden
           ${expandedCard === item.id ? "max-h-[1920px]" : "max-h-20"}
         `}
       >
-        <EntityCard entity={item} className="bg-gray shadow-sm hover:shadow-md transition-shadow">
+        <EntityCard
+          entity={item}
+          className="bg-gray shadow-sm hover:shadow-md transition-shadow"
+        >
           <EntityCard.Badge />
-          <EntityCard.Title className={`mt-4 transition-all duration-300 ${expandedCard === item.id ? "" : "line-clamp-1"}`} />
-          <EntityCard.Description className={`mt-2 pb-4 transition-all duration-300 ${expandedCard === item.id ? "" : "line-clamp-1"}`} />
+          <EntityCard.Title
+            className={`mt-4 transition-all ${
+              expandedCard === item.id ? "" : "line-clamp-1"
+            }`}
+          />
+          <EntityCard.Description
+            className={`transition-all ${
+              expandedCard === item.id ? "" : "line-clamp-1"
+            }`}
+          />
         </EntityCard>
       </div>
     </div>
@@ -208,7 +259,7 @@ const AreasTematicas: React.FC = () => {
               </button>
               {!addingArea && (
                 <button
-                  onClick={handleAddArea}  // Changed from handleEditAreas to handleAddArea
+                  onClick={handleAddArea} // Changed from handleEditAreas to handleAddArea
                   className="px-2 py-1 bg-green text-white rounded text-sm"
                 >
                   Agregar
@@ -254,10 +305,10 @@ const AreasTematicas: React.FC = () => {
         <Scrollbar maxHeight="calc(100vh - 200px)" className="pr-4 pb-4">
           <div className="flex gap-4">
             <div className="w-1/2 flex flex-col gap-4">
-              {leftColumn.map(area => renderCard(area))}
+              {leftColumn.map((area) => renderCard(area))}
             </div>
             <div className="w-1/2 flex flex-col gap-4">
-              {rightColumn.map(area => renderCard(area))}
+              {rightColumn.map((area) => renderCard(area))}
             </div>
           </div>
         </Scrollbar>
