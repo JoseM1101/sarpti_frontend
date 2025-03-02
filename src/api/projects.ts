@@ -1,7 +1,7 @@
 import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
-import { ProjectPostData } from "../types/Investigation"
+import { ProjectPostData } from "../types/Project"
 
 export const updateProjectState = async (
   id: string,
