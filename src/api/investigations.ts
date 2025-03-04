@@ -4,6 +4,8 @@ import { EntityStatus } from "../types/Entity"
 import { ApiResponse } from "../types/ApiResponse"
 import { InvestigationPostData } from "../types/Investigation"
 
+const token = localStorage.getItem("token")
+
 export const updateInvestigationState = async (
   id: string,
   newState: EntityStatus
@@ -39,8 +41,13 @@ export async function fetchFilteredData<T>(
 ): Promise<ApiResponse<T>> {
   try {
     const response = await axios.get<ApiResponse<T>>(
-      `${endpoint}?titulo=${encodeURIComponent(queryValue)}`
-    )
+      `${endpoint}?titulo=${encodeURIComponent(queryValue)}`,
+      {
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json'
+        }
+      })
 
     console.log(response.data)
     return response.data

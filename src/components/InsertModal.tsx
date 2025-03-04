@@ -12,7 +12,6 @@ interface InsertModalProps {
 }
 
 const InsertModal: React.FC<InsertModalProps> = ({ isOpen, closeModal, mode }) => {
-  console.log("Modal is open:", isOpen);  
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <Card className="w-25/12 h-3/6 bg-white rounded-3xl overflow-auto">

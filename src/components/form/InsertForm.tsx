@@ -9,6 +9,7 @@ import FormFour from "./multiform/FormFour";
 import FormFive from "./multiform/FormFive";
 import SummaryStep from "./multiform/summaryStep";
 import FormThree from './multiform/formThree';
+import ProgressIndicator from "./multiform/progressIndicator";
 
 interface FormData {
   titulo: string;
@@ -20,6 +21,10 @@ interface FormData {
   "cedula-2": string;
   "cedula-3": string;
   "cedula-4": string;
+  "cedula-5": string;
+  "cedula-6": string;
+  "cedula-7": string;
+  "cedula-8": string;
   inversion: number;
   inversionista: string;
   proyecto_id: string;
@@ -55,6 +60,9 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       return;
     }
 
+    const autores = [data["cedula-1"], data["cedula-2"],data["cedula-3"], data["cedula-4"]].filter((cedula) => cedula.trim() !== ""); 
+    const tutores = [data["cedula-5"], data["cedula-6"],data["cedula-7"], data["cedula-8"]].filter((cedula) => cedula.trim() !== "");
+
     const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
@@ -62,8 +70,8 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       nivel: 2,
       proyecto_id: data.proyecto_id,
       inversion: Number(data.inversion),
-      autores: [data["cedula-1"], data["cedula-2"]],
-      tutores: [data["cedula-3"], data["cedula-4"]],
+      autores: autores,
+      tutores: tutores,
       productos: [],
     };
 
@@ -72,6 +80,8 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       await createInvestigation(formattedData);
       console.log("Formulario enviado, cerrando modal");
       closeModal();
+      window.location.reload();
+      alert("Investigación creada exitosamente");
     } catch (error) {
       console.error("Error al crear la investigación", error);
     }
@@ -86,7 +96,8 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
         <h1 className="font-semibold text-lg text-lightblue">
           Paso {currentStep + 1} de {steps.length}: {stepTitles[currentStep]}
         </h1>
-          <CurrentStepComponent />
+        <ProgressIndicator totalSteps={steps.length} currentStep={currentStep + 1} />
+        <CurrentStepComponent />
         <div className="flex justify-between gap-4 mt-5">
           {currentStep > 0 && (
             <Button
@@ -97,8 +108,11 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
               Anterior
             </Button>
           )}
-          <Button type="submit" className="w-1/3">
-            {isLastStep ? "Enviar" : "Siguiente"}
+          <Button
+            type="submit"
+            className={`w-1/3 ${isLastStep ? "bg-green" : "bg-blue-500 hover:bg-blue-600"}`}
+          >
+            {isLastStep ? "Finalizar" : "Siguiente"}
           </Button>
         </div>
       </form>

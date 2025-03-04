@@ -6,6 +6,7 @@ import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
 import perfil from "../assets/icons/perfil.png"
 import investigadores from "../assets/icons/investigadores.png"
+import Cookies from "js-cookie"
 
 const linksFirst = [
   {
@@ -49,38 +50,19 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    // Helper to get a cookie by name
-    const getCookie = (name: string) => {
-      const value = `; ${document.cookie}`
-      const parts = value.split(`; ${name}=`)
-      if (parts.length === 2) return parts.pop()?.split(";").shift()
-      return null
-    }
-
-    const token = getCookie("token")
-    if (!token) {
-      console.error("Token not found in cookies")
-      return
-    }
-
     try {
-      // Assumes your backend expects the token in the Authorization header.
-      await axios.post(
-        "/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      // Remove the token cookie by setting an expired date.
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-      navigate("/login")
+      const userid = Cookies.get("userid");
+      await axios.post(`/logout/${userid}`, {}, { withCredentials: true });
+  
+      Cookies.remove("token");
+      Cookies.remove("usuario");
+      Cookies.remove("userid");
+  
+      navigate("/login");
     } catch (error) {
-      console.error("Error logging out:", error)
+      console.error("Error en el logout:", error);
     }
-  }
+  };
 
   return (
     <aside

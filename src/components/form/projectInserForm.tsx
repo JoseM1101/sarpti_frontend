@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import FormSix from "./multiform/formSix";
 import FormSeven from "./multiform/formSeven";
 import SummaryStep from "./multiform/summaryStep";
+import ProgressIndicator from "./multiform/progressIndicator";
 
 interface FormData {
   titulo: string;
@@ -52,6 +53,7 @@ const ProjectInsertForm: React.FC<ProjectInsertFormProps> = ({ closeModal }) => 
     console.log("Datos de Proyecto enviado:", formattedData)
     await createProject(formattedData)
     closeModal()
+    window.location.reload()
     alert("Proyecto creado exitosamente")
   } catch (error) {
     console.error("Error al crear el proyecto", error)
@@ -68,6 +70,7 @@ const ProjectInsertForm: React.FC<ProjectInsertFormProps> = ({ closeModal }) => 
         <h1 className="font-semibold text-lg text-lightblue">
           Paso {currentStep + 1} de {steps.length}: {StepTitles[currentStep]}
           </h1>
+          <ProgressIndicator totalSteps={steps.length} currentStep={currentStep + 1} />
           <CurrentStepComponent />
         <div className="flex justify-between gap-4 mt-5">
           {currentStep > 0 && (
@@ -79,8 +82,11 @@ const ProjectInsertForm: React.FC<ProjectInsertFormProps> = ({ closeModal }) => 
               Anterior
             </Button>
           )}
-          <Button type="submit" className="w-1/3">
-            {isLastStep ? "Enviar" : "Siguiente"}
+         <Button
+            type="submit"
+            className={`w-1/3 ${isLastStep ? "bg-green" : "bg-blue-500 hover:bg-blue-600"}`}
+          >
+            {isLastStep ? "Finalizar" : "Siguiente"}
           </Button>
         </div>
       </form>
