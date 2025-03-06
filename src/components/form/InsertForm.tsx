@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Button from "../common/Button";
 import { createInvestigation } from "../../api/investigations";
-import { InvestigationPostData } from "../../types/Investigation";
+import { InvestigationPostData } from '../../types/Investigation';
 import FormOne from "./multiform/formOne";
 import FormTwo from "./multiform/formTwo";
 import FormFour from "./multiform/FormFour";
@@ -25,9 +25,18 @@ interface FormData {
   "cedula-6": string;
   "cedula-7": string;
   "cedula-8": string;
+  nivel: number;
   inversion: number;
   inversionista: string;
   proyecto_id: string;
+  productos: ProductFormData[];
+
+}
+
+interface ProductFormData{
+  titulo: string;
+  descripcion: string;
+  /* url: string; */
 }
 
 interface InsertFormProps {
@@ -60,19 +69,20 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       return;
     }
 
-    const autores = [data["cedula-1"], data["cedula-2"],data["cedula-3"], data["cedula-4"]].filter((cedula) => cedula.trim() !== ""); 
-    const tutores = [data["cedula-5"], data["cedula-6"],data["cedula-7"], data["cedula-8"]].filter((cedula) => cedula.trim() !== "");
+    const autores = [data["cedula-1"], data["cedula-2"],data["cedula-3"], data["cedula-4"]].filter((cedula) => cedula && cedula.trim() !== ""); 
+    const tutores = [data["cedula-5"], data["cedula-6"],data["cedula-7"], data["cedula-8"]].filter((cedula) => cedula && cedula.trim() !== "");
+    const Keywords = [data["palabra-1"], data["palabra-2"], data["palabra-3"]].filter((keyword) => keyword.trim() !== "");
 
     const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
-      keywords: [data["palabra-1"], data["palabra-2"], data["palabra-3"]],
-      nivel: 2,
+      keywords: Keywords,
+      nivel: Number(data.nivel),
       proyecto_id: data.proyecto_id,
       inversion: Number(data.inversion),
       autores: autores,
       tutores: tutores,
-      productos: [],
+      productos: data.productos
     };
 
     try {
