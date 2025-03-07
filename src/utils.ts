@@ -1,5 +1,28 @@
 import { ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { EntityStatus } from "./types/Entity"
+
+export const statusItems: Record<
+  EntityStatus,
+  { label: string; color: string }
+> = {
+  [EntityStatus.FINISHED]: {
+    label: "Culminadas",
+    color: "bg-darkblue",
+  },
+  [EntityStatus.ACTIVE]: {
+    label: "En progreso",
+    color: "bg-green",
+  },
+  [EntityStatus.INACTIVE]: {
+    label: "Inactivas",
+    color: "bg-yellow",
+  },
+  [EntityStatus.CANCELLED]: {
+    label: "Canceladas",
+    color: "bg-red",
+  },
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
