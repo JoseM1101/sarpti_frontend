@@ -2,44 +2,61 @@ import { useUsers } from "../../../hooks/useUsers";
 import { useAreas } from "../../../hooks/useAreas";
 import { useFormContext } from "react-hook-form";
 import Dropdown from "../../common/DropDown";
-import imagenmodal from "../../../assets/images/modal-proyectos/2.png";
+
 
 const FormSeven = () => {
-    const {setValue, watch} = useFormContext();
-    const {users} =  useUsers();
-    const {areas} = useAreas();
+  const { setValue, watch } = useFormContext();
+  const { users } = useUsers();
+  const { areas } = useAreas();
 
-    const handleUserChange = (selectedUserName: string) => {
-        setValue("responsable", selectedUserName)
-    }
-    
-    const handleAreaChange = (selectedAreaId: string) => {
-        setValue("areas_tematicas_id", selectedAreaId)
-    }
+  const handleUserChange = (selectedUserName: string) => {
+    setValue("responsable", selectedUserName);
+  };
 
-    const responsable = watch("responsable");
-    const areas_tematicas_id = watch("areas_tematicas_id");
-  
-    console.log("Responsables", responsable); 
+  const handleAreaChange = (selectedAreaId: string) => {
+    setValue("areas_tematicas_id", selectedAreaId);
+  };
 
-return(
-    <div>
-        <img src={imagenmodal} alt="" className="mx-auto w-48 h-auto rounded-lg mb-8" />
-        <Dropdown 
-        options={users.map((user) => ({id: user.usuario, nombre: user.usuario}))}
-        selectValue={responsable || ""}  
-        onChange={handleUserChange}
-        placeholder="Selecciona un responsable"
-       />
+  const responsable = watch("responsable");
+  const areas_tematicas_id = watch("areas_tematicas_id");
 
-    <Dropdown 
-        options={areas.map((areastem) => ({id: areastem.id, nombre: areastem.titulo}))}
-        selectValue={areas_tematicas_id || ""}  
-        onChange={handleAreaChange}
-        placeholder="Selecciona un area tematica"
-       />
+  console.log("Responsables", responsable);
+
+  return (
+    <div className="flex flex-col gap-6">
+
+      <div className="w-full max-w-md mx-auto">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Responsable
+        </label>
+        <Dropdown
+          options={users.map((user) => ({
+            id: user.usuario,
+            nombre: user.usuario,
+          }))}
+          selectValue={responsable || ""}
+          onChange={handleUserChange}
+          placeholder="Selecciona un responsable"
+        />
+      </div>
+
+
+      <div className="w-full max-w-md mx-auto">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Área Temática
+        </label>
+        <Dropdown
+          options={areas.map((areastem) => ({
+            id: areastem.id,
+            nombre: areastem.titulo,
+          }))}
+          selectValue={areas_tematicas_id || ""}
+          onChange={handleAreaChange}
+          placeholder="Selecciona un área temática"
+        />
+      </div>
     </div>
-)
+  );
+};
 
-}
 export default FormSeven;

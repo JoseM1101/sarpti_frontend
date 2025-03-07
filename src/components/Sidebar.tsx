@@ -6,6 +6,7 @@ import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
 import perfil from "../assets/icons/perfil.png"
 import investigadores from "../assets/icons/investigadores.png"
+import Cookies from "js-cookie"
 
 const linksFirst = [
   {
@@ -73,8 +74,18 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    axios.post("/logout/user-001")
-    navigate("/login")
+    try {
+      const userid = Cookies.get("userid")
+      await axios.post(`/logout/${userid}`, {}, { withCredentials: true })
+
+      Cookies.remove("token")
+      Cookies.remove("usuario")
+      Cookies.remove("userid")
+
+      navigate("/login")
+    } catch (error) {
+      console.error("Error en el logout:", error)
+    }
   }
 
   return (

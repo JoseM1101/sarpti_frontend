@@ -1,5 +1,4 @@
 import { useFormContext } from "react-hook-form";
-import imagenmodal from "../../../assets/images/modal/3.png";
 import { useProjects } from "../../../hooks/useProjects";
 import Dropdown from "../../common/DropDown";
 
@@ -14,11 +13,6 @@ const proyectoId = watch("proyecto_id");
 
 return (
   <div className="flex flex-col gap-4">
-    <img
-      src={imagenmodal}
-      alt=""
-      className="w-full max-w-md rounded-lg mb-[20px]"
-    />
     <Dropdown
       options={projects.map((proj) => ({ id: proj.id, nombre: proj.titulo }))}
       selectValue={proyectoId || ""}
