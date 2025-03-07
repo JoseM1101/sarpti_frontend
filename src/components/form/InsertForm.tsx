@@ -14,9 +14,7 @@ import ProgressIndicator from "./multiform/progressIndicator";
 interface FormData {
   titulo: string;
   descripcion: string;
-  "palabra-1": string;
-  "palabra-2": string;
-  "palabra-3": string;
+  palabras: string[]; 
   "cedula-1": string;
   "cedula-2": string;
   "cedula-3": string;
@@ -30,10 +28,9 @@ interface FormData {
   inversionista: string;
   proyecto_id: string;
   productos: ProductFormData[];
-
 }
 
-interface ProductFormData{
+interface ProductFormData {
   titulo: string;
   descripcion: string;
   url: URL;
@@ -53,12 +50,23 @@ const stepTitles = [
 ];
 
 const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
-  const methods = useForm<FormData>();
+  const methods = useForm<FormData>({
+    defaultValues: {
+      palabras: [],
+    },
+  });
   const { handleSubmit, watch } = methods;
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  const steps = [FormOne,FormTwo,FormThree,FormFour,FormFive, () => <SummaryStep data={formData} mode="Investigaciones" />]; 
+  const steps = [
+    FormOne,
+    FormTwo,
+    FormThree,
+    FormFour,
+    FormFive,
+    () => <SummaryStep data={formData} mode="Investigaciones" />,
+  ];
   const CurrentStepComponent = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
   const formData = watch();
@@ -69,10 +77,24 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       return;
     }
 
-    const autores = [data["cedula-1"], data["cedula-2"],data["cedula-3"], data["cedula-4"]].filter((cedula) => cedula && cedula.trim() !== ""); 
-    const tutores = [data["cedula-5"], data["cedula-6"],data["cedula-7"], data["cedula-8"]].filter((cedula) => cedula && cedula.trim() !== "");
-    const Keywords = [data["palabra-1"], data["palabra-2"], data["palabra-3"]].filter((keyword) => keyword.trim() !== "");
+    const autores = [
+      data["cedula-1"],
+      data["cedula-2"],
+      data["cedula-3"],
+      data["cedula-4"],
+    ].filter((cedula) => cedula && cedula.trim() !== "");
 
+    const tutores = [
+      data["cedula-5"],
+      data["cedula-6"],
+      data["cedula-7"],
+      data["cedula-8"],
+    ].filter((cedula) => cedula && cedula.trim() !== "");
+
+    const palabras = data.palabras || [];
+    const Keywords = palabras.filter((keyword) => keyword && keyword.trim() !== "");
+
+    // Formatear los datos para enviar
     const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
@@ -82,7 +104,7 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       inversion: Number(data.inversion),
       autores: autores,
       tutores: tutores,
-      productos: data.productos
+      productos: data.productos,
     };
 
     try {
