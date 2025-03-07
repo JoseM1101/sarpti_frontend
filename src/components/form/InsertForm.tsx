@@ -36,7 +36,7 @@ interface FormData {
 interface ProductFormData{
   titulo: string;
   descripcion: string;
-  /* url: string; */
+  url: URL;
 }
 
 interface InsertFormProps {
