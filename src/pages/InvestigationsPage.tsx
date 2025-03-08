@@ -9,7 +9,6 @@ import { debounce } from "../utils"
 import { Link } from "react-router-dom"
 import useModal from "../hooks/useModal"
 import InsertModal from "../components/InsertModal"
-import Filters from "../components/filters/Filters"
 
 const InvestigationsPage: React.FC = () => {
   const [filteredInvestigations, setFilteredInvestigations] = useState<
@@ -31,22 +30,21 @@ const InvestigationsPage: React.FC = () => {
 
   return (
     <>
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-5">
         <div className="flex gap-3 items-center cursor-pointer">
           <img className="object-contain" src={investigaciones} alt="" />
           <Link to="/proyectos">
             <p className="text-gray-3 text-xl font-semibold">Investigaciones</p>
           </Link>
         </div>
-        <Filters />
         <SearchBar
           onSearch={(query) => {
             debouncedSearch(query)
           }}
           className="w-80"
         />
-        <Button className="py-3">Generar Reporte</Button>
-        <Button className="py-3" bgColor="green" onClick={openModal}>
+        <Button>Generar Reporte</Button>
+        <Button bgColor="green" onClick={openModal}>
           Agregar
         </Button>
       </div>
