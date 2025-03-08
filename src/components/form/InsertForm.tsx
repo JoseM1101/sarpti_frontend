@@ -27,6 +27,13 @@ interface FormData {
   inversion: number
   inversionista: string
   proyecto_id: string
+  productos: ProductFormData[]
+}
+
+interface ProductFormData {
+  titulo: string
+  descripcion: string
+  url: URL
 }
 
 interface InsertFormProps {
@@ -43,21 +50,26 @@ const stepTitles = [
 ]
 
 const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
-  const methods = useForm<FormData>()
-  const {
-    handleSubmit,
-    register,
-    getValues,
-    reset,
-    formState: { errors },
-  } = methods
+  const methods = useForm<FormData>({
+    defaultValues: {
+      palabras: [],
+    },
+  })
+  const { handleSubmit, watch } = methods
 
   const [currentStep, setCurrentStep] = useState(0)
-  const steps = Object.values(fields)
-  const isLastStep = currentStep === steps.length - 1
 
-  const [stepData, setStepData] = useState<FormData[]>([])
-  const [showSummaryModal, setShowSummaryModal] = useState(false)
+  const steps = [
+    FormOne,
+    FormTwo,
+    FormThree,
+    FormFour,
+    FormFive,
+    () => <SummaryStep data={formData} mode="Investigaciones" />,
+  ]
+  const CurrentStepComponent = steps[currentStep]
+  const isLastStep = currentStep === steps.length - 1
+  const formData = watch()
 
   const onSubmit = async (data: FormData) => {
     if (!isLastStep) {
@@ -70,24 +82,31 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       data["cedula-2"],
       data["cedula-3"],
       data["cedula-4"],
-    ].filter((cedula) => cedula.trim() !== "")
+    ].filter((cedula) => cedula && cedula.trim() !== "")
+
     const tutores = [
       data["cedula-5"],
       data["cedula-6"],
       data["cedula-7"],
       data["cedula-8"],
-    ].filter((cedula) => cedula.trim() !== "")
+    ].filter((cedula) => cedula && cedula.trim() !== "")
 
+    const palabras = data.palabras || []
+    const Keywords = palabras.filter(
+      (keyword) => keyword && keyword.trim() !== ""
+    )
+
+    // Formatear los datos para enviar
     const formattedData: InvestigationPostData = {
-      titulo: finalData.titulo,
-      descripcion: finalData.descripcion,
-      keywords: [finalData["palabra-1"], finalData["palabra-2"]],
-      nivel: 2,
+      titulo: data.titulo,
+      descripcion: data.descripcion,
+      keywords: Keywords,
+      nivel: Number(data.nivel),
       proyecto_id: data.proyecto_id,
       inversion: Number(data.inversion),
       autores: autores,
       tutores: tutores,
-      productos: [],
+      productos: data.productos,
     }
 
     try {
