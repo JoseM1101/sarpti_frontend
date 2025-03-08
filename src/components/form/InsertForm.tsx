@@ -10,25 +10,11 @@ import FormFive from "./multiform/FormFive"
 import SummaryStep from "./multiform/summaryStep"
 import FormThree from "./multiform/formThree"
 import ProgressIndicator from "./multiform/progressIndicator"
-import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import Button from "../common/Button";
-import { createInvestigation } from "../../api/investigations";
-import { InvestigationPostData } from '../../types/Investigation';
-import FormOne from "./multiform/formOne";
-import FormTwo from "./multiform/formTwo";
-import FormFour from "./multiform/FormFour";
-import FormFive from "./multiform/FormFive";
-import SummaryStep from "./multiform/summaryStep";
-import FormThree from './multiform/formThree';
-import ProgressIndicator from "./multiform/progressIndicator";
 
 interface FormData {
   titulo: string
   descripcion: string
-  "palabra-1": string
-  "palabra-2": string
-  "palabra-3": string
+  palabras: string[]
   "cedula-1": string
   "cedula-2": string
   "cedula-3": string
@@ -37,31 +23,17 @@ interface FormData {
   "cedula-6": string
   "cedula-7": string
   "cedula-8": string
+  nivel: number
   inversion: number
   inversionista: string
   proyecto_id: string
-  titulo: string;
-  descripcion: string;
-  palabras: string[]; 
-  "cedula-1": string;
-  "cedula-2": string;
-  "cedula-3": string;
-  "cedula-4": string;
-  "cedula-5": string;
-  "cedula-6": string;
-  "cedula-7": string;
-  "cedula-8": string;
-  nivel: number;
-  inversion: number;
-  inversionista: string;
-  proyecto_id: string;
-  productos: ProductFormData[];
+  productos: ProductFormData[]
 }
 
 interface ProductFormData {
-  titulo: string;
-  descripcion: string;
-  url: URL;
+  titulo: string
+  descripcion: string
+  url: URL
 }
 
 interface InsertFormProps {
@@ -70,10 +42,11 @@ interface InsertFormProps {
 
 const stepTitles = [
   "Información General",
-  "Autores",
-  "Tutores",
+  "Cedula de Tutores y Autores",
+  "Selecciona un Proyecto",
   "Palabras Clave",
   "Inversión",
+  "Resumen",
 ]
 
 const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
@@ -81,10 +54,10 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
     defaultValues: {
       palabras: [],
     },
-  });
-  const { handleSubmit, watch } = methods;
+  })
+  const { handleSubmit, watch } = methods
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0)
 
   const steps = [
     FormOne,
@@ -93,16 +66,12 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
     FormFour,
     FormFive,
     () => <SummaryStep data={formData} mode="Investigaciones" />,
-  ];
-  const CurrentStepComponent = steps[currentStep];
-  const isLastStep = currentStep === steps.length - 1;
-  const formData = watch();
+  ]
+  const CurrentStepComponent = steps[currentStep]
+  const isLastStep = currentStep === steps.length - 1
+  const formData = watch()
 
   const onSubmit = async (data: FormData) => {
-    const updatedStepData = [...stepData]
-    updatedStepData[currentStep] = data
-    setStepData(updatedStepData)
-
     if (!isLastStep) {
       setCurrentStep((prev) => prev + 1)
       return
@@ -113,17 +82,19 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       data["cedula-2"],
       data["cedula-3"],
       data["cedula-4"],
-    ].filter((cedula) => cedula && cedula.trim() !== "");
+    ].filter((cedula) => cedula && cedula.trim() !== "")
 
     const tutores = [
       data["cedula-5"],
       data["cedula-6"],
       data["cedula-7"],
       data["cedula-8"],
-    ].filter((cedula) => cedula && cedula.trim() !== "");
+    ].filter((cedula) => cedula && cedula.trim() !== "")
 
-    const palabras = data.palabras || [];
-    const Keywords = palabras.filter((keyword) => keyword && keyword.trim() !== "");
+    const palabras = data.palabras || []
+    const Keywords = palabras.filter(
+      (keyword) => keyword && keyword.trim() !== ""
+    )
 
     // Formatear los datos para enviar
     const formattedData: InvestigationPostData = {
@@ -135,16 +106,10 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       inversion: Number(data.inversion),
       autores: autores,
       tutores: tutores,
-      productos: [],
-    }
       productos: data.productos,
-    };
+    }
 
     try {
-      console.log("Datos a enviar:", formattedData)
-      await createInvestigation(formattedData)
-      console.log("Formulario enviado, cerrando modal")
-      closeModal()
       console.log("Datos a enviar:", formattedData)
       await createInvestigation(formattedData)
       console.log("Formulario enviado, cerrando modal")
