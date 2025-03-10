@@ -24,6 +24,7 @@ export interface InvestigationPostData {
 }
 
 export interface Investigation extends Entity {
+  name: ReactNode
   fecha_inicio: StartDate
   fecha_culminacion: EndDate
   nivel: InvestigationLevel

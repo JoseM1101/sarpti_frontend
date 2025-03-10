@@ -1,7 +1,10 @@
 import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
+import { ApiResponse } from "../types/ApiResponse"
 import { InvestigationPostData } from "../types/Investigation"
+
+const token = localStorage.getItem("token")
 
 export const updateInvestigationState = async (
   id: string,
@@ -11,7 +14,7 @@ export const updateInvestigationState = async (
 
   mutate(
     key,
-    async (currentData) => {
+    async (currentData: any) => {
       if (!currentData) return currentData
 
       return { ...currentData, estatus: newState }
@@ -29,6 +32,28 @@ export const updateInvestigationState = async (
     mutate(key)
 
     throw error
+  }
+}
+
+export async function fetchFilteredData<T>(
+  endpoint: string,
+  queryValue: string
+): Promise<ApiResponse<T>> {
+  try {
+    const response = await axios.get<ApiResponse<T>>(
+      `${endpoint}?titulo=${encodeURIComponent(queryValue)}`,
+      {
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json'
+        }
+      })
+
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    throw new Error("Error fetching data")
   }
 }
 

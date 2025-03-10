@@ -1,0 +1,16 @@
+import { useFormContext } from "react-hook-form";
+
+
+const FormOne = () => {
+const {register} = useFormContext();
+
+return(
+    <div>
+
+        <input type="text" {...register("titulo", {required: true})} placeholder="Titulo" className="w-full max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-[20px]"/>
+        <input type="text" {...register("descripcion", {required: true})} placeholder="Descripcion" className="w-full max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+    </div>
+)
+
+}
+export default FormOne;

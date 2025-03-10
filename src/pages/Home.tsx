@@ -1,25 +1,25 @@
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import Button from "../components/common/Button"
-import SearchBar from "../components/common/SearchBar"
+/* import SearchBar from "../components/common/SearchBar"
 import InvestigationsList from "../components/investigation/InvestigationsList"
 import ProjectsList from "../components/projects/ProjectsList"
-import { Entity } from "../types/Entity"
+import { Entity } from "../types/Entity" */
 import useModal from "../hooks/useModal"
 import InsertModal from "../components/InsertModal"
 import investigaciones from "../assets/icons/investigaciones.png"
 
 type Modes = "Proyectos" | "Investigaciones"
 
-const ListModeMap = {
+/* const ListModeMap = {
   Proyectos: ProjectsList,
   Investigaciones: InvestigationsList,
-}
+} */
 
 const Home: React.FC = () => {
   const [mode, setMode] = useState<Modes>("Investigaciones")
-  const { isOpen, openModal } = useModal()
-
-  const ListComponent = ListModeMap[mode]
+  const { isOpen, openModal, closeModal} = useModal()
+/* 
+  const ListComponent = ListModeMap[mode] */
 
   const toggleMode = () => {
     setMode((prevMode) =>
@@ -27,11 +27,11 @@ const Home: React.FC = () => {
     )
   }
 
-  const handleSearch = useCallback((filteredData: Entity[]) => {
+ /*  const handleSearch = useCallback((filteredData: Entity[]) => {
     // setData(filteredData)
     console.log(filteredData)
   }, [])
-
+ */
   return (
     <>
       <div>
@@ -43,20 +43,20 @@ const Home: React.FC = () => {
             <img className="object-contain" src={investigaciones} alt="" />
             <p className="text-gray-3 text-xl font-semibold">{mode}</p>
           </div>
-          <SearchBar<Entity>
+       {/*    <SearchBar<Entity>
             data={[]}
             onSearch={handleSearch}
             getLabel={(entity) => entity.titulo}
             className="w-80"
-          />
+          /> */}
           <Button>Generar Reporte</Button>
           <Button bgColor="green" onClick={openModal}>
             Agregar
           </Button>
         </div>
-        <ListComponent />
+      {/*   <ListComponent /> */}
       </div>
-      <InsertModal isOpen={isOpen} />
+      <InsertModal isOpen={isOpen} closeModal={closeModal} mode={mode}/>
     </>
   )
 }

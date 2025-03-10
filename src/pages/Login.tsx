@@ -1,27 +1,45 @@
-import { useState } from "react"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
-import logo from "../assets/images/logo.jpg"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo.jpg";
+import Cookies from "js-cookie";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Íconos de ojo
 
 const Login: React.FC = () => {
-  const [emailLocal, setEmailLocal] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const navigate = useNavigate()
+  const [emailLocal, setEmailLocal] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false); // Estado para mostrar/ocultar contraseña
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      const response = await axios.post("/login", {
-        correo: emailLocal,
-        clave: password,
-      })
-      console.log("Login successful:", response.data)
-      localStorage.setItem("userEmail", response.data.correo)
-      navigate("/")
-    } catch (error) {
-      console.error("Login error:", error)
+ 
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      navigate("/investigaciones");
     }
-  }
+  }, [navigate]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "/login",
+        {
+          usuario: emailLocal,
+          clave: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      Cookies.set("token", response.data.token, { sameSite: "Strict" });
+      localStorage.setItem("token", response.data.token);
+      navigate("/investigaciones");
+    } catch (error) {
+      console.error("Error en el login:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
@@ -59,30 +77,26 @@ const Login: React.FC = () => {
                 >
                   Contraseña
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#CFD7E0] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                  placeholder="Ingresa tu contraseña"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-2 border border-[#CFD7E0] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors pr-10" // Añade padding a la derecha
+                    placeholder="Ingresa tu contraseña"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)} 
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-700"
-                  >
-                    Recordar
-                  </label>
-                </div>
               </div>
               <button
                 type="submit"
@@ -95,7 +109,7 @@ const Login: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
