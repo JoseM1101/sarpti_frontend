@@ -7,12 +7,21 @@ import FormSix from "./multiform/formSix";
 import FormSeven from "./multiform/formSeven";
 import SummaryStep from "./multiform/summaryStep";
 import ProgressIndicator from "./multiform/progressIndicator";
+import FormEight from "./multiform/formeight";
 
 interface FormData {
   titulo: string;
   descripcion: string;
   responsable: string;
   areas_tematicas_id: string;
+  inversion: number;
+  productos: ProductFormData[];
+}
+
+interface ProductFormData {
+titulo: string;
+descripcion: string;
+url: URL;
 }
 
 interface ProjectInsertFormProps {
@@ -30,7 +39,7 @@ const ProjectInsertForm: React.FC<ProjectInsertFormProps> = ({ closeModal }) => 
   const { handleSubmit, watch } = methods;
   const [currentStep, setCurrentStep] = useState(0);
 
-  const steps = [FormSix,FormSeven,  () => <SummaryStep data={formData} mode="Proyectos" />];
+  const steps = [FormSix,FormSeven,FormEight,  () => <SummaryStep data={formData} mode="Proyectos" />];
   const CurrentStepComponent = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
   
@@ -47,14 +56,16 @@ const ProjectInsertForm: React.FC<ProjectInsertFormProps> = ({ closeModal }) => 
     descripcion: data.descripcion,
     responsable: data.responsable,
     areas_tematicas_id: data.areas_tematicas_id,
+    inversion: data.inversion,
+    productos: data.productos,
   }
 
   try {
     console.log("Datos de Proyecto enviado:", formattedData)
     await createProject(formattedData)
     closeModal()
-    window.location.reload()
-    alert("Proyecto creado exitosamente")
+/*     window.location.reload()
+    alert("Proyecto creado exitosamente") */
   } catch (error) {
     console.error("Error al crear el proyecto", error)
     alert("Error al crear el proyecto")
