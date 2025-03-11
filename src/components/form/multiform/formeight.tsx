@@ -32,13 +32,13 @@ const FormEight = () => {
           <div key={index} className="flex flex-col gap-2">
             <input
               type="text"
-              {...register(`productos.${index}.titulo`, { required: true })}
+              {...register(`productos.${index}.titulo`, )}
               placeholder="Título del Producto"
               className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              {...register(`productos.${index}.descripcion`, { required: true })}
+              {...register(`productos.${index}.descripcion`, )}
               placeholder="Descripción del Producto"
               className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
