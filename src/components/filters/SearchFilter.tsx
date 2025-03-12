@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import FilterCard from "./FilterCard"
-import SearchBar from "../common/SearchBar"
+import SearchBar from "./SearchBar"
 import { debounce } from "../../utils"
 import { fetchFilteredData } from "../../api/investigations"
 
@@ -22,6 +22,10 @@ function SearchFilter<T>({ endpoint }: SearchFilterProps) {
       ),
     [endpoint]
   )
+
+  // useEffect(() => {
+  //   console.log(filteredData)
+  // })
 
   return (
     <FilterCard>

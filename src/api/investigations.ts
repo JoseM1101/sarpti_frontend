@@ -37,19 +37,32 @@ export const updateInvestigationState = async (
 
 export async function fetchFilteredData<T>(
   endpoint: string,
-  queryValue: string
+  queryValues: string[]
 ): Promise<ApiResponse<T>> {
   try {
+    let queryString = ""
+
+    if (queryValues && queryValues.length > 0) {
+      queryString = "?"
+
+      queryValues.forEach((query, index) => {
+        queryString += query
+        if (index < queryValues.length - 1) {
+          queryString += "&"
+        }
+      })
+    }
+
     const response = await axios.get<ApiResponse<T>>(
-      `${endpoint}?titulo=${encodeURIComponent(queryValue)}`,
+      `${endpoint}${queryString}`,
       {
         headers: {
           Authorization: token,
-          'Content-Type': 'application/json'
-        }
-      })
+          "Content-Type": "application/json",
+        },
+      }
+    )
 
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error fetching data:", error)
