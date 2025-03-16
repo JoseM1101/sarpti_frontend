@@ -6,7 +6,8 @@ import Edit from "../../assets/icons/edit.png"
 import { Entity, EntityStatus } from "../../types/Entity"
 import { ApiResponse } from "../../types/ApiResponse"
 import AddLinea from "./common/AddLineas"
-import { useMessage } from "../../hooks/useMessage" // Add this import
+import { useMessage } from "../../hooks/useMessage"
+import { MessageType } from "../../types/Message" // Import MessageType enum
 
 interface Area extends Entity {
   id: string
@@ -20,7 +21,7 @@ interface Linea extends Entity {
   id: string
   titulo: string
   estatus: EntityStatus
-} // similar structure to Area but with minimum required fields
+}
 
 const AreasTematicas: React.FC = () => {
   const [areas, setAreas] = useState<Area[]>([])
@@ -28,19 +29,14 @@ const AreasTematicas: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const [editingItem, setEditingItem] = useState<Area | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  // Remove the errorMessage state
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  // Add the message handler hook
+  // Get showMessage from useMessage.
+  // (Message now supports optional onConfirm and onCancel callbacks.)
   const { showMessage } = useMessage()
 
-  // New state for dropdown options for lineas
-  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<
-    Linea[]
-  >([])
-  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<
-    Linea[]
-  >([])
+  // State for dropdown options for lineas.
+  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<Linea[]>([])
+  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<Linea[]>([])
 
   const fetchAreas = useCallback(() => {
     axios
@@ -48,13 +44,24 @@ const AreasTematicas: React.FC = () => {
       .then((response) => {
         const list = response.data.data.list || []
         setAreas(list)
+        // Show information message if no areas are found.
+        if (list.length === 0) {
+          showMessage({
+            type: MessageType.INFO,
+            title: "Información",
+            content: "No hay áreas temáticas registradas"
+          })
+        }
       })
       .catch((error) => {
-        showMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
             "Error al cargar áreas"
-        )
+        })
       })
   }, [showMessage])
 
@@ -70,15 +77,17 @@ const AreasTematicas: React.FC = () => {
         setLineasMatricialesOptions(list)
       })
       .catch((error) => {
-        showMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
-            "Error fetching lineas matriciales"
-        )
+            "Error al cargar líneas matriciales"
+        })
       })
   }, [showMessage])
 
-  // Fetch options for lineas potenciales
   useEffect(() => {
     axios
       .get<ApiResponse<Linea>>("/lineas/potenciales")
@@ -87,13 +96,28 @@ const AreasTematicas: React.FC = () => {
         setLineasPotencialesOptions(list)
       })
       .catch((error) => {
-        showMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
-            "Error fetching lineas potenciales"
-        )
+            "Error al cargar líneas potenciales"
+        })
       })
   }, [showMessage])
+
+  // CONFIRMATION for adding an area.
+  const handleAddArea = () => {
+    showMessage({
+      type: MessageType.INFO,
+      title: "Confirmación",
+      content: "¿Está seguro que desea agregar un área temática?",
+      onConfirm: () => setAddingArea(true),
+      onCancel: () => {
+      }
+    })
+  }
 
   const handleSaveArea = (data: {
     titulo: string
@@ -109,32 +133,41 @@ const AreasTematicas: React.FC = () => {
       linea_matricial_id: data.linea_matricial_id,
       linea_potencial_id: data.linea_potencial_id,
     }
-    console.log(newArea)
     axios
       .post<ApiResponse<Area>>("/areas", newArea)
       .then((response) => {
         const createdArea = response.data.data as unknown as Area
         setAreas((prev) => [createdArea, ...prev])
         setAddingArea(false)
+        showMessage({
+          type: MessageType.SUCCESS,
+          title: "Éxito",
+          content: "Área temática creada exitosamente"
+        })
       })
       .catch((error) => {
-        console.log(error)
-        showMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
-            "Error creando área"
-        )
+            "Error al crear área"
+        })
       })
   }
 
-  // Handlers for editing an area
+  // Instead of using a confirmation modal on edit button click, directly enable edit mode.
   const handleEditAreas = () => {
     setIsEditing(true)
   }
+
   const handleCancelEdit = () => {
     setIsEditing(false)
     setEditingItem(null)
   }
+
+  // When trying to save changes in the edit form, show a confirmation modal before sending the update.
   const handleSaveEdit = (data: {
     titulo: string
     descripcion: string
@@ -163,25 +196,49 @@ const AreasTematicas: React.FC = () => {
     }
     if (Object.keys(changedFields).length === 0) {
       setEditingItem(null)
+      showMessage({
+        type: MessageType.WARNING,
+        title: "Aviso",
+        content: "No se detectaron cambios"
+      })
       return
     }
 
-    axios
-      .patch<ApiResponse<Area>>(`/areas/${editingItem.id}`, changedFields)
-      .then(() => {
-        // Refetch areas after edit to ensure data consistency
-        fetchAreas()
-        setEditingItem(null)
-      })
-      .catch((error) => {
-        showMessage(
-          error?.response?.data?.message ||
-            error.message ||
-            "Error actualizando área"
-        )
-      })
+    // Show confirmation modal before saving changes.
+    showMessage({
+      type: MessageType.INFO,
+      title: "Confirmación",
+      content: "¿Está seguro de que desea guardar los cambios?",
+      onConfirm: () => {
+        axios
+          .patch<ApiResponse<Area>>(`/areas/${editingItem.id}`, changedFields)
+          .then(() => {
+            fetchAreas()
+            setEditingItem(null)
+            showMessage({
+              type: MessageType.SUCCESS,
+              title: "Éxito",
+              content: "Área temática actualizada exitosamente"
+            })
+          })
+          .catch((error) => {
+            showMessage({
+              type: MessageType.ERROR,
+              title: "Error",
+              content:
+                error?.response?.data?.message ||
+                error.message ||
+                "Error al actualizar área"
+            })
+          })
+      },
+      onCancel: () => {
+        // Optionally, handle cancel action—for example, show a cancellation message.
+      }
+    })
   }
 
+  // When a card is clicked in edit mode, load the area’s data and exit the "selecting edit" mode.
   const handleCardClick = (id: string) => {
     if (isEditing) {
       axios
@@ -192,19 +249,18 @@ const AreasTematicas: React.FC = () => {
           setIsEditing(false)
         })
         .catch((error) => {
-          showMessage(
-            error?.response?.data?.message ||
+          showMessage({
+            type: MessageType.ERROR,
+            title: "Error",
+            content:
+              error?.response?.data?.message ||
               error.message ||
-              "Error fetching area"
-          )
+              "Error al obtener área"
+          })
         })
     } else {
       setExpandedCard(expandedCard === id ? null : id)
     }
-  }
-
-  const handleAddArea = () => {
-    setAddingArea(true)
   }
 
   const renderCard = (item: Area) => (
@@ -243,41 +299,39 @@ const AreasTematicas: React.FC = () => {
   const leftColumn = areas.slice(0, midIndex)
   const rightColumn = areas.slice(midIndex)
 
-  const renderHeader = () => {
-    return (
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Áreas Temáticas</h2>
-        <div className="flex space-x-2">
-          {isEditing ? (
+  const renderHeader = () => (
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-bold">Áreas Temáticas</h2>
+      <div className="flex space-x-2">
+        {isEditing ? (
+          <button
+            onClick={handleCancelEdit}
+            className="px-2 py-1 bg-red text-white rounded text-sm"
+          >
+            Cancelar edición
+          </button>
+        ) : (
+          <>
             <button
-              onClick={handleCancelEdit}
-              className="px-2 py-1 bg-red text-white rounded text-sm"
+              onClick={handleEditAreas}
+              className="p-2 bg-yellow rounded"
+              disabled={addingArea}
             >
-              Cancelar edición
+              <img src={Edit} alt="Edit" className="w-4 h-4" />
             </button>
-          ) : (
-            <>
+            {!addingArea && (
               <button
-                onClick={handleEditAreas}
-                className="p-2 bg-yellow rounded"
-                disabled={addingArea}
+                onClick={handleAddArea}
+                className="px-2 py-1 bg-green text-white rounded text-sm"
               >
-                <img src={Edit} alt="Edit" className="w-4 h-4" />
+                Agregar
               </button>
-              {!addingArea && (
-                <button
-                  onClick={handleAddArea}
-                  className="px-2 py-1 bg-green text-white rounded text-sm"
-                >
-                  Agregar
-                </button>
-              )}
-            </>
-          )}
-        </div>
+            )}
+          </>
+        )}
       </div>
-    )
-  }
+    </div>
+  )
 
   return (
     <div className="p-4">
@@ -287,7 +341,6 @@ const AreasTematicas: React.FC = () => {
           entityType="area tematica"
           onCancel={handleCancelEdit}
           onSave={handleSaveArea}
-          // Pass the dropdown options as props to the AddLinea form
           lineasMatricialesOptions={lineasMatricialesOptions}
           lineasPotencialesOptions={lineasPotencialesOptions}
         />
@@ -300,8 +353,8 @@ const AreasTematicas: React.FC = () => {
             titulo: editingItem.titulo,
             descripcion: editingItem.descripcion,
             estatus: editingItem.estatus === EntityStatus.ACTIVE,
-            linea_matricial_id: (editingItem as Area).linea_matricial_id,
-            linea_potencial_id: (editingItem as Area).linea_potencial_id,
+            linea_matricial_id: editingItem.linea_matricial_id,
+            linea_potencial_id: editingItem.linea_potencial_id,
           }}
           isEditing={true}
           lineasMatricialesOptions={lineasMatricialesOptions}

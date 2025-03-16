@@ -11,6 +11,8 @@ export interface Message {
   content: string;
   id?: string;
   icon?: string; // Path to icon image
+  onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
 export interface MessageContextType {
