@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import axios from "axios"
 import EntityCard from "../entity/EntityCard"
 import Scrollbar from "../common/Scrollbar"
@@ -6,7 +6,7 @@ import Edit from "../../assets/icons/edit.png"
 import { Entity, EntityStatus } from "../../types/Entity"
 import { ApiResponse } from "../../types/ApiResponse"
 import AddLinea from "./common/AddLineas"
-import Modal from "../common/Modal"
+import { useMessage } from "../../hooks/useMessage" // Add this import
 
 interface Area extends Entity {
   id: string
@@ -16,7 +16,11 @@ interface Area extends Entity {
   linea_matricial_id?: string
   linea_potencial_id?: string
 }
-interface Linea extends Entity {} // assuming a similar structure
+interface Linea extends Entity {
+  id: string
+  titulo: string
+  estatus: EntityStatus
+} // similar structure to Area but with minimum required fields
 
 const AreasTematicas: React.FC = () => {
   const [areas, setAreas] = useState<Area[]>([])
@@ -24,7 +28,11 @@ const AreasTematicas: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const [editingItem, setEditingItem] = useState<Area | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  // Remove the errorMessage state
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  // Add the message handler hook
+  const { showMessage } = useMessage()
 
   // New state for dropdown options for lineas
   const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<
@@ -34,8 +42,7 @@ const AreasTematicas: React.FC = () => {
     Linea[]
   >([])
 
-  // Add a reusable function to fetch areas
-  const fetchAreas = () => {
+  const fetchAreas = useCallback(() => {
     axios
       .get<ApiResponse<Area>>("/areas")
       .then((response) => {
@@ -43,17 +50,17 @@ const AreasTematicas: React.FC = () => {
         setAreas(list)
       })
       .catch((error) => {
-        setErrorMessage(
+        showMessage(
           error?.response?.data?.message ||
             error.message ||
             "Error al cargar áreas"
         )
       })
-  }
+  }, [showMessage])
 
   useEffect(() => {
     fetchAreas()
-  }, [])
+  }, [fetchAreas])
 
   useEffect(() => {
     axios
@@ -63,13 +70,13 @@ const AreasTematicas: React.FC = () => {
         setLineasMatricialesOptions(list)
       })
       .catch((error) => {
-        setErrorMessage(
+        showMessage(
           error?.response?.data?.message ||
             error.message ||
             "Error fetching lineas matriciales"
         )
       })
-  }, [])
+  }, [showMessage])
 
   // Fetch options for lineas potenciales
   useEffect(() => {
@@ -80,13 +87,13 @@ const AreasTematicas: React.FC = () => {
         setLineasPotencialesOptions(list)
       })
       .catch((error) => {
-        setErrorMessage(
+        showMessage(
           error?.response?.data?.message ||
             error.message ||
             "Error fetching lineas potenciales"
         )
       })
-  }, [])
+  }, [showMessage])
 
   const handleSaveArea = (data: {
     titulo: string
@@ -112,7 +119,7 @@ const AreasTematicas: React.FC = () => {
       })
       .catch((error) => {
         console.log(error)
-        setErrorMessage(
+        showMessage(
           error?.response?.data?.message ||
             error.message ||
             "Error creando área"
@@ -167,7 +174,7 @@ const AreasTematicas: React.FC = () => {
         setEditingItem(null)
       })
       .catch((error) => {
-        setErrorMessage(
+        showMessage(
           error?.response?.data?.message ||
             error.message ||
             "Error actualizando área"
@@ -185,7 +192,7 @@ const AreasTematicas: React.FC = () => {
           setIsEditing(false)
         })
         .catch((error) => {
-          setErrorMessage(
+          showMessage(
             error?.response?.data?.message ||
               error.message ||
               "Error fetching area"
@@ -259,7 +266,7 @@ const AreasTematicas: React.FC = () => {
               </button>
               {!addingArea && (
                 <button
-                  onClick={handleAddArea} // Changed from handleEditAreas to handleAddArea
+                  onClick={handleAddArea}
                   className="px-2 py-1 bg-green text-white rounded text-sm"
                 >
                   Agregar
@@ -293,9 +300,8 @@ const AreasTematicas: React.FC = () => {
             titulo: editingItem.titulo,
             descripcion: editingItem.descripcion,
             estatus: editingItem.estatus === EntityStatus.ACTIVE,
-            // You might also pass default selected ids if applicable:
-            linea_matricial_id: (editingItem as any).linea_matricial_id,
-            linea_potencial_id: (editingItem as any).linea_potencial_id,
+            linea_matricial_id: (editingItem as Area).linea_matricial_id,
+            linea_potencial_id: (editingItem as Area).linea_potencial_id,
           }}
           isEditing={true}
           lineasMatricialesOptions={lineasMatricialesOptions}
@@ -312,29 +318,6 @@ const AreasTematicas: React.FC = () => {
             </div>
           </div>
         </Scrollbar>
-      )}
-
-      {/* Error Modal */}
-      {errorMessage && (
-        <Modal isOpen={true}>
-          <div className="relative bg-white p-6 rounded-lg shadow-xl">
-            <button
-              onClick={() => setErrorMessage(null)}
-              className="absolute top-2 right-2 bg-red text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 text-xl"
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            <h3 className="text-lg font-bold mb-4">Error</h3>
-            <p>{errorMessage}</p>
-            <button
-              onClick={() => setErrorMessage(null)}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded"
-            >
-              Cerrar
-            </button>
-          </div>
-        </Modal>
       )}
     </div>
   )
