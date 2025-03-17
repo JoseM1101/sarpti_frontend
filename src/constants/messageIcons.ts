@@ -1,8 +1,12 @@
+import errorIcon from "../assets/icons/error.png";
+import successIcon from "../assets/icons/success.png";
+import infoIcon from "../assets/icons/info.png";
+import warningIcon from "../assets/icons/warning.png";
 import { MessageType } from "../types/Message";
 
 export const MESSAGE_ICONS: Record<MessageType, string> = {
-  [MessageType.ERROR]: "/assets/icons/error.png",
-  [MessageType.SUCCESS]: "/assets/icons/success.png",
-  [MessageType.INFO]: "/assets/icons/info.png",
-  [MessageType.WARNING]: "/assets/icons/warning.png",
+  [MessageType.ERROR]: errorIcon,
+  [MessageType.SUCCESS]: successIcon,
+  [MessageType.INFO]: infoIcon,
+  [MessageType.WARNING]: warningIcon,
 };
