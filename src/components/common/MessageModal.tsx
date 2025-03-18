@@ -17,15 +17,15 @@ const MessageModal: React.FC = () => {
   const getHeaderColor = () => {
     switch (message.type) {
       case MessageType.ERROR:
-        return "bg-red-500";
+        return "bg-red";
       case MessageType.SUCCESS:
-        return "bg-green-500";
+        return "bg-green";
       case MessageType.INFO:
-        return "bg-blue-500";
+        return "bg-lightblue";
       case MessageType.WARNING:
-        return "bg-yellow-500";
+        return "bg-yellow";
       default:
-        return "bg-blue-500";
+        return "bg-lightblue";
     }
   };
 
