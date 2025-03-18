@@ -2,9 +2,53 @@ import { mutate } from "swr"
 import axios from "axios"
 import { EntityStatus } from "../types/Entity"
 import { ApiResponse } from "../types/ApiResponse"
-import { InvestigationPostData } from "../types/Investigation"
+import { Investigation, InvestigationPostData } from "../types/Investigation"
 
 const token = localStorage.getItem("token")
+
+export const updateInvestigationDetails = async (
+  id: string,
+  updatedData: Partial<Investigation>
+): Promise<ApiResponse<Investigation>> => {
+  const key = `/investigaciones/${id}`;
+
+  mutate(
+    key,
+    async (currentData: ApiResponse<Investigation> | undefined) => {
+      if (!currentData) return currentData;
+
+      return {
+        ...currentData,
+        data: {
+          ...currentData.data,
+          ...updatedData,
+        },
+      };
+    },
+    false
+  );
+
+  try {
+    const response = await axios.patch<ApiResponse<Investigation>>(
+      key,
+      updatedData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    mutate(key);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating investigation details:", error);
+    // Revalida los datos en caso de error
+    mutate(key);
+    throw error;
+  }
+};
 
 export const updateInvestigationState = async (
   id: string,
@@ -14,7 +58,7 @@ export const updateInvestigationState = async (
 
   mutate(
     key,
-    async (currentData: any) => {
+    async (currentData: unknown) => {
       if (!currentData) return currentData
 
       return { ...currentData, estatus: newState }
