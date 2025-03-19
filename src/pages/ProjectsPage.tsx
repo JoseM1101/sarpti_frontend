@@ -17,7 +17,7 @@ const ProjectsPage: React.FC = () => {
   const debouncedSearch = useMemo(
     () =>
       debounce(
-        (query: string) =>
+        (query: string[]) =>
           fetchFilteredData<Project>("/proyectos", query).then((result) =>
             setFilteredProjects(result.data.list)
           ),

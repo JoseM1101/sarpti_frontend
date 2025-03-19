@@ -17,9 +17,9 @@ const DetailedEntity: React.FC = () => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       {type === EntityTypes.INVESTIGATION ? (
-        <InvestigationDetailCard entity={data as Investigation} />
+        <InvestigationDetailCard entity={data as unknown as Investigation} />
       ) : (
-        <ProjectDetailCard entity={data as Project} />
+        <ProjectDetailCard entity={data as unknown as Project} />
       )}
     </div>
   )

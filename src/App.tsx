@@ -16,10 +16,15 @@ import ResearchersPage from "./pages/ResearchersPage"
 import ProtectedRoute from "./guard/protectedRoute"
 import { MessageProvider } from "./components/providers/MessageProvider"
 import MessageModal from "./components/common/MessageModal"
+import React, { useState } from "react";
+import GlobalLoader from "./components/common/GlobalLoader";
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
   return (
     <MessageProvider>
+      <GlobalLoader visible={loading} />
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
