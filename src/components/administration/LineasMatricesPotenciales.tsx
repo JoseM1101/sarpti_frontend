@@ -6,27 +6,25 @@ import Edit from "../../assets/icons/edit.png"
 import { ApiResponse } from "../../types/ApiResponse"
 import { Entity, EntityStatus } from "../../types/Entity"
 import AddLinea from "./common/AddLineas"
-import Modal from "../common/Modal"
+import { useMessage } from "../../hooks/useMessage"
+import { MessageType } from "../../types/Message"
 
-interface Linea extends Entity {}
+type Linea = Entity
 
 const LineasMatricesPotenciales: React.FC = () => {
   const [lineasMatriciales, setLineasMatriciales] = useState<Linea[]>([])
   const [lineasPotenciales, setLineasPotenciales] = useState<Linea[]>([])
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
-  const [addingSection, setAddingSection] = useState<
-    "matriciales" | "potenciales" | null
-  >(null)
+  const [addingSection, setAddingSection] = useState<"matriciales" | "potenciales" | null>(null)
   const [editingItem, setEditingItem] = useState<{
     section: "matriciales" | "potenciales"
     item: Linea
   } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [editingSection, setEditingSection] = useState<
-    "matriciales" | "potenciales" | null
-  >(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [editingSection, setEditingSection] = useState<"matriciales" | "potenciales" | null>(null)
+  const { showMessage } = useMessage()
 
+  // Remove local errorMessage state and use global messages.
   // Fetch matriciales data
   useEffect(() => {
     axios
@@ -36,13 +34,16 @@ const LineasMatricesPotenciales: React.FC = () => {
         setLineasMatriciales(list)
       })
       .catch((error) => {
-        setErrorMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
             "Error fetching matriciales"
-        )
+        })
       })
-  }, [])
+  }, [showMessage])
 
   // Fetch potenciales data
   useEffect(() => {
@@ -53,41 +54,39 @@ const LineasMatricesPotenciales: React.FC = () => {
         setLineasPotenciales(list)
       })
       .catch((error) => {
-        setErrorMessage(
-          error?.response?.data?.message ||
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content:
+            error?.response?.data?.message ||
             error.message ||
             "Error fetching potenciales"
-        )
+        })
       })
-  }, [])
+  }, [showMessage])
 
   const handleEditClick = (section: "matriciales" | "potenciales") => {
     setIsEditing(true)
     setEditingSection(section)
   }
 
-  const handleCardClick = (
-    id: string,
-    section: "matriciales" | "potenciales"
-  ) => {
+  const handleCardClick = (id: string, section: "matriciales" | "potenciales") => {
     if (isEditing && editingSection === section) {
-      axios
-        .get<ApiResponse<Linea>>(`/lineas/${section}/${id}`)
-        .then((response) => {
-          const item = response.data.data as unknown as Linea
-          setEditingItem({ section, item })
-          setIsEditing(false)
-          setEditingSection(null)
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error?.response?.data?.message ||
-              error.message ||
-              "Error fetching línea for editing"
-          )
-        })
+      const list = section === "matriciales" ? lineasMatriciales : lineasPotenciales;
+      const selectedItem = list.find((linea) => linea.id === id);
+      if (selectedItem) {
+        setEditingItem({ section, item: selectedItem });
+        setIsEditing(false);
+        setEditingSection(null);
+      } else {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content: "No se encontró la línea para editar"
+        });
+      }
     } else if (!isEditing) {
-      setExpandedCard(expandedCard === id ? null : id)
+      setExpandedCard(expandedCard === id ? null : id);
     }
   }
 
@@ -103,14 +102,14 @@ const LineasMatricesPotenciales: React.FC = () => {
     setEditingItem(null)
   }
 
-  // onSave in add mode passes two arguments [section, data]
-  // while in edit mode the editing form should call onSave with one argument (the edited data).
+  // For addition mode, arg is the section name and maybeData holds the new data.
+  // For edit mode, arg is the edited data.
   const handleSaveEdit = (
-    arg: any,
+    arg: "matriciales" | "potenciales" | { titulo: string; descripcion: string; estatus: boolean },
     maybeData?: { titulo: string; descripcion: string; estatus: boolean }
   ) => {
     if (maybeData !== undefined) {
-      // Addition mode
+      // Addition mode:
       const section = arg as "matriciales" | "potenciales"
       const data = {
         titulo: maybeData.titulo,
@@ -119,44 +118,61 @@ const LineasMatricesPotenciales: React.FC = () => {
           ? EntityStatus.ACTIVE
           : EntityStatus.INACTIVE,
       }
-      axios
-        .post<ApiResponse<Linea>>(`/lineas/${section}`, data)
-        .then((response) => {
-          const newItem = response.data.data as unknown as Linea
-          if (section === "matriciales") {
-            setLineasMatriciales((prev) => [newItem, ...prev])
-          } else {
-            setLineasPotenciales((prev) => [newItem, ...prev])
-          }
-          setAddingSection(null)
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error?.response?.data?.message ||
-              error.message ||
-              "Error adding línea"
-          )
-        })
+      showMessage({
+        type: MessageType.INFO,
+        title: "Confirmación",
+        content: "¿Está seguro de agregar esta línea?",
+        onConfirm: () => {
+          axios
+            .post<ApiResponse<Linea>>(`/lineas/${section}`, data)
+            .then((response) => {
+              const newItem = response.data.data as unknown as Linea
+              if (section === "matriciales") {
+                setLineasMatriciales((prev) => [newItem, ...prev])
+              } else {
+                setLineasPotenciales((prev) => [newItem, ...prev])
+              }
+              setAddingSection(null)
+              showMessage({
+                type: MessageType.SUCCESS,
+                title: "Éxito",
+                content: "Línea agregada exitosamente"
+              })
+            })
+            .catch((error) => {
+              showMessage({
+                type: MessageType.ERROR,
+                title: "Error",
+                content:
+                  error?.response?.data?.message ||
+                  error.message ||
+                  "Error adding línea"
+              })
+            })
+        },
+        onCancel: () => {
+          // Optionally handle cancel action.
+        }
+      })
     } else {
-      // Editing mode
+      // Editing mode:
       if (!editingItem) return
 
-      interface EditableFields {
+      type EditableFields = {
         titulo?: string
         descripcion?: string
         estatus?: number
       }
       const changedFields: EditableFields = {}
+      const editedData = arg as { titulo: string; descripcion: string; estatus: boolean }
 
-      if (arg.titulo !== editingItem.item.titulo) {
-        changedFields.titulo = arg.titulo
+      if (editedData.titulo !== editingItem.item.titulo) {
+        changedFields.titulo = editedData.titulo
       }
-
-      if (arg.descripcion !== editingItem.item.descripcion) {
-        changedFields.descripcion = arg.descripcion
+      if (editedData.descripcion !== editingItem.item.descripcion) {
+        changedFields.descripcion = editedData.descripcion
       }
-
-      const newEstatus = arg.estatus
+      const newEstatus = editedData.estatus
         ? EntityStatus.ACTIVE
         : EntityStatus.INACTIVE
       if (newEstatus !== editingItem.item.estatus) {
@@ -168,45 +184,56 @@ const LineasMatricesPotenciales: React.FC = () => {
         return
       }
 
-      axios
-        .patch<ApiResponse<Linea>>(
-          `/lineas/${editingItem.section}/${editingItem.item.id}`,
-          changedFields
-        )
-        .then(() => {
-          if (editingItem.section === "matriciales") {
-            setLineasMatriciales((prev) =>
-              prev.map((item) =>
-                item.id === editingItem.item.id
-                  ? { ...item, ...changedFields }
-                  : item
-              )
+      showMessage({
+        type: MessageType.INFO,
+        title: "Confirmación",
+        content: "¿Está seguro de guardar los cambios?",
+        onConfirm: () => {
+          axios
+            .patch<ApiResponse<Linea>>(
+              `/lineas/${editingItem.section}/${editingItem.item.id}`,
+              changedFields
             )
-          } else {
-            setLineasPotenciales((prev) =>
-              prev.map((item) =>
-                item.id === editingItem.item.id
-                  ? { ...item, ...changedFields }
-                  : item
-              )
-            )
-          }
-          setEditingItem(null)
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error?.response?.data?.message ||
-              error.message ||
-              "Error editing línea"
-          )
-        })
+            .then(() => {
+              if (editingItem.section === "matriciales") {
+                setLineasMatriciales((prev) =>
+                  prev.map((item) =>
+                    item.id === editingItem.item.id ? { ...item, ...changedFields } : item
+                  )
+                )
+              } else {
+                setLineasPotenciales((prev) =>
+                  prev.map((item) =>
+                    item.id === editingItem.item.id ? { ...item, ...changedFields } : item
+                  )
+                )
+              }
+              setEditingItem(null)
+              showMessage({
+                type: MessageType.SUCCESS,
+                title: "Éxito",
+                content: "Línea actualizada exitosamente"
+              })
+            })
+            .catch((error) => {
+              showMessage({
+                type: MessageType.ERROR,
+                title: "Error",
+                content:
+                  error?.response?.data?.message ||
+                  error.message ||
+                  "Error editing línea"
+              })
+            })
+        },
+        onCancel: () => {
+          // Optionally handle cancel action.
+        }
+      })
     }
   }
 
-  const renderSectionHeader = (
-    section: "matriciales" | "potenciales",
-    title: string
-  ) => (
+  const renderSectionHeader = (section: "matriciales" | "potenciales", title: string) => (
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-xl font-bold">{title}</h2>
       <div className="flex space-x-2">
@@ -249,25 +276,17 @@ const LineasMatricesPotenciales: React.FC = () => {
     >
       <div
         className={`
-                rounded-sm shadow-sm hover:shadow-md transition-all overflow-hidden
-                ${expandedCard === item.id ? "max-h-[1920px]" : "max-h-20"}
-            `}
+          rounded-sm shadow-sm hover:shadow-md transition-all overflow-hidden
+          ${expandedCard === item.id ? "max-h-[1920px]" : "max-h-20"}
+        `}
       >
         <EntityCard
           entity={item}
           className="bg-gray shadow-sm hover:shadow-md transition-shadow"
         >
           <EntityCard.Badge />
-          <EntityCard.Title
-            className={`mt-4 transition-all ${
-              expandedCard === item.id ? "" : "line-clamp-1"
-            }`}
-          />
-          <EntityCard.Description
-            className={`transition-all ${
-              expandedCard === item.id ? "" : "line-clamp-1"
-            }`}
-          />
+          <EntityCard.Title className={`mt-4 transition-all ${expandedCard === item.id ? "" : "line-clamp-1"}`} />
+          <EntityCard.Description className={`transition-all ${expandedCard === item.id ? "" : "line-clamp-1"}`} />
         </EntityCard>
       </div>
     </div>
@@ -343,8 +362,11 @@ const LineasMatricesPotenciales: React.FC = () => {
         )}
       </section>
 
+      {/* Local error modal is replaced by global messages;
+          if you still need a fallback error modal, include the required closeModal prop */}
+      {/* Example:
       {errorMessage && (
-        <Modal isOpen={true}>
+        <Modal isOpen={true} closeModal={() => setErrorMessage(null)}>
           <div className="relative bg-white p-6 rounded-lg shadow-xl">
             <button
               onClick={() => setErrorMessage(null)}
@@ -363,7 +385,7 @@ const LineasMatricesPotenciales: React.FC = () => {
             </button>
           </div>
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

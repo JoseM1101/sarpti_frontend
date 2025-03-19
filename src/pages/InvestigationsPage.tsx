@@ -4,7 +4,7 @@ import SearchBar from "../components/filters/SearchBar"
 import { FilterProvider } from "../components/filters/context/FilterProvider"
 import { Investigation } from "../types/Investigation"
 import InvestigationsList from "../components/investigation/InvestigationsList"
-import investigaciones from "../assets/icons/investigaciones.png"
+import investigacionesIcon from "../assets/icons/investigaciones.png"
 import { fetchFilteredData } from "../api/investigations"
 import { Link } from "react-router-dom"
 import useModal from "../hooks/useModal"
@@ -13,29 +13,43 @@ import Filters from "../components/filters/Filters"
 import PDFReport from "../components/reports/pdf/PDFReport"
 import { InvestigationRender } from "../components/reports/pdf/InvestigationRender"
 import { filters } from "../components/investigation/InvestigationFilters"
+import { useMessage } from "../hooks/useMessage"
+import { MessageType } from "../types/Message"
 
 const InvestigationsPage: React.FC = () => {
   const [filteredInvestigations, setFilteredInvestigations] = useState<
     Investigation[]
   >([])
   const { isOpen, openModal, closeModal } = useModal()
+  const { showMessage } = useMessage()
 
   const searchFn = useCallback(
     (filterQuery: string[]) => {
-      fetchFilteredData<Investigation>("/investigaciones", filterQuery).then(
-        (result) => {
+      fetchFilteredData<Investigation>("/investigaciones", filterQuery)
+        .then((result) => {
           setFilteredInvestigations(result.data.list)
-        }
-      )
+        })
+        .catch((err) => {
+          showMessage({
+            type: MessageType.ERROR,
+            title: "Error",
+            content:
+              err?.response?.data?.message || err.message || "Error al filtrar",
+          })
+        })
     },
-    [setFilteredInvestigations]
+    [setFilteredInvestigations, showMessage]
   )
 
   return (
     <FilterProvider>
       <div className="flex gap-5 items-center">
         <div className="flex gap-3 items-center cursor-pointer">
-          <img className="object-contain" src={investigaciones} alt="" />
+          <img
+            className="object-contain"
+            src={investigacionesIcon}
+            alt="Investigaciones"
+          />
           <Link to="/proyectos">
             <p className="text-gray-3 text-xl font-semibold">Investigaciones</p>
           </Link>
