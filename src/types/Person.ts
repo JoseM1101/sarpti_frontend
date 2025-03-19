@@ -1,23 +1,22 @@
 export enum typeIdentification {
-    V = "Venezolano",
-    E = "Extranjero",
-    J = "Juridico",
+    V = "V",
+    E = "E",
+    J = "J",
 }
-
-export enum academicDegree {
-    NONE = "Ninguno",
-    BACHELOR = "Bachiller",
-    TECHNICIAN = "Técnico Superior Universitario",
+export enum sexo {
+    M = "M",
+    F = "F",
 }
 
 export interface Person {
   id_persona: string
-  id_tipo_identificacion: typeIdentification
+  tipo_identificacion: typeIdentification
   nombres: string
   apellidos: string
   estado_civil: string
-  grado_academicos: academicDegree
+  grado_academico: string
   identificacion: number
+  sexo: sexo
   edad: number
   correo: string
 }
