@@ -59,10 +59,10 @@ const InvestigationDetailCard = ({ className, entity }: InvestigationDetailCardP
       titulo: editedTitle,
       descripcion: editedDescription,
       inversion: editedInvestment,
-      keywords: editedKeywords.filter((word) => word.trim() !== "") || [], // Evitar palabras vacías y asignar arreglo vacío
+      keywords: editedKeywords.filter((word) => word.trim() !== "") || [], 
     };
   
-    console.log("Datos enviados al backend:", updatedData); // Verificar qué datos se envían
+    console.log("Datos enviados al backend:", updatedData); 
   
     try {
       await updateInvestigationDetails(entity.id, updatedData);
@@ -107,10 +107,10 @@ const InvestigationDetailCard = ({ className, entity }: InvestigationDetailCardP
                 <FaTrash className="ml-2 cursor-pointer text-red-500" onClick={() => handleRemoveKeyword(index)} />
               </div>
             ))}
-            {/* <button onClick={handleAddKeyword} className="p-2 bg-green text-white rounded-lg flex items-center gap-2">
+            <button onClick={handleAddKeyword} className="p-2 bg-green text-white rounded-lg flex items-center gap-2">
               <FaPlus />
               Agregar palabra
-            </button> */}
+            </button>
           </div>
         ) : (
           <EntityCard.Keywords keywords={entity.keywords} className="rounded-sm text-lightblue font-medium text-sm p-2" />

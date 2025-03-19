@@ -9,7 +9,6 @@ const token = localStorage.getItem("token")
 export const updateInvestigationDetails = async (
   id: string,
   updatedData: Partial<Investigation>,
-  replaceKeywords: boolean = false // Nuevo parámetro para elegir PUT o PATCH
 ): Promise<ApiResponse<Investigation>> => {
   const key = `/investigaciones/${id}`;
 
@@ -30,18 +29,14 @@ export const updateInvestigationDetails = async (
   );
 
   try {
-    const response = await axios({
-      method: replaceKeywords ? "PUT" : "PATCH",
-      url: key,
-      data: updatedData,
+    const response = await axios.patch(key, updatedData, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     });
 
     mutate(key);
-
     return response.data;
   } catch (error) {
     console.error("Error updating investigation details:", error);
