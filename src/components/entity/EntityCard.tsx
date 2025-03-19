@@ -122,7 +122,7 @@ EntityCard.RelatedPeople = function EntityCardRelatedPeople({
   return (
     <p className={twMerge("text-sm font-semibold text-gray-3", className)}>
       {showText && <span className="text-gray-2">{namespace}: </span>}
-      {formatItems(people, (person) => `${person.nombre} ${person.apellido}`)}
+      {formatItems(people, (person) => `${person.nombres} ${person.apellidos}`)}
     </p>
   )
 }

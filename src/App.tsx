@@ -12,10 +12,10 @@ import Administration from "./pages/Administration"
 import DetailedEntity from "./pages/DetailedEntity"
 import Layout from "./components/Layout"
 import "./config/axiosConfig"
-import UserGrid from "./components/user/UserGrid"
+import ResearchersPage from "./pages/ResearchersPage"
 import ProtectedRoute from "./guard/protectedRoute"
-import { MessageProvider } from "./components/providers/MessageProvider";
-import MessageModal from "./components/common/MessageModal";
+import { MessageProvider } from "./components/providers/MessageProvider"
+import MessageModal from "./components/common/MessageModal"
 
 const App: React.FC = () => {
   return (
@@ -28,7 +28,7 @@ const App: React.FC = () => {
               <Route path="/investigaciones" element={<InvestigationsPage />} />
               <Route path="/proyectos" element={<ProjectsPage />} />
               <Route path=":type/:id" element={<DetailedEntity />} />
-              <Route path="/investigadores" element={<UserGrid />} />
+              <Route path="/investigadores" element={<ResearchersPage />} />
               <Route path="/administracion" element={<Administration />} />
             </Route>
           </Route>
@@ -37,7 +37,7 @@ const App: React.FC = () => {
       </Router>
       <MessageModal />
     </MessageProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
