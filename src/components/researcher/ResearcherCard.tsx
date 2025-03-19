@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import { twMerge } from "tailwind-merge"
 import { EntityStatus } from "../../types/Entity"
@@ -22,7 +20,9 @@ const ResearcherCard: React.FC<ResearcherCardProps> = ({
   const formattedIdentification = `${person.tipo_identificacion}-${String(
     person.identificacion
   ).replace(/^0+/, "")}`
-  const initials = `${person.nombres.charAt(0)}${person.apellidos ? person.apellidos.charAt(0) : ""}`.toUpperCase()
+  const initials = `${person.nombre.charAt(0)}${
+    person.apellido ? person.apellido.charAt(0) : ""
+  }`.toUpperCase()
 
   return (
     <div
@@ -40,7 +40,7 @@ const ResearcherCard: React.FC<ResearcherCardProps> = ({
           </div>
           <div className="flex flex-col">
             <h3 className="font-medium text-sm">
-              {person.nombres} {person.apellidos}
+              {person.nombre} {person.apellido}
             </h3>
             <p className="text-xs text-gray-500">
               {person.grado_academico || ""}
