@@ -19,7 +19,7 @@ function BasicDatePicker({ label, value, onChange }: BasicDatePickerProps) {
         slotProps={{ textField: { placeholder: "YYYY-MM-DD" } }}
         onChange={(newValue: Dayjs | null) =>
           onChange(newValue ? newValue.toDate() : null)
-        } // Convert Dayjs back to Date
+        }
       />
     </LocalizationProvider>
   )

@@ -3,6 +3,7 @@ import { useInvestigations } from "../../hooks/useInvestigations"
 import InvestigationMenuCard from "./InvestigationMenuCard"
 import EntityList from "../entity/EntityList"
 import { Investigation } from "../../types/Investigation"
+import { useFilterContext } from "../filters/context/useFilterContext"
 interface InvestigationListProps {
   filteredInvestigations: Investigation[]
 }
@@ -19,6 +20,7 @@ const InvestigationsList: React.FC<InvestigationListProps> = ({
   filteredInvestigations,
 }) => {
   const { investigations, error, isLoading } = useInvestigations()
+  const { isBeingFiltered } = useFilterContext()
 
   if (error) {
     return <div>Error: {error.message}</div>
@@ -28,13 +30,22 @@ const InvestigationsList: React.FC<InvestigationListProps> = ({
     return <div>Loading...</div>
   }
 
-  return (
+  return isBeingFiltered ? (
+    filteredInvestigations.length > 0 ? (
+      <EntityList<Investigation>
+        entities={filteredInvestigations}
+        renderEntity={(entity) => renderFunction(entity)}
+      />
+    ) : (
+      <div className="flex justify-center items-center h-full">
+        <p className="text-gray-3 text-lg font-semibold">
+          No se encontraron resultados
+        </p>
+      </div>
+    )
+  ) : (
     <EntityList<Investigation>
-      entities={
-        filteredInvestigations.length > 0
-          ? filteredInvestigations
-          : investigations
-      }
+      entities={investigations}
       renderEntity={(entity) => renderFunction(entity)}
     />
   )

@@ -1,7 +1,7 @@
 import useSWR from "swr"
 import { fetcher } from "../api"
 import { EntityMap } from "../types/Entity"
-import { ApiResponse } from "@/types/ApiResponse"
+import { ApiResponse } from "../types/ApiResponse"
 
 export const useEntity = <T extends keyof EntityMap>(
   entityType: T,

@@ -10,6 +10,9 @@ import { Link } from "react-router-dom"
 import useModal from "../hooks/useModal"
 import InsertModal from "../components/InsertModal"
 import Filters from "../components/filters/Filters"
+import PDFReport from "../components/reports/pdf/PDFReport"
+import { InvestigationRender } from "../components/reports/pdf/InvestigationRender"
+import { filters } from "../components/investigation/InvestigationFilters"
 
 const InvestigationsPage: React.FC = () => {
   const [filteredInvestigations, setFilteredInvestigations] = useState<
@@ -37,9 +40,15 @@ const InvestigationsPage: React.FC = () => {
             <p className="text-gray-3 text-xl font-semibold">Investigaciones</p>
           </Link>
         </div>
-        <Filters updateFn={searchFn} />
+        <Filters updateFn={searchFn} filters={filters} />
         <SearchBar onSearch={searchFn} className="w-80" />
-        <Button className="py-3">Generar Reporte</Button>
+        <PDFReport
+          title="Reporte de Investigaciones"
+          data={filteredInvestigations}
+          recordRenderer={(records) => (
+            <InvestigationRender investigations={records} />
+          )}
+        />
         <Button className="py-3" bgColor="green" onClick={openModal}>
           Agregar
         </Button>
