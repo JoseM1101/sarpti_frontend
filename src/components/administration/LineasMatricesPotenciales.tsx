@@ -72,26 +72,21 @@ const LineasMatricesPotenciales: React.FC = () => {
 
   const handleCardClick = (id: string, section: "matriciales" | "potenciales") => {
     if (isEditing && editingSection === section) {
-      axios
-        .get<ApiResponse<Linea>>(`/lineas/${section}/${id}`)
-        .then((response) => {
-          const item = response.data.data as unknown as Linea
-          setEditingItem({ section, item })
-          setIsEditing(false)
-          setEditingSection(null)
-        })
-        .catch((error) => {
-          showMessage({
-            type: MessageType.ERROR,
-            title: "Error",
-            content:
-              error?.response?.data?.message ||
-              error.message ||
-              "Error fetching línea for editing"
-          })
-        })
+      const list = section === "matriciales" ? lineasMatriciales : lineasPotenciales;
+      const selectedItem = list.find((linea) => linea.id === id);
+      if (selectedItem) {
+        setEditingItem({ section, item: selectedItem });
+        setIsEditing(false);
+        setEditingSection(null);
+      } else {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error",
+          content: "No se encontró la línea para editar"
+        });
+      }
     } else if (!isEditing) {
-      setExpandedCard(expandedCard === id ? null : id)
+      setExpandedCard(expandedCard === id ? null : id);
     }
   }
 

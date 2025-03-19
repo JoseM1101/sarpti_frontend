@@ -1,26 +1,32 @@
-import "./App.css"
+import React, { useState, useEffect } from "react";
+import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-} from "react-router-dom"
-import InvestigationsPage from "./pages/InvestigationsPage"
-import ProjectsPage from "./pages/ProjectsPage"
-import Login from "./pages/Login"
-import Administration from "./pages/Administration"
-import DetailedEntity from "./pages/DetailedEntity"
-import Layout from "./components/Layout"
-import "./config/axiosConfig"
-import ResearchersPage from "./pages/ResearchersPage"
-import ProtectedRoute from "./guard/protectedRoute"
-import { MessageProvider } from "./components/providers/MessageProvider"
-import MessageModal from "./components/common/MessageModal"
-import React, { useState } from "react";
+} from "react-router-dom";
+import InvestigationsPage from "./pages/InvestigationsPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import Login from "./pages/Login";
+import Administration from "./pages/Administration";
+import DetailedEntity from "./pages/DetailedEntity";
+import Layout from "./components/Layout";
+import "./config/axiosConfig";
+import ResearchersPage from "./pages/ResearchersPage";
+import ProtectedRoute from "./guard/protectedRoute";
+import { MessageProvider } from "./components/providers/MessageProvider";
+import MessageModal from "./components/common/MessageModal";
 import GlobalLoader from "./components/common/GlobalLoader";
+import { registerLoader } from "./components/providers/loadingService";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
+
+  // Register the setLoading function with our loading service
+  useEffect(() => {
+    registerLoader(setLoading);
+  }, []);
 
   return (
     <MessageProvider>
@@ -42,7 +48,7 @@ const App: React.FC = () => {
       </Router>
       <MessageModal />
     </MessageProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -3,15 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.jpg";
 import Cookies from "js-cookie";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Íconos de ojo
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login: React.FC = () => {
   const [emailLocal, setEmailLocal] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false); // Estado para mostrar/ocultar contraseña
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
- 
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
@@ -32,7 +31,6 @@ const Login: React.FC = () => {
           withCredentials: true,
         }
       );
-
       Cookies.set("token", response.data.token, { sameSite: "Strict" });
       localStorage.setItem("token", response.data.token);
       navigate("/investigaciones");
@@ -83,20 +81,18 @@ const Login: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-2 border border-[#CFD7E0] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors pr-10" // Añade padding a la derecha
+                    className="w-full px-4 py-2 border border-[#CFD7E0] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors pr-10"
                     placeholder="Ingresa tu contraseña"
                     required
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)} 
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
-              </div>
-              <div className="flex items-center justify-between">
               </div>
               <button
                 type="submit"
