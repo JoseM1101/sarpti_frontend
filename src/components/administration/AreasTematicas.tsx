@@ -192,9 +192,11 @@ const AreasTematicas: React.FC = () => {
     setIsEditing(true)
   }
 
+  // Función para cancelar edición o agregar
   const handleCancelEdit = () => {
-    setIsEditing(false)
-    setEditingItem(null)
+    setIsEditing(false);
+    setEditingItem(null);
+    setAddingArea(false); // Se agrega para cancelar también el modo de agregar
   }
 
   // When trying to save changes in the edit form, show a confirmation modal before sending the update.
@@ -332,7 +334,8 @@ const AreasTematicas: React.FC = () => {
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-xl font-bold">Áreas Temáticas</h2>
       <div className="flex space-x-2">
-        {isEditing || editingItem ? null : (
+        {/* Si se está editando O agregando, no se muestran los botones en la cabecera */}
+        {isEditing || editingItem || addingArea ? null : (
           <>
             <button
               onClick={handleEditAreas}
@@ -341,14 +344,12 @@ const AreasTematicas: React.FC = () => {
             >
               <img src={Edit} alt="Edit" className="w-4 h-4" />
             </button>
-            {!addingArea && (
-              <button
-                onClick={handleAddArea}
-                className="px-2 py-1 bg-green text-white rounded text-sm"
-              >
-                Agregar
-              </button>
-            )}
+            <button
+              onClick={handleAddArea}
+              className="px-2 py-1 bg-green text-white rounded text-sm"
+            >
+              Agregar
+            </button>
           </>
         )}
       </div>

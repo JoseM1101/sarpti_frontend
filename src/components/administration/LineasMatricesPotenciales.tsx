@@ -235,25 +235,17 @@ const LineasMatricesPotenciales: React.FC = () => {
 
   const renderSectionHeader = useCallback(
     (section: "matriciales" | "potenciales", title: string) => {
-      // Se considera en edición si se está en modo edición (isEditing) o se ha seleccionado un item para editar en la sección.
-      const inEditMode = isEditing || (editingItem && editingItem.section === section);
+      // Se considera en modo edición si isEditing es true, se ha seleccionado un item para esa sección, o se está agregando esa sección.
+      const inEditMode =
+        isEditing ||
+        (editingItem && editingItem.section === section) ||
+        addingSection === section;
+    
       return (
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{title}</h2>
           <div className="flex space-x-2">
-            {inEditMode ? (
-              <button
-                onClick={() => {
-                  // Cancela el modo edición en la sección
-                  setEditingItem(null);
-                  setIsEditing(false);
-                  setEditingSection(null);
-                }}
-                className="px-2 py-1 bg-red text-white rounded text-sm"
-              >
-                Cancelar edición
-              </button>
-            ) : (
+            {inEditMode ? null : (
               <>
                 <button
                   onClick={() => handleEditClick(section)}
