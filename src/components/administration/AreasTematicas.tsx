@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, memo, useRef } from "react"
 import axios from "axios"
 import EntityCard from "../entity/EntityCard"
 import Scrollbar from "../common/Scrollbar"
@@ -38,12 +38,22 @@ const AreasTematicas: React.FC = () => {
   const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<Linea[]>([])
   const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<Linea[]>([])
 
+  // Add refs to track initial loads
+  const initialAreasLoadRef = useRef(false);
+  const initialMatricialesLoadRef = useRef(false);
+  const initialPotencialesLoadRef = useRef(false);
+
   const fetchAreas = useCallback(() => {
+    // Skip if already loaded once
+    if (initialAreasLoadRef.current) return;
+
     axios
       .get<ApiResponse<Area>>("/areas")
       .then((response) => {
         const list = response.data.data.list || []
         setAreas(list)
+        initialAreasLoadRef.current = true;
+
         // Show information message if no areas are found.
         if (list.length === 0) {
           showMessage({
@@ -54,6 +64,7 @@ const AreasTematicas: React.FC = () => {
         }
       })
       .catch((error) => {
+        initialAreasLoadRef.current = true;
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
@@ -69,14 +80,19 @@ const AreasTematicas: React.FC = () => {
     fetchAreas()
   }, [fetchAreas])
 
-  useEffect(() => {
+  const fetchLineasMatriciales = useCallback(() => {
+    // Skip if already loaded once
+    if (initialMatricialesLoadRef.current) return;
+
     axios
       .get<ApiResponse<Linea>>("/lineas/matriciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasMatricialesOptions(list)
+        initialMatricialesLoadRef.current = true;
       })
       .catch((error) => {
+        initialMatricialesLoadRef.current = true;
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
@@ -88,14 +104,20 @@ const AreasTematicas: React.FC = () => {
       })
   }, [showMessage])
 
-  useEffect(() => {
+  // Memoize the function to fetch líneas potenciales
+  const fetchLineasPotenciales = useCallback(() => {
+    // Skip if already loaded once
+    if (initialPotencialesLoadRef.current) return;
+
     axios
       .get<ApiResponse<Linea>>("/lineas/potenciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasPotencialesOptions(list)
+        initialPotencialesLoadRef.current = true;
       })
       .catch((error) => {
+        initialPotencialesLoadRef.current = true;
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
@@ -106,6 +128,14 @@ const AreasTematicas: React.FC = () => {
         })
       })
   }, [showMessage])
+
+  useEffect(() => {
+    fetchLineasMatriciales()
+  }, [fetchLineasMatriciales])
+
+  useEffect(() => {
+    fetchLineasPotenciales()
+  }, [fetchLineasPotenciales])
 
   // CONFIRMATION for adding an area.
   const handleAddArea = () => {
@@ -376,4 +406,4 @@ const AreasTematicas: React.FC = () => {
   )
 }
 
-export default AreasTematicas
+export default memo(AreasTematicas)

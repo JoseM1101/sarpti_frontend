@@ -6,52 +6,47 @@ import { showLoader, hideLoader } from "../components/providers/loadingService";
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
-// Global variables to track active requests and loader state
 let activeRequests = 0;
-let loaderTimer: ReturnType<typeof setTimeout> | null = null;
-let loaderVisible = false;
 
 axios.interceptors.request.use(
   (config) => {
+    // Use a custom flag to skip the loader if necessary.
+    const skipLoader = (config as any).skipLoader;
     const token = Cookies.get("token");
     if (token) {
       config.headers.Authorization = token;
     }
-    activeRequests++;
-    if (activeRequests === 1) {
-      loaderTimer = setTimeout(() => {
+    if (!skipLoader) {
+      activeRequests++;
+      if (activeRequests === 1) {
         showLoader();
-        loaderVisible = true;
-        loaderTimer = null;
-      }, 500);
+      }
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-const decrementActiveRequests = () => {
-  activeRequests = Math.max(activeRequests - 1, 0);
-  // When there are no more pending requests clear the timer and hide loader if it was shown
-  if (activeRequests === 0) {
-    if (loaderTimer) {
-      clearTimeout(loaderTimer);
-      loaderTimer = null;
-    }
-    if (loaderVisible) {
+const decrementActiveRequests = (config: any) => {
+  const skipLoader = config && config.skipLoader;
+  if (!skipLoader) {
+    activeRequests = Math.max(activeRequests - 1, 0);
+    if (activeRequests === 0) {
       hideLoader();
-      loaderVisible = false;
     }
   }
 };
 
 axios.interceptors.response.use(
   (response) => {
-    decrementActiveRequests();
+    decrementActiveRequests(response.config);
     return response;
   },
   (error) => {
-    decrementActiveRequests();
+    // Check if error.config exists
+    if (error.config) {
+      decrementActiveRequests(error.config);
+    }
     return Promise.reject(error);
   }
 );
