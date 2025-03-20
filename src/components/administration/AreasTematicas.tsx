@@ -324,7 +324,6 @@ const AreasTematicas: React.FC = () => {
       </div>
     </div>
   )
-
   const midIndex = Math.floor(areas.length / 2)
   const leftColumn = areas.slice(0, midIndex)
   const rightColumn = areas.slice(midIndex)
