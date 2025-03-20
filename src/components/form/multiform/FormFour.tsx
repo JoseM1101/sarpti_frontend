@@ -1,33 +1,33 @@
-import { useState, useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { useState, useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 
 const FormFour = () => {
-  const { register, setValue, getValues } = useFormContext();
-  const [wordsCount, setWordsCount] = useState(1);
+  const { register, setValue, getValues } = useFormContext()
+  const [wordsCount, setWordsCount] = useState(1)
 
   const handleAddWord = () => {
-    const palabras = getValues("palabras") || [];
-    setValue("palabras", [...palabras, ""]); 
-    setWordsCount((prev) => prev + 1);
-  };
+    const palabras = getValues("palabras") || []
+    setValue("palabras", [...palabras, ""])
+    setWordsCount((prev) => prev + 1)
+  }
 
   const handleRestWord = () => {
     if (wordsCount > 1) {
-      const palabras = getValues("palabras") || [];
-      palabras.pop(); 
-      setValue("palabras", palabras); 
-      setWordsCount((prev) => prev - 1);
+      const palabras = getValues("palabras") || []
+      palabras.pop()
+      setValue("palabras", palabras)
+      setWordsCount((prev) => prev - 1)
     } else {
-      alert("No se pueden eliminar más palabras");
+      alert("No se pueden eliminar más palabras")
     }
-  };
+  }
 
   useEffect(() => {
-    const palabras = getValues("palabras") || [];
+    const palabras = getValues("palabras") || []
     if (palabras.length === 0) {
-      setValue("palabras", Array(wordsCount).fill("")); 
+      setValue("palabras", Array(wordsCount).fill(""))
     }
-  }, [setValue, getValues, wordsCount]);
+  }, [setValue, getValues, wordsCount])
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,7 +59,7 @@ const FormFour = () => {
         </button>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FormFour;
+export default FormFour

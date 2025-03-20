@@ -1,124 +1,128 @@
-import { useState, useEffect } from "react";
-import { useFormContext } from "react-hook-form";
-import axios from "axios";
-import Cookies from "js-cookie"; 
+import { useState, useEffect } from "react"
+import { useFormContext } from "react-hook-form"
+import axios from "axios"
+import Cookies from "js-cookie"
 
 const FormTwo = () => {
-  const { register, watch } = useFormContext();
-  const [tutorCount, setTutorCount] = useState(1);
-  const [authorCount, setAuthorCount] = useState(1);
+  const { register, watch } = useFormContext()
+  const [tutorCount, setTutorCount] = useState(1)
+  const [authorCount, setAuthorCount] = useState(1)
 
-  const [tutorVerifications, setTutorVerifications] = useState<{ [key: string]: { isValid: boolean; nombre?: string } }>({});
-  const [authorVerifications, setAuthorVerifications] = useState<{ [key: string]: { isValid: boolean; nombre?: string } }>({});
+  const [tutorVerifications, setTutorVerifications] = useState<{
+    [key: string]: { isValid: boolean; nombre?: string }
+  }>({})
+  const [authorVerifications, setAuthorVerifications] = useState<{
+    [key: string]: { isValid: boolean; nombre?: string }
+  }>({})
 
   const verifyCedula = async (cedula: string, type: "tutor" | "author") => {
-    if (cedula.length === 8) { 
+    if (cedula.length === 8) {
       try {
-        const token = Cookies.get("token"); 
+        const token = Cookies.get("token")
         const response = await axios.get(`/personas?identificacion=${cedula}`, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
-        });
-  
-        const data = response.data;
-  
+        })
+
+        const data = response.data
+
         if (data.success && data.data.list.length > 0) {
-          const persona = data.data.list[0]; 
-          const nombreCompleto = `${persona.nombre} ${persona.apellido}`.trim();
-  
+          const persona = data.data.list[0]
+          const nombreCompleto = `${persona.nombre} ${persona.apellido}`.trim()
+
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: true, nombre: nombreCompleto },
-            }));
+            }))
           } else {
             setAuthorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: true, nombre: nombreCompleto },
-            }));
+            }))
           }
-        } else { 
+        } else {
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: false, nombre: "Cédula no se encuentra" },
-            }));
+            }))
           } else {
             setAuthorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: false, nombre: "Cédula no se encuentra" },
-            }));
+            }))
           }
         }
       } catch (error) {
-        console.error("Error al verificar la cédula:", error);
-  
+        console.error("Error al verificar la cédula:", error)
+
         if (axios.isAxiosError(error) && error.response?.status === 404) {
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: false, nombre: "Cédula no se encuentra" },
-            }));
+            }))
           } else {
             setAuthorVerifications((prev) => ({
               ...prev,
               [cedula]: { isValid: false, nombre: "Cédula no se encuentra" },
-            }));
+            }))
           }
         }
       }
     }
-  };
+  }
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name && name.startsWith("cedula-")) {
-        const index = parseInt(name.split("-")[1], 10);
-        const cedula = value[name];
+        const index = parseInt(name.split("-")[1], 10)
+        const cedula = value[name]
         if (cedula && cedula.length === 8) {
           if (index < 5) {
-            verifyCedula(cedula, "tutor");
+            verifyCedula(cedula, "tutor")
           } else {
-            verifyCedula(cedula, "author");
+            verifyCedula(cedula, "author")
           }
         }
       }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const handleAddTutor = () => {
     if (tutorCount < 4) {
-      setTutorCount((prev) => prev + 1);
+      setTutorCount((prev) => prev + 1)
     } else {
-      alert("No se pueden agregar más de 4 tutores.");
+      alert("No se pueden agregar más de 4 tutores.")
     }
-  };
+  }
 
   const handleRestTutor = () => {
     if (tutorCount > 1) {
-      setTutorCount((prev) => prev - 1);
+      setTutorCount((prev) => prev - 1)
     } else {
-      alert("No se pueden eliminar más tutores.");
+      alert("No se pueden eliminar más tutores.")
     }
-  };
+  }
 
   const handleAddAuthor = () => {
     if (authorCount < 4) {
-      setAuthorCount((prev) => prev + 1);
+      setAuthorCount((prev) => prev + 1)
     } else {
-      alert("No se pueden agregar más de 4 autores.");
+      alert("No se pueden agregar más de 4 autores.")
     }
-  };
+  }
 
   const handleRestAuthor = () => {
     if (authorCount > 1) {
-      setAuthorCount((prev) => prev - 1);
+      setAuthorCount((prev) => prev - 1)
     } else {
-      alert("No se pueden eliminar más autores.");
+      alert("No se pueden eliminar más autores.")
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -126,8 +130,8 @@ const FormTwo = () => {
         <div className="flex-1">
           <h2 className="text-lg font-semibold mb-4">Tutores</h2>
           {[...Array(tutorCount)].map((_, index) => {
-            const cedula = watch(`cedula-${index + 1}`); 
-            const verification = tutorVerifications[cedula]; 
+            const cedula = watch(`cedula-${index + 1}`)
+            const verification = tutorVerifications[cedula]
 
             return (
               <div key={index} className="flex flex-col gap-3">
@@ -139,24 +143,28 @@ const FormTwo = () => {
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
-                  {verification ? (
-                    <>
-                      <span style={{ color: verification.isValid ? "green" : "red" }}>
-                        {verification.isValid ? "✓" : "X"}
-                      </span>
-                      {verification.isValid ? (
-                        <span>{verification.nombre}</span>
-                      ) : (
-                        <span>Cédula no se encuentra</span>
-                      )}
-                    </>
-                  ) : (
-                    <span>Verificando...</span>
-                  )}
-                </div>  
+                    {verification ? (
+                      <>
+                        <span
+                          style={{
+                            color: verification.isValid ? "green" : "red",
+                          }}
+                        >
+                          {verification.isValid ? "✓" : "X"}
+                        </span>
+                        {verification.isValid ? (
+                          <span>{verification.nombre}</span>
+                        ) : (
+                          <span>Cédula no se encuentra</span>
+                        )}
+                      </>
+                    ) : (
+                      <span>Verificando...</span>
+                    )}
+                  </div>
                 )}
               </div>
-            );
+            )
           })}
           <button
             type="button"
@@ -180,8 +188,8 @@ const FormTwo = () => {
         <div className="flex-1">
           <h2 className="text-lg font-semibold mb-4">Autores</h2>
           {[...Array(authorCount)].map((_, index) => {
-            const cedula = watch(`cedula-${index + 5}`); 
-            const verification = authorVerifications[cedula]; 
+            const cedula = watch(`cedula-${index + 5}`)
+            const verification = authorVerifications[cedula]
 
             return (
               <div key={index} className="flex flex-col gap-3">
@@ -193,24 +201,28 @@ const FormTwo = () => {
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
-                  {verification ? (
-                    <>
-                      <span style={{ color: verification.isValid ? "green" : "red" }}>
-                        {verification.isValid ? "✓" : "X"}
-                      </span>
-                      {verification.isValid ? (
-                        <span>{verification.nombre}</span>
-                      ) : (
-                        <span>Cédula no se encuentra</span>
-                      )}
-                    </>
-                  ) : (
-                    <span>Verificando...</span>
-                  )}
-                </div>  
+                    {verification ? (
+                      <>
+                        <span
+                          style={{
+                            color: verification.isValid ? "green" : "red",
+                          }}
+                        >
+                          {verification.isValid ? "✓" : "X"}
+                        </span>
+                        {verification.isValid ? (
+                          <span>{verification.nombre}</span>
+                        ) : (
+                          <span>Cédula no se encuentra</span>
+                        )}
+                      </>
+                    ) : (
+                      <span>Verificando...</span>
+                    )}
+                  </div>
                 )}
               </div>
-            );
+            )
           })}
           <button
             type="button"
@@ -232,7 +244,7 @@ const FormTwo = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FormTwo;
+export default FormTwo

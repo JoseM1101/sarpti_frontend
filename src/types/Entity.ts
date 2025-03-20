@@ -1,5 +1,6 @@
 import { Project } from "./Project"
 import { Investigation } from "./Investigation"
+import { Areas } from "./Areas"
 
 export enum EntityStatus {
   INACTIVE = 0,
@@ -11,11 +12,13 @@ export enum EntityStatus {
 export enum EntityTypes {
   PROJECT = "proyectos",
   INVESTIGATION = "investigaciones",
+  AREAS = "areas",
 }
 
 export type EntityMap = {
   proyectos: Project
   investigaciones: Investigation
+  areas: Areas
 }
 
 export interface EntityProduct {

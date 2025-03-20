@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useState } from "react"
+import { useFormContext } from "react-hook-form"
 
 const FormFive = () => {
-  const { register } = useFormContext();
-  const [productCount, setProductCount] = useState(1);
+  const { register } = useFormContext()
+  const [productCount, setProductCount] = useState(1)
 
   const handleAddProduct = () => {
-    setProductCount((prev) => prev + 1);
-  };
+    setProductCount((prev) => prev + 1)
+  }
 
   const handleRestProduct = () => {
     if (productCount > 1) {
-      setProductCount((prev) => prev - 1);
+      setProductCount((prev) => prev - 1)
     } else {
-      alert("No se pueden eliminar más productos.");
+      alert("No se pueden eliminar más productos.")
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,13 +42,13 @@ const FormFive = () => {
           <div key={index} className="flex flex-col gap-2">
             <input
               type="text"
-              {...register(`productos.${index}.titulo`, )}
+              {...register(`productos.${index}.titulo`)}
               placeholder="Título del Producto"
               className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              {...register(`productos.${index}.descripcion`, )}
+              {...register(`productos.${index}.descripcion`)}
               placeholder="Descripción del Producto"
               className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -58,10 +58,7 @@ const FormFive = () => {
               placeholder="URL del Producto"
               className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
             />
-            {productCount > 1 && (
-            <hr className="mb-4"/>
-
-            )}
+            {productCount > 1 && <hr className="mb-4" />}
           </div>
         ))}
       </div>
@@ -84,7 +81,7 @@ const FormFive = () => {
         </button>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FormFive;
+export default FormFive
