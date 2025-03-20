@@ -14,6 +14,9 @@ import {
   updateInvestigationDetails,
 } from "../../api/investigations"
 import { EntityStatus } from "../../types/Entity"
+import { useMessage } from "../../hooks/useMessage"
+import { MessageType } from "../../types/Message"
+
 import { FaCheck, FaEdit, FaTimes, FaPlus, FaTrash } from "react-icons/fa"
 import pause from "../../assets/images/pause.png"
 import stop from "../../assets/images/stop.png"
@@ -57,6 +60,7 @@ const InvestigationDetailCard = ({
   const baseClasses =
     "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
+  const { showMessage } = useMessage()
 
   const handleAddKeyword = () => {
     setEditedKeywords([...editedKeywords, ""])
@@ -87,8 +91,20 @@ const InvestigationDetailCard = ({
     try {
       await updateInvestigationDetails(entity.id, updatedData)
       setIsEditing(false)
+      showMessage({
+        type: MessageType.SUCCESS,
+        title: "Cambios guardados",
+        content: "Los cambios se han guardado exitosamente.",
+      })
     } catch (error) {
       console.error("Error al guardar los cambios:", error)
+      showMessage({
+        type: MessageType.ERROR,
+        title: "Error al guardar",
+        content:
+          error?.response?.data?.message ||
+          "No se pudieron guardar los cambios.",
+      })
     }
   }
 
@@ -252,6 +268,23 @@ const InvestigationDetailCard = ({
                 <img
                   onClick={() =>
                     updateInvestigationState(entity.id, EntityStatus.CANCELLED)
+                      .then(() => {
+                        showMessage({
+                          type: MessageType.SUCCESS,
+                          title: "Investigación Cancelada",
+                          content:
+                            "La investigación ha sido cancelada correctamente.",
+                        })
+                      })
+                      .catch((error) => {
+                        showMessage({
+                          type: MessageType.ERROR,
+                          title: "Error al cancelar",
+                          content:
+                            error?.response?.data?.message ||
+                            "No se pudo cancelar la investigación.",
+                        })
+                      })
                   }
                   className="cursor-pointer"
                   src={stop}
@@ -260,6 +293,23 @@ const InvestigationDetailCard = ({
                 <img
                   onClick={() =>
                     updateInvestigationState(entity.id, EntityStatus.INACTIVE)
+                      .then(() => {
+                        showMessage({
+                          type: MessageType.SUCCESS,
+                          title: "Investigación Pausada",
+                          content:
+                            "La investigación ha sido pausada correctamente.",
+                        })
+                      })
+                      .catch((error) => {
+                        showMessage({
+                          type: MessageType.ERROR,
+                          title: "Error al pausar",
+                          content:
+                            error?.response?.data?.message ||
+                            "No se pudo pausar la investigación.",
+                        })
+                      })
                   }
                   className="cursor-pointer"
                   src={pause}
@@ -268,6 +318,23 @@ const InvestigationDetailCard = ({
                 <Button
                   onClick={() =>
                     updateInvestigationState(entity.id, EntityStatus.FINISHED)
+                      .then(() => {
+                        showMessage({
+                          type: MessageType.SUCCESS,
+                          title: "Investigación Finalizada",
+                          content:
+                            "La investigación ha finalizado correctamente.",
+                        })
+                      })
+                      .catch((error) => {
+                        showMessage({
+                          type: MessageType.ERROR,
+                          title: "Error al finalizar",
+                          content:
+                            error?.response?.data?.message ||
+                            "No se pudo finalizar la investigación.",
+                        })
+                      })
                   }
                   className="w-full flex gap-2 items-center justify-center"
                 >
@@ -280,6 +347,23 @@ const InvestigationDetailCard = ({
                 bgColor="green"
                 onClick={() =>
                   updateInvestigationState(entity.id, EntityStatus.ACTIVE)
+                    .then(() => {
+                      showMessage({
+                        type: MessageType.SUCCESS,
+                        title: "Investigación Reactivada",
+                        content:
+                          "La investigación ha sido reactivada correctamente.",
+                      })
+                    })
+                    .catch((error) => {
+                      showMessage({
+                        type: MessageType.ERROR,
+                        title: "Error al reactivar",
+                        content:
+                          error?.response?.data?.message ||
+                          "No se pudo reactivar la investigación.",
+                      })
+                    })
                 }
                 className="w-full flex gap-2 items-center justify-center"
               >

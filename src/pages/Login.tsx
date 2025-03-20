@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.jpg";
 import Cookies from "js-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useMessage } from "../hooks/useMessage";
+import { MessageType } from "../types/Message";
 
 const Login: React.FC = () => {
   const [emailLocal, setEmailLocal] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { showMessage } = useMessage();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,7 +37,18 @@ const Login: React.FC = () => {
       Cookies.set("token", response.data.token, { sameSite: "Strict" });
       localStorage.setItem("token", response.data.token);
       navigate("/investigaciones");
-    } catch (error) {
+    } catch (error: any) {
+      const message =
+        error?.response?.status === 401
+          ? "Credenciales incorrectas"
+          : error?.response?.data?.message ||
+            error.message ||
+            "Error en el login";
+      showMessage({
+        type: MessageType.ERROR,
+        title: "Error de autenticación",
+        content: message,
+      });
       console.error("Error en el login:", error);
     }
   };
