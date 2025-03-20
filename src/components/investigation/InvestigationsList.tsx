@@ -19,16 +19,8 @@ const renderFunction = (entity: Investigation) => {
 const InvestigationsList: React.FC<InvestigationListProps> = ({
   filteredInvestigations,
 }) => {
-  const { investigations, error, isLoading } = useInvestigations()
+  const { investigations } = useInvestigations()
   const { isBeingFiltered } = useFilterContext()
-
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   return isBeingFiltered ? (
     filteredInvestigations.length > 0 ? (

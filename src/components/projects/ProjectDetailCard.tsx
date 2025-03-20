@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
-import { Project } from "../../types/Project";
-import EntityCard from "../entity/EntityCard";
-import Button from "../common/Button";
-import descripcion from "../../assets/icons/descripcion.png";
-import autores from "../../assets/icons/autores.png";
-import { updateProjectState, updateProjectDetails } from "../../api/projects"; 
-import { EntityStatus } from "../../types/Entity";
-import { FaCheck, FaEdit, FaTimes } from "react-icons/fa";
+import { useState } from "react"
+import { twMerge } from "tailwind-merge"
+import { Project } from "../../types/Project"
+import EntityCard from "../entity/EntityCard"
+import Button from "../common/Button"
+import descripcion from "../../assets/icons/descripcion.png"
+import autores from "../../assets/icons/autores.png"
+import { updateProjectState, updateProjectDetails } from "../../api/projects"
+import { EntityStatus } from "../../types/Entity"
+import { FaCheck, FaEdit, FaTimes } from "react-icons/fa"
 
 interface ProjectDetailCardProps {
-  className?: string;
-  entity: Project;
+  className?: string
+  entity: Project
 }
 
 const itemHeader = (icon: string, text: string) => (
@@ -19,42 +19,47 @@ const itemHeader = (icon: string, text: string) => (
     <img className="object-contain" src={icon} alt="" />
     <p className="font-semibold text-gray-2">{text}</p>
   </div>
-);
+)
 
-const renderItem = (header: React.ReactElement, body: React.ReactElement, className?: string) => (
+const renderItem = (
+  header: React.ReactElement,
+  body: React.ReactElement,
+  className?: string
+) => (
   <div className={twMerge("flex flex-col gap-1", className)}>
     {header}
     {body}
   </div>
-);
+)
 
 const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(entity.titulo);
-  const [editedDescription, setEditedDescription] = useState(entity.descripcion);
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedTitle, setEditedTitle] = useState(entity.titulo)
+  const [editedDescription, setEditedDescription] = useState(entity.descripcion)
 
-  const baseClasses = "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6";
-  const mergedClasses = twMerge(baseClasses, className);
+  const baseClasses =
+    "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
+  const mergedClasses = twMerge(baseClasses, className)
 
   const handleSave = async () => {
     const updatedData = {
       titulo: editedTitle,
       descripcion: editedDescription,
-    };
+    }
 
     try {
-      await updateProjectDetails(entity.id, updatedData); // Asegúrate de implementar esta función
-      setIsEditing(false);
+      await updateProjectDetails(entity.id, updatedData) // Asegúrate de implementar esta función
+      setIsEditing(false)
     } catch (error) {
-      console.error("Error al guardar los cambios:", error);
+      console.error("Error al guardar los cambios:", error)
     }
-  };
+  }
 
   const handleCancel = () => {
-    setEditedTitle(entity.titulo);
-    setEditedDescription(entity.descripcion);
-    setIsEditing(false);
-  };
+    setEditedTitle(entity.titulo)
+    setEditedDescription(entity.descripcion)
+    setIsEditing(false)
+  }
 
   return (
     <EntityCard className={mergedClasses} entity={entity}>
@@ -64,7 +69,7 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
           type="text"
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
-          className="text-3xl border border-gray-300 p-2 rounded"
+          className="w-full text-gray-3 text-3xl border border-lightblue p-2 rounded"
         />
       ) : (
         <EntityCard.Title className="text-3xl" />
@@ -78,20 +83,20 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
               <textarea
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
-                className="border border-gray-300 p-2 rounded"
+                className="text-gray-3 border border-lightblue p-2 rounded"
               />
             ) : (
               <EntityCard.Description />
             )
           )}
           {renderItem(
-          itemHeader(descripcion, "Lineas de Investigacion"),
-          <p className="text-gray-2 ml-5 font-semibold">
-            <span className="text-gray-2">Area tematica: </span>
-            {entity.areas_tematicas}
-          </p>,
-          "mt-4"
-        )}
+            itemHeader(descripcion, "Lineas de Investigacion"),
+            <p className="text-gray-2 ml-5 font-semibold">
+              <span className="text-gray-2">Area tematica: </span>
+              {entity.areas_tematicas}
+            </p>,
+            "mt-4"
+          )}
         </div>
 
         <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
@@ -99,25 +104,36 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
             onClick={isEditing ? handleCancel : () => setIsEditing(true)}
             className="absolute bg-white p-1 rounded-full shadow-lg"
           >
-            {isEditing ? <FaTimes className="w-6 h-6 text-red-500" /> : <FaEdit className="w-6 h-6 text-blue-500" />}
+            {isEditing ? (
+              <FaTimes className="w-6 h-6 p-0.5 text-red" />
+            ) : (
+              <FaEdit className="w-6 h-6 p-0.5 text-lightblue" />
+            )}
           </button>
         </div>
 
         <div className="w-2/5 flex flex-col gap-3 justify-between">
-          <EntityCard.StartDate className="text-base" startDate={entity.fecha_creacion} icon />
+          <EntityCard.StartDate
+            className="text-base"
+            startDate={entity.fecha_creacion}
+            icon
+          />
           <div className="flex gap-2">
-          <img className="object-contain" src={autores} alt="" />
-          <p className="text-gray-2 font-semibold">Responsable:</p>
-          <p className="text-gray-3 font-semibold">{entity.responsable}</p>
-        </div>
-        <div className="flex gap-2">
-          <img className="object-contain" src={autores} alt="" />
-          <p className="text-gray-2 font-semibold">Creador:</p>
-          <p className="text-gray-3 font-semibold">{entity.creador}</p>
-        </div>
+            <img className="object-contain" src={autores} alt="" />
+            <p className="text-gray-2 font-semibold">Responsable:</p>
+            <p className="text-gray-3 font-semibold">{entity.responsable}</p>
+          </div>
+          <div className="flex gap-2">
+            <img className="object-contain" src={autores} alt="" />
+            <p className="text-gray-2 font-semibold">Creador:</p>
+            <p className="text-gray-3 font-semibold">{entity.creador}</p>
+          </div>
           <div className="flex gap-2 w-full">
             {isEditing ? (
-              <Button onClick={handleSave} className="w-full flex gap-2 items-center justify-center">
+              <Button
+                onClick={handleSave}
+                className="w-full flex gap-2 items-center justify-center"
+              >
                 <FaCheck className="text-green-500" />
                 Guardar Cambios
               </Button>
@@ -126,21 +142,23 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
                 onClick={() =>
                   updateProjectState(
                     entity.id,
-                    entity.estatus === EntityStatus.ACTIVE ? EntityStatus.INACTIVE : EntityStatus.ACTIVE
+                    entity.estatus === EntityStatus.ACTIVE
+                      ? EntityStatus.INACTIVE
+                      : EntityStatus.ACTIVE
                   )
                 }
                 className="w-full flex gap-2 items-center justify-center"
               >
-                {entity.estatus === EntityStatus.ACTIVE ? "Desactivar Proyecto" : "Activar Proyecto"}
+                {entity.estatus === EntityStatus.ACTIVE
+                  ? "Desactivar Proyecto"
+                  : "Activar Proyecto"}
               </Button>
             )}
           </div>
         </div>
       </div>
     </EntityCard>
-  );
-};
+  )
+}
 
-export default ProjectDetailCard;
-
-
+export default ProjectDetailCard

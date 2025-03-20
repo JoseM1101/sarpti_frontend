@@ -17,16 +17,8 @@ const renderFunction = (entity: Project) => {
 }
 
 const ProjectsList: React.FC<ProjectListProps> = ({ filteredProjects }) => {
-  const { projects, error, isLoading } = useProjects()
+  const { projects } = useProjects()
   const { isBeingFiltered } = useFilterContext()
-
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   return isBeingFiltered ? (
     filteredProjects.length > 0 ? (

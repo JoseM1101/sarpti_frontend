@@ -106,7 +106,7 @@ const InvestigationDetailCard = ({
           type="text"
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
-          className="text-3xl border border-gray-300 p-2 rounded"
+          className="w-full text-3xl border border-lightblue text-gray-3 p-2 rounded"
         />
       ) : (
         <EntityCard.Title className="text-3xl" />
@@ -118,7 +118,7 @@ const InvestigationDetailCard = ({
             {editedKeywords.map((keyword, index) => (
               <div
                 key={index}
-                className="flex items-center border border-gray-300 p-2 rounded"
+                className="flex items-center border border-lightblue text-gray-3 p-2 rounded"
               >
                 <input
                   type="text"
@@ -132,13 +132,14 @@ const InvestigationDetailCard = ({
                 />
               </div>
             ))}
-            <button
+            <Button
+              bgColor="green"
               onClick={handleAddKeyword}
-              className="p-2 bg-green text-white rounded-lg flex items-center gap-2"
+              className="p-2 text-white flex justify-center items-center gap-2"
             >
               <FaPlus />
               Agregar palabra
-            </button>
+            </Button>
           </div>
         ) : (
           <EntityCard.Keywords
@@ -156,7 +157,7 @@ const InvestigationDetailCard = ({
               <textarea
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
-                className="border border-gray-300 p-2 rounded"
+                className="border border-lightblue text-gray-3 p-2 rounded"
               />
             ) : (
               <EntityCard.Description />
@@ -179,16 +180,16 @@ const InvestigationDetailCard = ({
         </div>
 
         <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
-          <button
+          <Button
             onClick={isEditing ? handleCancel : () => setIsEditing(true)}
             className="absolute bg-white p-1 rounded-full shadow-lg"
           >
             {isEditing ? (
-              <FaTimes className="w-6 h-6 text-red-500" />
+              <FaTimes className="w-6 h-6 p-0.5 text-red" />
             ) : (
-              <FaEdit className="w-6 h-6 text-blue-500" />
+              <FaEdit className="w-6 h-6 p-0.5 text-lightblue" />
             )}
-          </button>
+          </Button>
         </div>
 
         <div className="w-2/5 flex flex-col gap-3 justify-between">
@@ -220,7 +221,7 @@ const InvestigationDetailCard = ({
                 onChange={(e) =>
                   setEditedInvestment(parseFloat(e.target.value))
                 }
-                className="border border-gray-300 p-2 rounded"
+                className="border border-lightblue text-gray-3 p-2 rounded"
               />
             ) : (
               <EntityCard.Investment
