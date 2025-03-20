@@ -143,13 +143,7 @@ const AreasTematicas: React.FC = () => {
 
   // CONFIRMATION for adding an area.
   const handleAddArea = () => {
-    showMessage({
-      type: MessageType.INFO,
-      title: "Confirmación",
-      content: "¿Está seguro que desea agregar un área temática?",
-      onConfirm: () => setAddingArea(true),
-      onCancel: () => {},
-    })
+    setAddingArea(true)
   }
 
   const handleSaveArea = (data: {
@@ -195,9 +189,11 @@ const AreasTematicas: React.FC = () => {
     setIsEditing(true)
   }
 
+  // Función para cancelar edición o agregar
   const handleCancelEdit = () => {
-    setIsEditing(false)
-    setEditingItem(null)
+    setIsEditing(false);
+    setEditingItem(null);
+    setAddingArea(false); // Se agrega para cancelar también el modo de agregar
   }
 
   // When trying to save changes in the edit form, show a confirmation modal before sending the update.
@@ -322,7 +318,6 @@ const AreasTematicas: React.FC = () => {
       </EntityCard>
     </div>
   )
-
   const midIndex = Math.floor(areas.length / 2)
   const leftColumn = areas.slice(0, midIndex)
   const rightColumn = areas.slice(midIndex)
@@ -331,14 +326,8 @@ const AreasTematicas: React.FC = () => {
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-xl font-semibold text-gray-3">Áreas Temáticas</h2>
       <div className="flex space-x-2">
-        {isEditing ? (
-          <button
-            onClick={handleCancelEdit}
-            className="px-2 py-1 bg-red text-white rounded text-sm"
-          >
-            Cancelar edición
-          </button>
-        ) : (
+        {/* Si se está editando O agregando, no se muestran los botones en la cabecera */}
+        {isEditing || editingItem || addingArea ? null : (
           <>
             <button
               onClick={handleEditAreas}
@@ -347,19 +336,17 @@ const AreasTematicas: React.FC = () => {
             >
               <img src={Edit} alt="Edit" className="w-4 h-4" />
             </button>
-            {!addingArea && (
-              <button
-                onClick={handleAddArea}
-                className="px-2 py-1 bg-green text-white rounded text-sm"
-              >
-                Agregar
-              </button>
-            )}
+            <button
+              onClick={handleAddArea}
+              className="px-2 py-1 bg-green text-white rounded text-sm"
+            >
+              Agregar
+            </button>
           </>
         )}
       </div>
     </div>
-  )
+  );
 
   return (
     <div className="p-4">

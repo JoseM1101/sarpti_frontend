@@ -8,7 +8,7 @@ export const statusItems: Record<
 > = {
   [EntityStatus.FINISHED]: {
     label: "Culminadas",
-    color: "bg-darkblue",
+    color: "bg-lightblue",
   },
   [EntityStatus.ACTIVE]: {
     label: "En progreso",

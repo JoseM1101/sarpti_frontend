@@ -34,10 +34,11 @@ const renderItem = (
   </div>
 )
 
-const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
+const ProjectDetailCard = ({ className, entity }: { className?: string; entity: Project; }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(entity.titulo)
   const [editedDescription, setEditedDescription] = useState(entity.descripcion)
+  const { showMessage } = useMessage();
 
   const baseClasses =
     "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
@@ -50,10 +51,20 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
     }
 
     try {
-      await updateProjectDetails(entity.id, updatedData) // Asegúrate de implementar esta función
-      setIsEditing(false)
-    } catch (error) {
-      console.error("Error al guardar los cambios:", error)
+      await updateProjectDetails(entity.id, updatedData);
+      setIsEditing(false);
+      showMessage({
+        type: MessageType.SUCCESS,
+        title: "Cambios guardados",
+        content: "Los cambios se han guardado exitosamente."
+      });
+    } catch (error: any) {
+      console.error("Error al guardar los cambios:", error);
+      showMessage({
+        type: MessageType.ERROR,
+        title: "Error al guardar",
+        content: error?.response?.data?.message || "No se pudieron guardar los cambios."
+      });
     }
   }
 
@@ -152,6 +163,20 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
                       ? EntityStatus.INACTIVE
                       : EntityStatus.ACTIVE
                   )
+                  .then(() => {
+                    showMessage({
+                      type: MessageType.SUCCESS,
+                      title: "Estado actualizado",
+                      content: "El estado del proyecto fue actualizado correctamente."
+                    });
+                  })
+                  .catch((error) => {
+                    showMessage({
+                      type: MessageType.ERROR,
+                      title: "Error al actualizar",
+                      content: error?.response?.data?.message || "No se pudo actualizar el estado del proyecto."
+                    });
+                  })
                 }
                 className="w-full flex gap-2 items-center justify-center"
               >

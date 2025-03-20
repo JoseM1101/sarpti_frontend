@@ -91,38 +91,42 @@ const Investigadores: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-3">Usuarios</h2>
         <div className="flex space-x-2">
-          {isEditing ? (
-            <button
-              onClick={() => {
-                setIsEditing(false);
-                setEditingUser(null);
-              }}
-              className="px-2 py-1 bg-red text-white rounded text-sm"
-            >
-              Cancelar edición
-            </button>
-          ) : (
-            (userRole === 2 || userRole === 3) && ( // Mostrar botón de edición para nivel 2 y 3
+          {!(editingUser || addingUser) && (
+            <>
+              {isEditing ? (
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditingUser(null);
+                  }}
+                  className="px-2 py-1 bg-red text-white rounded text-sm"
+                >
+                  Cancelar edición
+                </button>
+              ) : (
+                (userRole === 2 || userRole === 3) && ( // Mostrar botón de edición para nivel 2 y 3
               <button
-                onClick={() => setIsEditing(true)}
-                className="p-2 bg-yellow rounded"
-              >
-                <img src={Edit} alt="Edit" className="w-4 h-4" />
-              </button>
-            )
+                    onClick={() => setIsEditing(true)}
+                    className="p-2 bg-yellow rounded"
+                      >
+                    <img src={Edit} alt="Edit" className="w-4 h-4" />
+                  </button>
+                )
           )}
-          {canAddUser() && ( // Mostrar botón de agregar si tiene permisos
+              {canAddUser() && ( // Mostrar botón de agregar si tiene permisos
             <button
-              onClick={() => setAddingUser(true)}
-              className="px-2 py-1 bg-green text-white rounded text-sm"
-            >
-              Agregar Usuario
-            </button>
+                  onClick={() => setAddingUser(true)}
+                  className="px-2 py-1 bg-green text-white rounded text-sm"
+                >
+                  Agregar Usuario
+                </button>
+            </>
+          )}
           )}
         </div>
       </div>
     );
-  }, [isEditing, userRole, canAddUser]);
+  }, [isEditing, userRole, canAddUser, editingUser]);
 
   const handleCancelUser = useCallback(() => {
     setAddingUser(false);

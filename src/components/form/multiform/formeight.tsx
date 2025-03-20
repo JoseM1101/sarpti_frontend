@@ -20,7 +20,7 @@ const FormEight = () => {
   return (
     <div className="flex flex-col gap-4">
       <input
-        type="text"
+        type="number"
         {...register("inversion", { required: true })}
         placeholder="Inversión"
         className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -174,7 +174,7 @@ const FormTwo = () => {
             <button
               type="button"
               onClick={handleRestTutor}
-              className="mt-4 p-2 bg-red-500 text-white rounded-lg ml-1"
+              className="mt-4 p-2 bg-red text-white rounded-lg ml-1"
             >
               Eliminar Cédula
             </button>
@@ -228,7 +228,7 @@ const FormTwo = () => {
             <button
               type="button"
               onClick={handleRestAuthor}
-              className="mt-4 p-2 bg-red-500 text-white rounded-lg ml-1"
+              className="mt-4 p-2 bg-red text-white rounded-lg ml-1"
             >
               Eliminar Cédula
             </button>

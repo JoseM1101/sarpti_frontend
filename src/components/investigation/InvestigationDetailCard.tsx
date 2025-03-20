@@ -245,7 +245,7 @@ const InvestigationDetailCard = ({
             itemHeader(inversion, "Inversión"),
             isEditing ? (
               <input
-                type="text"
+                type="number"
                 value={editedInvestment}
                 onChange={(e) =>
                   setEditedInvestment(parseFloat(e.target.value))
