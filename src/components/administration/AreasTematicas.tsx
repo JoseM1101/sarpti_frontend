@@ -139,14 +139,7 @@ const AreasTematicas: React.FC = () => {
 
   // CONFIRMATION for adding an area.
   const handleAddArea = () => {
-    showMessage({
-      type: MessageType.INFO,
-      title: "Confirmación",
-      content: "¿Está seguro que desea agregar un área temática?",
-      onConfirm: () => setAddingArea(true),
-      onCancel: () => {
-      }
-    })
+    setAddingArea(true)
   }
 
   const handleSaveArea = (data: {
