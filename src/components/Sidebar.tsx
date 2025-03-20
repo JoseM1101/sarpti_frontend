@@ -1,10 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import axios from "axios"
 import logo from "../assets/images/logo.png"
 import { twMerge } from "tailwind-merge"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
-// import perfil from "../assets/icons/perfil.png"
 import investigadores from "../assets/icons/investigadores.png"
 import Cookies from "js-cookie"
 
@@ -13,6 +12,11 @@ const linksFirst = [
     icon: investigaciones,
     text: "Investigaciones",
     to: "/investigaciones",
+  },
+  {
+    icon: investigaciones,
+    text: "Proyectos",
+    to: "/proyectos",
   },
   {
     icon: investigadores,
@@ -38,10 +42,21 @@ const LinkRenderer = ({
   text: string
   to: string
 }) => {
+  const location = useLocation() // Get the current path
+
   return (
     <Link to={to} className="flex gap-2">
       <img className="object-contain" src={icon} alt="" />
-      <p className="text-gray-3 text-xl font-normal">{text}</p>
+      <p
+        className={twMerge(
+          "text-xl font-normal",
+          location.pathname === to
+            ? "text-lightblue font-semibold"
+            : "text-gray-3"
+        )}
+      >
+        {text}
+      </p>
     </Link>
   )
 }
@@ -97,9 +112,6 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
           Cerrar sesión
         </button>
       </div>
-      {/* <div className="absolute left-10 bottom-5">
-        <LinkRenderer icon={perfil} text="Perfil" to="/perfil" />
-      </div> */}
     </aside>
   )
 }
