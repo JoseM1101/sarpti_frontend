@@ -211,7 +211,7 @@ const InvestigationDetailCard = ({
         <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
           <Button
             onClick={isEditing ? handleCancel : () => setIsEditing(true)}
-            className="absolute bg-white p-1 rounded-full shadow-lg"
+            className="absolute bg-white p-1 rounded-full shadow-none"
           >
             {isEditing ? (
               <FaTimes className="w-6 h-6 p-0.5 text-red" />

@@ -108,7 +108,7 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
         <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
           <button
             onClick={isEditing ? handleCancel : () => setIsEditing(true)}
-            className="absolute bg-white p-1 rounded-full shadow-lg"
+            className="absolute bg-white p-1 rounded-full"
           >
             {isEditing ? (
               <FaTimes className="w-6 h-6 p-0.5 text-red" />

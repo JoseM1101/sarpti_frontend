@@ -329,7 +329,7 @@ const AreasTematicas: React.FC = () => {
 
   const renderHeader = () => (
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold">Áreas Temáticas</h2>
+      <h2 className="text-xl font-semibold text-gray-3">Áreas Temáticas</h2>
       <div className="flex space-x-2">
         {isEditing ? (
           <button

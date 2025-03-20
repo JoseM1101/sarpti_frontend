@@ -269,7 +269,7 @@ const LineasMatricesPotenciales: React.FC = () => {
   const renderSectionHeader = useCallback(
     (section: "matriciales" | "potenciales", title: string) => (
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">{title}</h2>
+        <h2 className="text-xl font-semibold text-gray-3">{title}</h2>
         {userRole !== 1 && (section === "potenciales" || userRole !== 2) && (
           <div className="flex space-x-2">
             {isEditing && editingSection === section ? (
