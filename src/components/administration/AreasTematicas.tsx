@@ -322,7 +322,6 @@ const AreasTematicas: React.FC = () => {
       </EntityCard>
     </div>
   )
-
   const midIndex = Math.floor(areas.length / 2)
   const leftColumn = areas.slice(0, midIndex)
   const rightColumn = areas.slice(midIndex)
@@ -331,14 +330,7 @@ const AreasTematicas: React.FC = () => {
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-xl font-bold">Áreas Temáticas</h2>
       <div className="flex space-x-2">
-        {isEditing ? (
-          <button
-            onClick={handleCancelEdit}
-            className="px-2 py-1 bg-red text-white rounded text-sm"
-          >
-            Cancelar edición
-          </button>
-        ) : (
+        {isEditing || editingItem ? null : (
           <>
             <button
               onClick={handleEditAreas}
@@ -359,7 +351,7 @@ const AreasTematicas: React.FC = () => {
         )}
       </div>
     </div>
-  )
+  );
 
   return (
     <div className="p-4">

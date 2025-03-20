@@ -265,47 +265,48 @@ const LineasMatricesPotenciales: React.FC = () => {
   )
 
   const renderSectionHeader = useCallback(
-    (section: "matriciales" | "potenciales", title: string) => (
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">{title}</h2>
-        <div className="flex space-x-2">
-          {isEditing && editingSection === section ? (
-            <button
-              onClick={() => {
-                setIsEditing(false)
-                setEditingSection(null)
-              }}
-              className="px-2 py-1 bg-red text-white rounded text-sm"
-            >
-              Cancelar selección
-            </button>
-          ) : (
-            <>
+    (section: "matriciales" | "potenciales", title: string) => {
+      // Se considera en edición si se está en modo edición (isEditing) o se ha seleccionado un item para editar en la sección.
+      const inEditMode =
+        isEditing || (editingItem && editingItem.section === section)
+      return (
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">{title}</h2>
+          <div className="flex space-x-2">
+            {inEditMode ? (
               <button
-                onClick={() => handleEditClick(section)}
-                className="p-2 bg-yellow hover:bg-yellow-800 rounded"
-                disabled={addingSection !== null}
+                onClick={() => {
+                  // Cancela el modo edición en la sección
+                  setEditingItem(null)
+                  setIsEditing(false)
+                  setEditingSection(null)
+                }}
+                className="px-2 py-1 bg-red text-white rounded text-sm"
               >
-                <img src={Edit} alt="Edit" className="w-4 h-4" />
+                Cancelar edición
               </button>
-              <button
-                onClick={() => handleAddSection(section)}
-                className="px-2 py-1 bg-green text-white rounded text-sm"
-              >
-                Agregar
-              </button>
-            </>
-          )}
+            ) : (
+              <>
+                <button
+                  onClick={() => handleEditClick(section)}
+                  className="p-2 bg-yellow hover:bg-yellow-800 rounded"
+                  disabled={addingSection !== null}
+                >
+                  <img src={Edit} alt="Edit" className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleAddSection(section)}
+                  className="px-2 py-1 bg-green text-white rounded text-sm"
+                >
+                  Agregar
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    ),
-    [
-      isEditing,
-      editingSection,
-      addingSection,
-      handleEditClick,
-      handleAddSection,
-    ]
+      )
+    },
+    [isEditing, editingItem, addingSection, handleEditClick, handleAddSection]
   )
 
   const renderCard = useCallback(
