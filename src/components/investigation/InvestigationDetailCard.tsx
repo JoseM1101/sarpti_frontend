@@ -13,6 +13,8 @@ import {
   updateInvestigationDetails,
 } from "../../api/investigations"
 import { EntityStatus } from "../../types/Entity"
+import { useMessage } from "../../hooks/useMessage";
+import { MessageType } from "../../types/Message";
 
 import { FaCheck, FaEdit, FaTimes, FaPlus, FaTrash } from "react-icons/fa"
 import pause from "../../assets/images/pause.png"
@@ -88,8 +90,20 @@ const InvestigationDetailCard = ({
     try {
       await updateInvestigationDetails(entity.id, updatedData)
       setIsEditing(false)
+      showMessage({
+        type: MessageType.SUCCESS,
+        title: "Cambios guardados",
+        content: "Los cambios se han guardado exitosamente."
+      })
     } catch (error) {
       console.error("Error al guardar los cambios:", error)
+      showMessage({
+        type: MessageType.ERROR,
+        title: "Error al guardar",
+        content:
+          error?.response?.data?.message ||
+          "No se pudieron guardar los cambios."
+      })
     }
   }
 
