@@ -8,11 +8,8 @@ import autores from "../../assets/icons/autores.png";
 import { updateProjectState, updateProjectDetails } from "../../api/projects"; 
 import { EntityStatus } from "../../types/Entity";
 import { FaCheck, FaEdit, FaTimes } from "react-icons/fa";
-
-interface ProjectDetailCardProps {
-  className?: string;
-  entity: Project;
-}
+import { useMessage } from "../../hooks/useMessage";
+import { MessageType } from "../../types/Message";
 
 const itemHeader = (icon: string, text: string) => (
   <div className="flex gap-2 items-center">
@@ -28,10 +25,11 @@ const renderItem = (header: React.ReactElement, body: React.ReactElement, classN
   </div>
 );
 
-const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
+const ProjectDetailCard = ({ className, entity }: { className?: string; entity: Project; }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(entity.titulo);
   const [editedDescription, setEditedDescription] = useState(entity.descripcion);
+  const { showMessage } = useMessage();
 
   const baseClasses = "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6";
   const mergedClasses = twMerge(baseClasses, className);
@@ -43,10 +41,20 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
     };
 
     try {
-      await updateProjectDetails(entity.id, updatedData); // Asegúrate de implementar esta función
+      await updateProjectDetails(entity.id, updatedData);
       setIsEditing(false);
-    } catch (error) {
+      showMessage({
+        type: MessageType.SUCCESS,
+        title: "Cambios guardados",
+        content: "Los cambios se han guardado exitosamente."
+      });
+    } catch (error: any) {
       console.error("Error al guardar los cambios:", error);
+      showMessage({
+        type: MessageType.ERROR,
+        title: "Error al guardar",
+        content: error?.response?.data?.message || "No se pudieron guardar los cambios."
+      });
     }
   };
 
@@ -85,13 +93,13 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
             )
           )}
           {renderItem(
-          itemHeader(descripcion, "Lineas de Investigacion"),
-          <p className="text-gray-2 ml-5 font-semibold">
-            <span className="text-gray-2">Area tematica: </span>
-            {entity.areas_tematicas}
-          </p>,
-          "mt-4"
-        )}
+            itemHeader(descripcion, "Lineas de Investigacion"),
+            <p className="text-gray-2 ml-5 font-semibold">
+              <span className="text-gray-2">Area tematica: </span>
+              {entity.areas_tematicas}
+            </p>,
+            "mt-4"
+          )}
         </div>
 
         <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
@@ -99,22 +107,26 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
             onClick={isEditing ? handleCancel : () => setIsEditing(true)}
             className="absolute bg-white p-1 rounded-full shadow-lg"
           >
-            {isEditing ? <FaTimes className="w-6 h-6 text-red-500" /> : <FaEdit className="w-6 h-6 text-blue-500" />}
+            {isEditing ? (
+              <FaTimes className="w-6 h-6 text-red-500" />
+            ) : (
+              <FaEdit className="w-6 h-6 text-blue-500" />
+            )}
           </button>
         </div>
 
         <div className="w-2/5 flex flex-col gap-3 justify-between">
           <EntityCard.StartDate className="text-base" startDate={entity.fecha_creacion} icon />
           <div className="flex gap-2">
-          <img className="object-contain" src={autores} alt="" />
-          <p className="text-gray-2 font-semibold">Responsable:</p>
-          <p className="text-gray-3 font-semibold">{entity.responsable}</p>
-        </div>
-        <div className="flex gap-2">
-          <img className="object-contain" src={autores} alt="" />
-          <p className="text-gray-2 font-semibold">Creador:</p>
-          <p className="text-gray-3 font-semibold">{entity.creador}</p>
-        </div>
+            <img className="object-contain" src={autores} alt="" />
+            <p className="text-gray-2 font-semibold">Responsable:</p>
+            <p className="text-gray-3 font-semibold">{entity.responsable}</p>
+          </div>
+          <div className="flex gap-2">
+            <img className="object-contain" src={autores} alt="" />
+            <p className="text-gray-2 font-semibold">Creador:</p>
+            <p className="text-gray-3 font-semibold">{entity.creador}</p>
+          </div>
           <div className="flex gap-2 w-full">
             {isEditing ? (
               <Button onClick={handleSave} className="w-full flex gap-2 items-center justify-center">
@@ -126,8 +138,24 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
                 onClick={() =>
                   updateProjectState(
                     entity.id,
-                    entity.estatus === EntityStatus.ACTIVE ? EntityStatus.INACTIVE : EntityStatus.ACTIVE
+                    entity.estatus === EntityStatus.ACTIVE
+                      ? EntityStatus.INACTIVE
+                      : EntityStatus.ACTIVE
                   )
+                  .then(() => {
+                    showMessage({
+                      type: MessageType.SUCCESS,
+                      title: "Estado actualizado",
+                      content: "El estado del proyecto fue actualizado correctamente."
+                    });
+                  })
+                  .catch((error) => {
+                    showMessage({
+                      type: MessageType.ERROR,
+                      title: "Error al actualizar",
+                      content: error?.response?.data?.message || "No se pudo actualizar el estado del proyecto."
+                    });
+                  })
                 }
                 className="w-full flex gap-2 items-center justify-center"
               >

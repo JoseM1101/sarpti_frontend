@@ -75,82 +75,118 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
   const formData = watch()
 
   const onSubmit = async (data: FormData) => {
-    if (!isLastStep) {
-      setCurrentStep((prev) => prev + 1)
-      return
-    }
-
-    const autores = [
-      data["cedula-1"],
-      data["cedula-2"],
-      data["cedula-3"],
-      data["cedula-4"],
-    ].filter((cedula) => cedula && cedula.trim() !== "")
-    
-    const tutores = [
-      data["cedula-5"],
-      data["cedula-6"],
-      data["cedula-7"],
-      data["cedula-8"],
-    ].filter((cedula) => cedula && cedula.trim() !== "")
-
-    const palabras = data.palabras || []
-    const Keywords = palabras.filter(
-      (keyword) => keyword && keyword.trim() !== ""
-    )
-    
-    // Validaciones antes de enviar al backend
-    if (autores.length === 0) {
-      showMessage({
-        type: MessageType.ERROR,
-        title: "Error",
-        content: "Debe haber por lo menos un autor para crear la investigación.",
-      })
-      return
-    }
-    if (tutores.length === 0) {
-      showMessage({
-        type: MessageType.ERROR,
-        title: "Error",
-        content: "Debe haber por lo menos un tutor para crear la investigación.",
-      })
-      return
-    }
-    if (Number(data.inversion) < 0) {
-      showMessage({
-        type: MessageType.ERROR,
-        title: "Error",
-        content: "La inversión no debe ser un número negativo.",
-      })
-      return
-    }
-    
-    // Validar que el título no exista ya
-    try {
-      const response = await axios.get<{ data: { list: any[] } }>(
-        `/investigaciones?titulo=${encodeURIComponent(data.titulo)}`
-      )
-      if (response.data.data.list && response.data.data.list.length > 0) {
+    // Validaciones por paso:
+    if (currentStep === 0) {
+      // Paso 1: Información General (Título y Descripción)
+      if (!data.titulo || data.titulo.trim() === "") {
         showMessage({
           type: MessageType.ERROR,
-          title: "Error",
-          content: "El título ya existe.",
-        })
-        return
+          title: "Error en el Paso 1",
+          content: "El título es obligatorio.",
+        });
+        return;
       }
-    } catch (error: any) {
-      showMessage({
-        type: MessageType.ERROR,
-        title: "Error",
-        content:
-          error?.response?.data?.message ||
-          error.message ||
-          "Error al validar el título.",
-      })
-      return
+      if (!data.descripcion || data.descripcion.trim() === "") {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 1",
+          content: "La descripción es obligatoria.",
+        });
+        return;
+      }
+      // Validar que el título no exista
+      try {
+        const response = await axios.get<{ data: { list: any[] } }>(
+          `/investigaciones?titulo=${encodeURIComponent(data.titulo)}`
+        );
+        if (response.data.data.list && response.data.data.list.length > 0) {
+          showMessage({
+            type: MessageType.ERROR,
+            title: "Error en el Paso 1",
+            content: "El título ya existe.",
+          });
+          return;
+        }
+      } catch (error: any) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 1",
+          content:
+            error?.response?.data?.message ||
+            error.message ||
+            "Error al validar el título.",
+        });
+        return;
+      }
+    } else if (currentStep === 1) {
+      // Paso 2: Cédula de Tutores y Autores
+      const autores = [
+        data["cedula-1"],
+        data["cedula-2"],
+        data["cedula-3"],
+        data["cedula-4"],
+      ].filter((cedula) => cedula && cedula.trim() !== "");
+      const tutores = [
+        data["cedula-5"],
+        data["cedula-6"],
+        data["cedula-7"],
+        data["cedula-8"],
+      ].filter((cedula) => cedula && cedula.trim() !== "");
+      if (autores.length === 0) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 2",
+          content: "Debe haber por lo menos un autor para crear la investigación.",
+        });
+        return;
+      }
+      if (tutores.length === 0) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 2",
+          content: "Debe haber por lo menos un tutor para crear la investigación.",
+        });
+        return;
+      }
+    } else if (currentStep === 4) {
+      // Paso 5: Inversión
+      if (data.inversion === undefined || data.inversion === null) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 5",
+          content: "Debe ingresarse la inversión.",
+        });
+        return;
+      }
+      if (isNaN(Number(data.inversion))) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 5",
+          content: "La inversión debe ser un valor numérico.",
+        });
+        return;
+      }
+      if (Number(data.inversion) < 0) {
+        showMessage({
+          type: MessageType.ERROR,
+          title: "Error en el Paso 5",
+          content: "La inversión no debe ser un número negativo.",
+        });
+        return;
+      }
     }
     
-    // Formatear los datos para enviar
+    // Si no es el último paso, se avanza al siguiente
+    if (!isLastStep) {
+      setCurrentStep((prev) => prev + 1);
+      return;
+    }
+    
+    // Último paso: preparar y enviar los datos
+    const palabras = data.palabras || [];
+    const Keywords = palabras.filter(
+      (keyword) => keyword && keyword.trim() !== ""
+    );
     const formattedData: InvestigationPostData = {
       titulo: data.titulo,
       descripcion: data.descripcion,
@@ -158,18 +194,28 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       nivel: Number(data.nivel),
       proyecto_id: data.proyecto_id,
       inversion: Number(data.inversion),
-      autores: autores,
-      tutores: tutores,
+      autores: [
+        data["cedula-1"],
+        data["cedula-2"],
+        data["cedula-3"],
+        data["cedula-4"],
+      ].filter((cedula) => cedula && cedula.trim() !== ""),
+      tutores: [
+        data["cedula-5"],
+        data["cedula-6"],
+        data["cedula-7"],
+        data["cedula-8"],
+      ].filter((cedula) => cedula && cedula.trim() !== ""),
       productos: data.productos,
-    }
-
+    };
+    
     try {
-      console.log("Datos a enviar:", formattedData)
-      await createInvestigation(formattedData)
-      console.log("Formulario enviado, cerrando modal")
-      closeModal()
+      console.log("Datos a enviar:", formattedData);
+      await createInvestigation(formattedData);
+      console.log("Formulario enviado, cerrando modal");
+      closeModal();
     } catch (error: any) {
-      console.error("Error al crear la investigación", error)
+      console.error("Error al crear la investigación", error);
       showMessage({
         type: MessageType.ERROR,
         title: "Error al crear",
@@ -177,7 +223,7 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
           error?.response?.data?.message ||
           error.message ||
           "Error al crear la investigación.",
-      })
+      });
     }
   }
 

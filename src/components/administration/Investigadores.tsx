@@ -74,35 +74,39 @@ const Investigadores: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Investigadores</h2>
         <div className="flex space-x-2">
-          {isEditing ? (
-            <button
-              onClick={() => {
-                setIsEditing(false)
-                setEditingUser(null)
-              }}
-              className="px-2 py-1 bg-red text-white rounded text-sm"
-            >
-              Cancelar edición
-            </button>
-          ) : (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="p-2 bg-yellow rounded"
-              disabled={addingUser}
-            >
-              <img src={Edit} alt="Edit" className="w-4 h-4" />
-            </button>
+          {!editingUser && (
+            <>
+              {isEditing ? (
+                <button
+                  onClick={() => {
+                    setIsEditing(false)
+                    setEditingUser(null)
+                  }}
+                  className="px-2 py-1 bg-red text-white rounded text-sm"
+                >
+                  Cancelar edición
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="p-2 bg-yellow rounded"
+                  disabled={addingUser}
+                >
+                  <img src={Edit} alt="Edit" className="w-4 h-4" />
+                </button>
+              )}
+              <button
+                onClick={() => setAddingUser(true)}
+                className="px-2 py-1 bg-green text-white rounded text-sm"
+              >
+                Agregar Usuario
+              </button>
+            </>
           )}
-          <button
-            onClick={() => setAddingUser(true)}
-            className="px-2 py-1 bg-green text-white rounded text-sm"
-          >
-            Agregar Usuario
-          </button>
         </div>
       </div>
     )
-  }, [isEditing, addingUser])
+  }, [isEditing, addingUser, editingUser])
 
   const handleCancelUser = useCallback(() => {
     setAddingUser(false)

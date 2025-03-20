@@ -232,11 +232,9 @@ const InvestigationDetailCard = ({
             itemHeader(inversion, "Inversión"),
             isEditing ? (
               <input
-                type="text"
+                type="number"
                 value={editedInvestment}
-                onChange={(e) =>
-                  setEditedInvestment(parseFloat(e.target.value))
-                }
+                onChange={(e) => setEditedInvestment(Number(e.target.value))}
                 className="border border-gray-300 p-2 rounded"
               />
             ) : (
