@@ -173,7 +173,7 @@ export const InvestigationRender = ({
         {investigation.productos && investigation.productos.length > 0 ? (
           investigation.productos.map((producto) => (
             <Text key={producto.id} style={styles.text}>
-              - {producto.titulo}
+              - {producto.titulo ? producto.titulo : "No hay productos registrados"}
             </Text>
           ))
         ) : (

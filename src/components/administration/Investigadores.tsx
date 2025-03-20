@@ -112,21 +112,21 @@ const Investigadores: React.FC = () => {
                     <img src={Edit} alt="Edit" className="w-4 h-4" />
                   </button>
                 )
-          )}
+              )}
               {canAddUser() && ( // Mostrar botón de agregar si tiene permisos
-            <button
+                <button
                   onClick={() => setAddingUser(true)}
                   className="px-2 py-1 bg-green text-white rounded text-sm"
                 >
                   Agregar Usuario
                 </button>
+              )}
             </>
-          )}
           )}
         </div>
       </div>
     );
-  }, [isEditing, userRole, canAddUser, editingUser]);
+  }, [isEditing, userRole, canAddUser, editingUser, addingUser]);
 
   const handleCancelUser = useCallback(() => {
     setAddingUser(false);
