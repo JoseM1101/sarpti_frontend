@@ -113,10 +113,7 @@ export const InvestigationRender = ({
   investigations: Investigation[]
 }) => (
   <View style={styles.pageContainer}>
-    {/* Show summary at the top */}
     <InvestigationSummary investigations={investigations} />
-
-    {/* Render all investigations */}
     {investigations.map((investigation) => (
       <View wrap={false} key={investigation.id} style={styles.container}>
         <Text style={styles.title}>{investigation.titulo}</Text>
@@ -180,7 +177,7 @@ export const InvestigationRender = ({
             </Text>
           ))
         ) : (
-          <Text style={styles.text}>No productos registrados.</Text>
+          <Text style={styles.text}>No hay productos registrados.</Text>
         )}
       </View>
     ))}

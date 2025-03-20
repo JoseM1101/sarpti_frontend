@@ -45,6 +45,12 @@ const formatFilters = (filters: (string | null)[]): string[] => {
           return `Fecha de culminación desde: ${value}`
         case "fecha_culminacion_max":
           return `Fecha de culminación hasta: ${value}`
+        case "sexo":
+          return `Sexo: ${value}`
+        case "edad_min":
+          return `Edad mínima: ${value}`
+        case "edad_max":
+          return `Edad máxima: ${value}`
         default:
           return null
       }

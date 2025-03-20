@@ -13,6 +13,7 @@ export interface Person {
   tipo_identificacion: typeIdentification
   nombre: string
   apellido: string
+  nombre_completo: string
   estado_civil: string
   grado_academico: string
   identificacion: number

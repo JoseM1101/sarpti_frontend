@@ -6,9 +6,14 @@ import { debounce } from "../../utils"
 interface SearchBarProps {
   className?: string
   onSearch: (filterQuery: string[]) => void
+  filterKey?: string // **New prop to define the filter field (default: "titulo")**
 }
 
-const SearchBar = ({ onSearch, className }: SearchBarProps) => {
+const SearchBar = ({
+  onSearch,
+  className,
+  filterKey = "titulo",
+}: SearchBarProps) => {
   const [query, setQuery] = useState<string>("")
   const { setFilterQuery, resetTrigger, setIsBeingFiltered } =
     useFilterContext()
@@ -28,35 +33,39 @@ const SearchBar = ({ onSearch, className }: SearchBarProps) => {
 
   useEffect(() => {
     setFilterQuery((prevQuery) => {
-      const updatedQuery = prevQuery.filter((q) => !q.startsWith("titulo="))
+      // **Remove any previous instances of this filter field**
+      const updatedQuery = prevQuery.filter(
+        (q) => !q.startsWith(`${filterKey}=`)
+      )
 
       if (query.trim()) {
-        updatedQuery.push(`titulo=${query}`)
+        updatedQuery.push(`${filterKey}=${query}`)
       }
 
       debouncedSearch(updatedQuery)
 
       return updatedQuery
     })
-  }, [query, setFilterQuery, debouncedSearch])
+  }, [query, filterKey, setFilterQuery, debouncedSearch])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
   }
 
   return (
     <div
       className={twMerge(
-        "px-4 py-2 border-2 border-gray-2 rounded-3xl gap-2",
+        "px-4 py-2 border-2 border-gray-2 rounded-3xl flex items-center gap-2",
         className
       )}
     >
+      {/* **Search Input** */}
       <input
         type="text"
         value={query}
-        onChange={handleChange}
+        onChange={handleQueryChange}
         placeholder="Buscar..."
-        className="text-lg focus:outline-none"
+        className="text-lg focus:outline-none w-full"
       />
     </div>
   )
