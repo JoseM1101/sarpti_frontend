@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { createPortal } from "react-dom"
 import { twMerge } from "tailwind-merge"
 import { Investigation } from "../../types/Investigation"
 import EntityCard from "../entity/EntityCard"
@@ -16,6 +17,7 @@ import { EntityStatus } from "../../types/Entity"
 import { FaCheck, FaEdit, FaTimes, FaPlus, FaTrash } from "react-icons/fa"
 import pause from "../../assets/images/pause.png"
 import stop from "../../assets/images/stop.png"
+import Legend from "../entity/Legend"
 
 interface InvestigationDetailCardProps {
   className?: string
@@ -100,6 +102,10 @@ const InvestigationDetailCard = ({
 
   return (
     <EntityCard className={mergedClasses} entity={entity}>
+      {createPortal(
+        <Legend className="absolute top-16 left-1/2 -translate-x-1/2" />,
+        document.querySelector("main") as HTMLElement
+      )}
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />
       {isEditing ? (
         <input

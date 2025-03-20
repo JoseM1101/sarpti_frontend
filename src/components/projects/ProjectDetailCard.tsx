@@ -8,6 +8,8 @@ import autores from "../../assets/icons/autores.png"
 import { updateProjectState, updateProjectDetails } from "../../api/projects"
 import { EntityStatus } from "../../types/Entity"
 import { FaCheck, FaEdit, FaTimes } from "react-icons/fa"
+import { createPortal } from "react-dom"
+import Legend from "../entity/Legend"
 
 interface ProjectDetailCardProps {
   className?: string
@@ -63,6 +65,10 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
 
   return (
     <EntityCard className={mergedClasses} entity={entity}>
+      {createPortal(
+        <Legend className="absolute top-16 left-1/2 -translate-x-1/2" />,
+        document.querySelector("main") as HTMLElement
+      )}
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />
       {isEditing ? (
         <input

@@ -34,6 +34,11 @@ interface EntityCardProps<T extends Entity> {
   className?: string
   children: React.ReactNode
 }
+
+interface EntityCardBadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+
 function EntityCard<T extends Entity>({
   entity,
   className,
@@ -48,12 +53,11 @@ function EntityCard<T extends Entity>({
 
 EntityCard.Badge = function EntityCardBadge({
   className,
-}: {
-  className?: string
-}) {
+  ...rest
+}: EntityCardBadgeProps) {
   const { entity } = useEntityCardContext()
 
-  return <Badge className={className} state={entity.estatus} />
+  return <Badge {...rest} className={className} state={entity.estatus} />
 }
 
 EntityCard.Title = function EntityCardTitle({
