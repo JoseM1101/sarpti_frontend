@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useMemo } from "react";
 import { Message } from "../../types/Message";
 import { MessageContext } from "../../context/MessageContext";
 
@@ -20,8 +20,13 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({ children }) =>
     setMessage(null);
   };
 
+  const contextValue = useMemo(
+    () => ({ message, showMessage, clearMessage }),
+    [message]
+  );
+
   return (
-    <MessageContext.Provider value={{ message, showMessage, clearMessage }}>
+    <MessageContext.Provider value={contextValue}>
       {children}
     </MessageContext.Provider>
   );
