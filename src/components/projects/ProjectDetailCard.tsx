@@ -10,6 +10,8 @@ import { EntityStatus } from "../../types/Entity"
 import { FaCheck, FaEdit, FaTimes } from "react-icons/fa"
 import { createPortal } from "react-dom"
 import Legend from "../entity/Legend"
+import { useMessage } from "../../hooks/useMessage"
+import { MessageType } from "../../types/Message"
 
 interface ProjectDetailCardProps {
   className?: string
@@ -34,13 +36,7 @@ const renderItem = (
   </div>
 )
 
-const ProjectDetailCard = ({
-  className,
-  entity,
-}: {
-  className?: string
-  entity: Project
-}) => {
+const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(entity.titulo)
   const [editedDescription, setEditedDescription] = useState(entity.descripcion)
@@ -159,7 +155,7 @@ const ProjectDetailCard = ({
                 onClick={handleSave}
                 className="w-full flex gap-2 items-center justify-center"
               >
-                <FaCheck className="text-green-500" />
+                <FaCheck />
                 Guardar Cambios
               </Button>
             ) : (
