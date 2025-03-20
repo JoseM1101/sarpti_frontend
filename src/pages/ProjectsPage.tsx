@@ -13,18 +13,30 @@ import Filters from "../components/filters/Filters"
 import PDFReport from "../components/reports/pdf/PDFReport"
 import { ProjectRender } from "../components/reports/pdf/ProjectRender"
 import { filters } from "../components/projects/ProjectFilters"
+import { useMessage } from "../hooks/useMessage"
+import { MessageType } from "../types/Message"
 
 const ProjectsPage: React.FC = () => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
   const { isOpen, openModal, closeModal } = useModal()
+  const { showMessage } = useMessage()
 
   const searchFn = useCallback(
     (filterQuery: string[]) => {
-      fetchFilteredData<Project>("/proyectos", filterQuery).then((result) => {
-        setFilteredProjects(result.data.list)
-      })
+      fetchFilteredData<Project>("/proyectos", filterQuery)
+        .then((result) => {
+          setFilteredProjects(result.data.list)
+        })
+        .catch((err) => {
+          showMessage({
+            type: MessageType.ERROR,
+            title: "Error",
+            content:
+              err?.response?.data?.message || err.message || "Error al filtrar",
+          })
+        })
     },
-    [setFilteredProjects]
+    [setFilteredProjects, showMessage]
   )
 
   return (
