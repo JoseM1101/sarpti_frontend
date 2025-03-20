@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
 import { twMerge } from "tailwind-merge";
+import { FaTimes } from "react-icons/fa"; 
 
 interface ModalProps {
   className?: string;
@@ -16,12 +17,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, className, children, closeModal }
             "w-screen h-screen bg-black bg-opacity-50 fixed top-0 left-0 flex items-center justify-center z-10",
             className
           )}
-          onClick={closeModal}
+        
         >
-          <div
-            className="relative bg-white rounded-lg p-8 w-11/12 max-w-2xl mx-auto" 
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative bg-white rounded-lg p-8 w-11/12 max-w-2xl mx-auto">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              aria-label="Cerrar modal"
+            >
+              <FaTimes className="w-5 h-5" />
+            </button>
             {children}
           </div>
         </div>,

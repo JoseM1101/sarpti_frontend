@@ -23,16 +23,17 @@ export interface InvestigationPostData {
   tutores: string[]
   productos: Partial<EntityProduct>[]
 }
-
 export interface Investigation extends Entity {
-  name: ReactNode
-  fecha_inicio: StartDate
-  fecha_culminacion: EndDate
-  nivel: InvestigationLevel
-  proyecto: string
-  inversion: number
-  autores: Person[]
-  tutores: Person[]
-  keywords: Keywords
-  productos: EntityProduct[] | null
+  name: ReactNode;
+  fecha_inicio: StartDate;
+  fecha_culminacion: EndDate;
+  nivel: InvestigationLevel;
+  proyecto: string;
+  inversion: number;
+  autores: string[]; 
+  tutores: string[]; 
+  keywords: Keywords;
+  productos: EntityProduct[] | null;
 }
+
+

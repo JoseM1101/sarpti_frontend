@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import axios from "axios";
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 
 const FormTwo = () => {
   const { register, watch } = useFormContext();
@@ -12,21 +12,21 @@ const FormTwo = () => {
   const [authorVerifications, setAuthorVerifications] = useState<{ [key: string]: { isValid: boolean; nombre?: string } }>({});
 
   const verifyCedula = async (cedula: string, type: "tutor" | "author") => {
-    if (cedula.length === 8) { 
+    if (cedula.length === 8) {
       try {
-        const token = Cookies.get("token"); 
+        const token = Cookies.get("token");
         const response = await axios.get(`/personas?identificacion=${cedula}`, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         });
-  
+
         const data = response.data;
-  
+
         if (data.success && data.data.list.length > 0) {
-          const persona = data.data.list[0]; 
+          const persona = data.data.list[0];
           const nombreCompleto = `${persona.nombre} ${persona.apellido}`.trim();
-  
+
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
               ...prev,
@@ -38,7 +38,7 @@ const FormTwo = () => {
               [cedula]: { isValid: true, nombre: nombreCompleto },
             }));
           }
-        } else { 
+        } else {
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
               ...prev,
@@ -53,7 +53,7 @@ const FormTwo = () => {
         }
       } catch (error) {
         console.error("Error al verificar la cédula:", error);
-  
+
         if (axios.isAxiosError(error) && error.response?.status === 404) {
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
@@ -126,8 +126,8 @@ const FormTwo = () => {
         <div className="flex-1">
           <h2 className="text-lg font-semibold mb-4">Tutores</h2>
           {[...Array(tutorCount)].map((_, index) => {
-            const cedula = watch(`cedula-${index + 1}`); 
-            const verification = tutorVerifications[cedula]; 
+            const cedula = watch(`cedula-${index + 1}`);
+            const verification = tutorVerifications[cedula];
 
             return (
               <div key={index} className="flex flex-col gap-3">
@@ -139,21 +139,21 @@ const FormTwo = () => {
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
-                  {verification ? (
-                    <>
-                      <span style={{ color: verification.isValid ? "green" : "red" }}>
-                        {verification.isValid ? "✓" : "X"}
-                      </span>
-                      {verification.isValid ? (
-                        <span>{verification.nombre}</span>
-                      ) : (
-                        <span>Cédula no se encuentra</span>
-                      )}
-                    </>
-                  ) : (
-                    <span>Verificando...</span>
-                  )}
-                </div>  
+                    {verification ? (
+                      <>
+                        <span style={{ color: verification.isValid ? "green" : "red" }}>
+                          {verification.isValid ? "✓" : "X"}
+                        </span>
+                        {verification.isValid ? (
+                          <span>{verification.nombre}</span>
+                        ) : (
+                          <span>Cédula no se encuentra</span>
+                        )}
+                      </>
+                    ) : (
+                      <span>Verificando...</span>
+                    )}
+                  </div>
                 )}
               </div>
             );
@@ -180,34 +180,34 @@ const FormTwo = () => {
         <div className="flex-1">
           <h2 className="text-lg font-semibold mb-4">Autores</h2>
           {[...Array(authorCount)].map((_, index) => {
-            const cedula = watch(`cedula-${index + 5}`); 
-            const verification = authorVerifications[cedula]; 
+            const cedula = watch(`cedula-${index + 5}`);
+            const verification = authorVerifications[cedula];
 
             return (
               <div key={index} className="flex flex-col gap-3">
                 <input
                   type="text"
-                  {...register(`cedula-${index + 5}`, { required: index < 1 })}
+                  {...register(`cedula-${index + 5}`, { required: true })} // Hacer todos los campos obligatorios
                   placeholder="Cédula"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
-                  {verification ? (
-                    <>
-                      <span style={{ color: verification.isValid ? "green" : "red" }}>
-                        {verification.isValid ? "✓" : "X"}
-                      </span>
-                      {verification.isValid ? (
-                        <span>{verification.nombre}</span>
-                      ) : (
-                        <span>Cédula no se encuentra</span>
-                      )}
-                    </>
-                  ) : (
-                    <span>Verificando...</span>
-                  )}
-                </div>  
+                    {verification ? (
+                      <>
+                        <span style={{ color: verification.isValid ? "green" : "red" }}>
+                          {verification.isValid ? "✓" : "X"}
+                        </span>
+                        {verification.isValid ? (
+                          <span>{verification.nombre}</span>
+                        ) : (
+                          <span>Cédula no se encuentra</span>
+                        )}
+                      </>
+                    ) : (
+                      <span>Verificando...</span>
+                    )}
+                  </div>
                 )}
               </div>
             );
