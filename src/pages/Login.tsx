@@ -36,6 +36,8 @@ const Login: React.FC = () => {
       );
       Cookies.set("token", response.data.token, { sameSite: "Strict" });
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userRole", String(response.data.data.nivel)); 
+      console.log("Nivel almacenado en localStorage:", response.data.data.nivel); 
       navigate("/investigaciones");
     } catch (error: any) {
       const message =

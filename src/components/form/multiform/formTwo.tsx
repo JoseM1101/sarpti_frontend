@@ -143,24 +143,20 @@ const FormTwo = () => {
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
-                    {verification ? (
-                      <>
-                        <span
-                          style={{
-                            color: verification.isValid ? "green" : "red",
-                          }}
-                        >
-                          {verification.isValid ? "✓" : "X"}
-                        </span>
-                        {verification.isValid ? (
-                          <span>{verification.nombre}</span>
-                        ) : (
-                          <span>Cédula no se encuentra</span>
-                        )}
-                      </>
-                    ) : (
-                      <span>Verificando...</span>
-                    )}
+                      {verification ? (
+                       <>
+                         <span style={{ color: verification.isValid ? "green" : "red" }}>
+                           {verification.isValid ? "✓" : "X"}
+                         </span>
+                         {verification.isValid ? (
+                           <span>{verification.nombre}</span>
+                         ) : (
+                           <span>Cédula no se encuentra</span>
+                         )}
+                       </>
+                     ) : (
+                       <span>Verificando...</span>
+                     )}
                   </div>
                 )}
               </div>
@@ -195,30 +191,26 @@ const FormTwo = () => {
               <div key={index} className="flex flex-col gap-3">
                 <input
                   type="text"
-                  {...register(`cedula-${index + 5}`, { required: index < 1 })}
+                  {...register(`cedula-${index + 5}`, { required: true  })}
                   placeholder="Cédula"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
                     {verification ? (
-                      <>
-                        <span
-                          style={{
-                            color: verification.isValid ? "green" : "red",
-                          }}
-                        >
-                          {verification.isValid ? "✓" : "X"}
-                        </span>
-                        {verification.isValid ? (
-                          <span>{verification.nombre}</span>
-                        ) : (
-                          <span>Cédula no se encuentra</span>
-                        )}
-                      </>
-                    ) : (
-                      <span>Verificando...</span>
-                    )}
+                       <>
+                         <span style={{ color: verification.isValid ? "green" : "red" }}>
+                           {verification.isValid ? "✓" : "X"}
+                         </span>
+                         {verification.isValid ? (
+                           <span>{verification.nombre}</span>
+                         ) : (
+                           <span>Cédula no se encuentra</span>
+                         )}
+                       </>
+                     ) : (
+                       <span>Verificando...</span>
+                     )}
                   </div>
                 )}
               </div>
