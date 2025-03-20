@@ -9,7 +9,11 @@ type DateFilterKeys =
   | "fecha_culminacion_min"
   | "fecha_culminacion_max"
 
-const DateFilter: React.FC = () => {
+interface DateFilterProps {
+  visibleFields?: DateFilterKeys[] // Controls which fields are visible
+}
+
+const DateFilter: React.FC<DateFilterProps> = ({ visibleFields }) => {
   const { setFilterQuery, resetTrigger } = useFilterContext()
 
   const [dates, setDates] = useState<Record<DateFilterKeys, string | null>>({
@@ -49,41 +53,29 @@ const DateFilter: React.FC = () => {
     })
   }
 
+  const allFields: { key: DateFilterKeys; label: string }[] = [
+    { key: "fecha_inicio_min", label: "Fecha Inicio Min" },
+    { key: "fecha_inicio_max", label: "Fecha Inicio Max" },
+    { key: "fecha_culminacion_min", label: "Fecha Culminación Min" },
+    { key: "fecha_culminacion_max", label: "Fecha Culminación Max" },
+  ]
+
+  const fieldsToRender = visibleFields || allFields.map((field) => field.key)
+
   return (
     <FilterCard>
       <div className="flex flex-col gap-3">
-        <div>
-          <label className="font-semibold text-gray-2">Fecha Inicio Min</label>
-          <BasicDatePicker
-            value={parseDate(dates.fecha_inicio_min)}
-            onChange={(date) => handleDateChange("fecha_inicio_min", date)}
-          />
-        </div>
-        <div>
-          <label className="font-semibold text-gray-2">Fecha Inicio Max</label>
-          <BasicDatePicker
-            value={parseDate(dates.fecha_inicio_max)}
-            onChange={(date) => handleDateChange("fecha_inicio_max", date)}
-          />
-        </div>
-        <div>
-          <label className="font-semibold text-gray-2">
-            Fecha Culminación Min
-          </label>
-          <BasicDatePicker
-            value={parseDate(dates.fecha_culminacion_min)}
-            onChange={(date) => handleDateChange("fecha_culminacion_min", date)}
-          />
-        </div>
-        <div>
-          <label className="font-semibold text-gray-2">
-            Fecha Culminación Max
-          </label>
-          <BasicDatePicker
-            value={parseDate(dates.fecha_culminacion_max)}
-            onChange={(date) => handleDateChange("fecha_culminacion_max", date)}
-          />
-        </div>
+        {allFields
+          .filter(({ key }) => fieldsToRender.includes(key))
+          .map(({ key, label }) => (
+            <div key={key}>
+              <label className="font-semibold text-gray-2">{label}</label>
+              <BasicDatePicker
+                value={parseDate(dates[key])}
+                onChange={(date) => handleDateChange(key, date)}
+              />
+            </div>
+          ))}
       </div>
     </FilterCard>
   )

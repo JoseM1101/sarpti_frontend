@@ -7,26 +7,16 @@ export interface Project extends Entity {
   areas_tematicas: string
 }
 export interface ProjectPostData {
-  titulo: string;
-  descripcion: string;
-  responsable: string;
-  areas_tematicas_id: string;
-  inversion: number;
-  productos: ProductFormData[];
-/*   fecha_creacion: string; 
-  estatus: number; 
-  creador: string;
-  areas_tematicas: string;
-  autores: string[]; 
-  tutores: string[]; 
-  inversion: number;
-  inversionista: string; */
- 
+  titulo: string
+  descripcion: string
+  responsable: string
+  areas_tematicas_id: string
+  inversion: number
+  productos: ProductFormData[]
 }
 
-
 interface ProductFormData {
-titulo: string;
-descripcion: string;
-url: URL;
+  titulo: string
+  descripcion: string
+  url: URL
 }

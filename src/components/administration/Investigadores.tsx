@@ -38,7 +38,7 @@ const Investigadores: React.FC = () => {
           content:
             err?.response?.data?.message ||
             err.message ||
-            "Error al cargar usuarios"
+            "Error al cargar usuarios",
         })
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +61,7 @@ const Investigadores: React.FC = () => {
               content:
                 err?.response?.data?.message ||
                 err.message ||
-                "Error fetching user"
+                "Error fetching user",
             })
           })
       }
@@ -88,7 +88,6 @@ const Investigadores: React.FC = () => {
             <button
               onClick={() => setIsEditing(true)}
               className="p-2 bg-yellow rounded"
-              disabled={addingUser}
             >
               <img src={Edit} alt="Edit" className="w-4 h-4" />
             </button>
@@ -102,7 +101,7 @@ const Investigadores: React.FC = () => {
         </div>
       </div>
     )
-  }, [isEditing, addingUser])
+  }, [isEditing])
 
   const handleCancelUser = useCallback(() => {
     setAddingUser(false)
@@ -112,15 +111,22 @@ const Investigadores: React.FC = () => {
   const handleSaveUser = useCallback(
     (data: Partial<User>) => {
       if (editingUser) {
-        const changedFields: Partial<{ [K in keyof User]: NonNullable<User[K]> }> = {}
+        const changedFields: Partial<{
+          [K in keyof User]: NonNullable<User[K]>
+        }> = {}
         Object.keys(data).forEach((key) => {
           const dataKey = key as keyof User
           if (data[dataKey] !== editingUser[dataKey] && data[dataKey] != null) {
-            changedFields[dataKey] = data[dataKey]! as NonNullable<User[typeof dataKey]>
+            changedFields[dataKey] = data[dataKey]! as NonNullable<
+              User[typeof dataKey]
+            >
           }
         })
         if (changedFields.nivel && typeof changedFields.nivel === "string") {
-          changedFields.nivel = parseInt(changedFields.nivel as string, 10) as any
+          changedFields.nivel = parseInt(
+            changedFields.nivel as string,
+            10
+          ) as any
         }
 
         if (Object.keys(changedFields).length === 0) {
@@ -134,14 +140,17 @@ const Investigadores: React.FC = () => {
           content: "¿Está seguro de que desea guardar los cambios?",
           onConfirm: () => {
             withLoader(async () => {
-              await axios.patch<ApiResponse<User>>(`/usuarios/${editingUser.id}`, changedFields)
+              await axios.patch<ApiResponse<User>>(
+                `/usuarios/${editingUser.id}`,
+                changedFields
+              )
               const res = await axios.get<ApiResponse<User>>("/usuarios")
               setUsers(res.data.data.list)
               setEditingUser(null)
               showMessage({
                 type: MessageType.SUCCESS,
                 title: "Éxito",
-                content: "Usuario actualizado exitosamente"
+                content: "Usuario actualizado exitosamente",
               })
             }).catch((err) => {
               showMessage({
@@ -150,13 +159,13 @@ const Investigadores: React.FC = () => {
                 content:
                   err?.response?.data?.message ||
                   err.message ||
-                  "Error updating user"
+                  "Error updating user",
               })
             })
           },
           onCancel: () => {
             // Optionally handle cancel action.
-          }
+          },
         })
       } else {
         if (data.nivel && typeof data.nivel === "string") {
@@ -177,7 +186,7 @@ const Investigadores: React.FC = () => {
                 showMessage({
                   type: MessageType.SUCCESS,
                   title: "Éxito",
-                  content: "Usuario creado exitosamente"
+                  content: "Usuario creado exitosamente",
                 })
               })
               .catch((err) => {
@@ -187,13 +196,13 @@ const Investigadores: React.FC = () => {
                   content:
                     err?.response?.data?.message ||
                     err.message ||
-                    "Error creating user"
+                    "Error creating user",
                 })
               })
           },
           onCancel: () => {
             // Optionally handle cancel action.
-          }
+          },
         })
       }
     },
@@ -201,7 +210,7 @@ const Investigadores: React.FC = () => {
   )
 
   if (loading) return <div className="p-4">Cargando usuarios...</div>
-  if (error) return <div className="p-4 text-red-500">{error}</div>
+  if (error) return <div className="p-4 text-red">{error}</div>
 
   return (
     <div className="p-4">
@@ -218,6 +227,7 @@ const Investigadores: React.FC = () => {
           <div className="grid grid-cols-1 gap-4">
             {users.map((user, index) => (
               <InvestigadorCard
+                className={isEditing ? "cursor-pointer" : ""}
                 key={user.id || index}
                 user={user}
                 onClick={() => handleCardClick(user.id)}

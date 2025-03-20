@@ -35,43 +35,47 @@ const AreasTematicas: React.FC = () => {
   const { showMessage } = useMessage()
 
   // State for dropdown options for lineas.
-  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<Linea[]>([])
-  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<Linea[]>([])
+  const [lineasMatricialesOptions, setLineasMatricialesOptions] = useState<
+    Linea[]
+  >([])
+  const [lineasPotencialesOptions, setLineasPotencialesOptions] = useState<
+    Linea[]
+  >([])
 
   // Add refs to track initial loads
-  const initialAreasLoadRef = useRef(false);
-  const initialMatricialesLoadRef = useRef(false);
-  const initialPotencialesLoadRef = useRef(false);
+  const initialAreasLoadRef = useRef(false)
+  const initialMatricialesLoadRef = useRef(false)
+  const initialPotencialesLoadRef = useRef(false)
 
   const fetchAreas = useCallback(() => {
     // Skip if already loaded once
-    if (initialAreasLoadRef.current) return;
+    if (initialAreasLoadRef.current) return
 
     axios
       .get<ApiResponse<Area>>("/areas")
       .then((response) => {
         const list = response.data.data.list || []
         setAreas(list)
-        initialAreasLoadRef.current = true;
+        initialAreasLoadRef.current = true
 
         // Show information message if no areas are found.
         if (list.length === 0) {
           showMessage({
             type: MessageType.INFO,
             title: "Información",
-            content: "No hay áreas temáticas registradas"
+            content: "No hay áreas temáticas registradas",
           })
         }
       })
       .catch((error) => {
-        initialAreasLoadRef.current = true;
+        initialAreasLoadRef.current = true
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
           content:
             error?.response?.data?.message ||
             error.message ||
-            "Error al cargar áreas"
+            "Error al cargar áreas",
         })
       })
   }, [showMessage])
@@ -82,24 +86,24 @@ const AreasTematicas: React.FC = () => {
 
   const fetchLineasMatriciales = useCallback(() => {
     // Skip if already loaded once
-    if (initialMatricialesLoadRef.current) return;
+    if (initialMatricialesLoadRef.current) return
 
     axios
       .get<ApiResponse<Linea>>("/lineas/matriciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasMatricialesOptions(list)
-        initialMatricialesLoadRef.current = true;
+        initialMatricialesLoadRef.current = true
       })
       .catch((error) => {
-        initialMatricialesLoadRef.current = true;
+        initialMatricialesLoadRef.current = true
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
           content:
             error?.response?.data?.message ||
             error.message ||
-            "Error al cargar líneas matriciales"
+            "Error al cargar líneas matriciales",
         })
       })
   }, [showMessage])
@@ -107,24 +111,24 @@ const AreasTematicas: React.FC = () => {
   // Memoize the function to fetch líneas potenciales
   const fetchLineasPotenciales = useCallback(() => {
     // Skip if already loaded once
-    if (initialPotencialesLoadRef.current) return;
+    if (initialPotencialesLoadRef.current) return
 
     axios
       .get<ApiResponse<Linea>>("/lineas/potenciales")
       .then((response) => {
         const list = response.data.data.list || []
         setLineasPotencialesOptions(list)
-        initialPotencialesLoadRef.current = true;
+        initialPotencialesLoadRef.current = true
       })
       .catch((error) => {
-        initialPotencialesLoadRef.current = true;
+        initialPotencialesLoadRef.current = true
         showMessage({
           type: MessageType.ERROR,
           title: "Error",
           content:
             error?.response?.data?.message ||
             error.message ||
-            "Error al cargar líneas potenciales"
+            "Error al cargar líneas potenciales",
         })
       })
   }, [showMessage])
@@ -144,8 +148,7 @@ const AreasTematicas: React.FC = () => {
       title: "Confirmación",
       content: "¿Está seguro que desea agregar un área temática?",
       onConfirm: () => setAddingArea(true),
-      onCancel: () => {
-      }
+      onCancel: () => {},
     })
   }
 
@@ -172,7 +175,7 @@ const AreasTematicas: React.FC = () => {
         showMessage({
           type: MessageType.SUCCESS,
           title: "Éxito",
-          content: "Área temática creada exitosamente"
+          content: "Área temática creada exitosamente",
         })
       })
       .catch((error) => {
@@ -182,7 +185,7 @@ const AreasTematicas: React.FC = () => {
           content:
             error?.response?.data?.message ||
             error.message ||
-            "Error al crear área"
+            "Error al crear área",
         })
       })
   }
@@ -229,7 +232,7 @@ const AreasTematicas: React.FC = () => {
       showMessage({
         type: MessageType.WARNING,
         title: "Aviso",
-        content: "No se detectaron cambios"
+        content: "No se detectaron cambios",
       })
       return
     }
@@ -248,7 +251,7 @@ const AreasTematicas: React.FC = () => {
             showMessage({
               type: MessageType.SUCCESS,
               title: "Éxito",
-              content: "Área temática actualizada exitosamente"
+              content: "Área temática actualizada exitosamente",
             })
           })
           .catch((error) => {
@@ -258,13 +261,13 @@ const AreasTematicas: React.FC = () => {
               content:
                 error?.response?.data?.message ||
                 error.message ||
-                "Error al actualizar área"
+                "Error al actualizar área",
             })
           })
       },
       onCancel: () => {
         // Optionally, handle cancel action—for example, show a cancellation message.
-      }
+      },
     })
   }
 
@@ -285,7 +288,7 @@ const AreasTematicas: React.FC = () => {
             content:
               error?.response?.data?.message ||
               error.message ||
-              "Error al obtener área"
+              "Error al obtener área",
           })
         })
     } else {
@@ -299,29 +302,24 @@ const AreasTematicas: React.FC = () => {
       className="w-full pb-4 flex-shrink-0 cursor-pointer"
       onClick={() => handleCardClick(item.id)}
     >
-      <div
-        className={`
-          rounded-sm shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden
-          ${expandedCard === item.id ? "max-h-[1920px]" : "max-h-20"}
-        `}
+      <EntityCard
+        entity={item}
+        className={`bg-gray overflow-hidden ${
+          expandedCard === item.id ? "max-h-[1920px]" : "max-h-20"
+        }`}
       >
-        <EntityCard
-          entity={item}
-          className="bg-gray shadow-sm hover:shadow-md transition-shadow"
-        >
-          <EntityCard.Badge />
-          <EntityCard.Title
-            className={`mt-4 transition-all ${
-              expandedCard === item.id ? "" : "line-clamp-1"
-            }`}
-          />
-          <EntityCard.Description
-            className={`transition-all ${
-              expandedCard === item.id ? "" : "line-clamp-1"
-            }`}
-          />
-        </EntityCard>
-      </div>
+        <EntityCard.Badge />
+        <EntityCard.Title
+          className={`mt-4 transition-all ${
+            expandedCard === item.id ? "" : "line-clamp-1"
+          }`}
+        />
+        <EntityCard.Description
+          className={`transition-all ${
+            expandedCard === item.id ? "" : "line-clamp-1"
+          }`}
+        />
+      </EntityCard>
     </div>
   )
 

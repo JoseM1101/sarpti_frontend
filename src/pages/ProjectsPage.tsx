@@ -45,7 +45,7 @@ const ProjectsPage: React.FC = () => {
         <div className="flex gap-3 items-center cursor-pointer">
           <img className="object-contain" src={investigaciones} alt="" />
           <Link to="/investigaciones">
-            <p className="text-gray-3 text-xl font-semibold">Proyectos</p>
+            <p className="text-gray-3 text-xl font-semibold">Investigaciones</p>
           </Link>
         </div>
         <Filters updateFn={searchFn} filters={filters} />

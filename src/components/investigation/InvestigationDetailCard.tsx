@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { twMerge } from "tailwind-merge"
 import { Investigation } from "../../types/Investigation"
@@ -52,15 +52,22 @@ const InvestigationDetailCard = ({
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(entity.titulo)
   const [editedDescription, setEditedDescription] = useState(entity.descripcion)
-  const [editedInvestment, setEditedInvestment] = useState(entity.inversion)
+  const [editedInvestment, setEditedInvestment] = useState<number>(
+    entity.inversion
+  )
   const [editedKeywords, setEditedKeywords] = useState(
     entity.keywords.length > 0 ? entity.keywords : [""]
   )
-
   const baseClasses =
     "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
   const mergedClasses = twMerge(baseClasses, className)
   const { showMessage } = useMessage()
+
+  useEffect(() => {
+    if (isNaN(editedInvestment)) {
+      setEditedInvestment(0)
+    }
+  }, [editedInvestment])
 
   const handleAddKeyword = () => {
     setEditedKeywords([...editedKeywords, ""])
@@ -119,7 +126,7 @@ const InvestigationDetailCard = ({
   return (
     <EntityCard className={mergedClasses} entity={entity}>
       {createPortal(
-        <Legend className="absolute top-16 left-1/2 -translate-x-1/2" />,
+        <Legend className="absolute top-8 left-1/2 -translate-x-1/2" />,
         document.querySelector("main") as HTMLElement
       )}
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />

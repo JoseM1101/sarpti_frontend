@@ -51,7 +51,7 @@ const InvestigationsPage: React.FC = () => {
             alt="Investigaciones"
           />
           <Link to="/proyectos">
-            <p className="text-gray-3 text-xl font-semibold">Investigaciones</p>
+            <p className="text-gray-3 text-xl font-semibold">Proyectos</p>
           </Link>
         </div>
         <Filters updateFn={searchFn} filters={filters} />

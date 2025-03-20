@@ -66,7 +66,7 @@ const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
   return (
     <EntityCard className={mergedClasses} entity={entity}>
       {createPortal(
-        <Legend className="absolute top-16 left-1/2 -translate-x-1/2" />,
+        <Legend className="absolute top-8 left-1/2 -translate-x-1/2" />,
         document.querySelector("main") as HTMLElement
       )}
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />

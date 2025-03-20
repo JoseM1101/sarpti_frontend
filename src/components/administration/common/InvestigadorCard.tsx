@@ -2,9 +2,11 @@ import React from "react"
 import { User, UserRole } from "../../../types/User"
 import EntityCard from "../../entity/EntityCard"
 import { EntityStatus } from "@/types/Entity"
+import { twMerge } from "tailwind-merge"
 
 interface InvestigadorCardProps {
   user: User
+  className?: string
   onClick?: () => void
 }
 
@@ -21,7 +23,11 @@ const getRolText = (rol: UserRole): string => {
   }
 }
 
-const InvestigadorCard: React.FC<InvestigadorCardProps> = ({ user, onClick }) => {
+const InvestigadorCard: React.FC<InvestigadorCardProps> = ({
+  user,
+  onClick,
+  className,
+}) => {
   const formatDate = (date: Date | null): string => {
     if (!date) return "No registrada"
     return date.toLocaleString("es-ES", {
@@ -42,8 +48,8 @@ const InvestigadorCard: React.FC<InvestigadorCardProps> = ({ user, onClick }) =>
   }
 
   return (
-    <div className="relative" onClick={onClick}>
-      <EntityCard entity={entity} className="bg-gray shadow-sm hover:shadow-md transition-shadow p-4">
+    <div className={twMerge("relative", className)} onClick={onClick}>
+      <EntityCard entity={entity} className="overflow-hidden p-4">
         <div className="flex items-center space-x-4">
           {/* Avatar placed at left inside EntityCard */}
           <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
@@ -61,9 +67,13 @@ const InvestigadorCard: React.FC<InvestigadorCardProps> = ({ user, onClick }) =>
           </div>
         </div>
         <div className="flex justify-end mt-2">
-          <span className={`px-2 py-1 rounded-full text-sm ${
-            user.conectado ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-          }`}>
+          <span
+            className={`px-2 py-1 rounded-full text-sm ${
+              user.conectado
+                ? "bg-green-100 text-green-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
+          >
             {user.conectado ? "En línea" : "Desconectado"}
           </span>
         </div>
