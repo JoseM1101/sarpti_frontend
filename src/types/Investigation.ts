@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import { Entity, EntityProduct } from "./Entity"
 import { Person } from "./Person"
 

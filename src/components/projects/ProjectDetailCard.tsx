@@ -1,103 +1,146 @@
-import { twMerge } from "tailwind-merge"
-import { Project } from "../../types/Project"
-import EntityCard from "../entity/EntityCard"
-import Button from "../common/Button"
-import descripcion from "../../assets/icons/descripcion.png"
-import autores from "../../assets/icons/autores.png"
-import { updateProjectState } from "../../api/projects"
-import { EntityStatus } from "../../types/Entity"
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { Project } from "../../types/Project";
+import EntityCard from "../entity/EntityCard";
+import Button from "../common/Button";
+import descripcion from "../../assets/icons/descripcion.png";
+import autores from "../../assets/icons/autores.png";
+import { updateProjectState, updateProjectDetails } from "../../api/projects"; 
+import { EntityStatus } from "../../types/Entity";
+import { FaCheck, FaEdit, FaTimes } from "react-icons/fa";
 
-interface ProjectDetailCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
-  className?: string
-  entity: Project
+interface ProjectDetailCardProps {
+  className?: string;
+  entity: Project;
 }
 
-const itemHeader = (icon: string, text: string) => {
-  return (
-    <div className="flex gap-2 items-center">
-      <img className="object-contain" src={icon} alt="" />
-      <p className="font-semibold text-gray-2">{text}</p>
-    </div>
-  )
-}
+const itemHeader = (icon: string, text: string) => (
+  <div className="flex gap-2 items-center">
+    <img className="object-contain" src={icon} alt="" />
+    <p className="font-semibold text-gray-2">{text}</p>
+  </div>
+);
 
-const renderItem = (
-  header: React.ReactElement,
-  body: React.ReactElement,
-  className?: string
-) => {
-  return (
-    <div className={twMerge("flex flex-col gap-1", className)}>
-      {header}
-      {body}
-    </div>
-  )
-}
+const renderItem = (header: React.ReactElement, body: React.ReactElement, className?: string) => (
+  <div className={twMerge("flex flex-col gap-1", className)}>
+    {header}
+    {body}
+  </div>
+);
 
 const ProjectDetailCard = ({ className, entity }: ProjectDetailCardProps) => {
-  const baseClasses =
-    "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6"
-  const mergedClasses = twMerge(baseClasses, className)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(entity.titulo);
+  const [editedDescription, setEditedDescription] = useState(entity.descripcion);
+
+  const baseClasses = "max-w-4xl w-11/12 bg-white border border-lightblue rounded-xl overflow-hidden p-6";
+  const mergedClasses = twMerge(baseClasses, className);
+
+  const handleSave = async () => {
+    const updatedData = {
+      titulo: editedTitle,
+      descripcion: editedDescription,
+    };
+
+    try {
+      await updateProjectDetails(entity.id, updatedData); // Asegúrate de implementar esta función
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error al guardar los cambios:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedTitle(entity.titulo);
+    setEditedDescription(entity.descripcion);
+    setIsEditing(false);
+  };
 
   return (
     <EntityCard className={mergedClasses} entity={entity}>
       <EntityCard.Badge className="w-7 h-7 rounded-br-3xl" />
-      <EntityCard.Title className="text-3xl" />
-      <div className="flex mt-3">
-        <div className="w-3/6 flex flex-col">
+      {isEditing ? (
+        <input
+          type="text"
+          value={editedTitle}
+          onChange={(e) => setEditedTitle(e.target.value)}
+          className="text-3xl border border-gray-300 p-2 rounded"
+        />
+      ) : (
+        <EntityCard.Title className="text-3xl" />
+      )}
+
+      <div className="flex justify-between mt-10 gap-2">
+        <div className="flex flex-col gap-3 w-3/5">
           {renderItem(
             itemHeader(descripcion, "Descripción"),
-            <p className="text-gray-2 font-semibold">{entity.descripcion}</p>
+            isEditing ? (
+              <textarea
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                className="border border-gray-300 p-2 rounded"
+              />
+            ) : (
+              <EntityCard.Description />
+            )
           )}
           {renderItem(
-            itemHeader(descripcion, "Lineas de Investigacion"),
-            <p className="text-gray-2 ml-5 font-semibold">
-              <span className="text-gray-2">Area tematica: </span>
-              {entity.areas_tematicas}
-            </p>,
-            "mt-4"
-          )}
+          itemHeader(descripcion, "Lineas de Investigacion"),
+          <p className="text-gray-2 ml-5 font-semibold">
+            <span className="text-gray-2">Area tematica: </span>
+            {entity.areas_tematicas}
+          </p>,
+          "mt-4"
+        )}
         </div>
-        <span className="mx-3 h-auto bg-black w-px"></span>
-        <div className="w-3/6 flex flex-col justify-between gap-2">
-          <EntityCard.StartDate
-            className="text-base"
-            startDate={entity.fecha_creacion}
-          />
+
+        <div className="relative mx-3 h-auto bg-black w-px flex items-center justify-center">
+          <button
+            onClick={isEditing ? handleCancel : () => setIsEditing(true)}
+            className="absolute bg-white p-1 rounded-full shadow-lg"
+          >
+            {isEditing ? <FaTimes className="w-6 h-6 text-red-500" /> : <FaEdit className="w-6 h-6 text-blue-500" />}
+          </button>
+        </div>
+
+        <div className="w-2/5 flex flex-col gap-3 justify-between">
+          <EntityCard.StartDate className="text-base" startDate={entity.fecha_creacion} icon />
           <div className="flex gap-2">
-            <img className="object-contain" src={autores} alt="" />
-            <p className="text-gray-2 font-semibold">Responsable:</p>
-            <p className="text-gray-3 font-semibold">{entity.responsable}</p>
+          <img className="object-contain" src={autores} alt="" />
+          <p className="text-gray-2 font-semibold">Responsable:</p>
+          <p className="text-gray-3 font-semibold">{entity.responsable}</p>
+        </div>
+        <div className="flex gap-2">
+          <img className="object-contain" src={autores} alt="" />
+          <p className="text-gray-2 font-semibold">Creador:</p>
+          <p className="text-gray-3 font-semibold">{entity.creador}</p>
+        </div>
+          <div className="flex gap-2 w-full">
+            {isEditing ? (
+              <Button onClick={handleSave} className="w-full flex gap-2 items-center justify-center">
+                <FaCheck className="text-green-500" />
+                Guardar Cambios
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  updateProjectState(
+                    entity.id,
+                    entity.estatus === EntityStatus.ACTIVE ? EntityStatus.INACTIVE : EntityStatus.ACTIVE
+                  )
+                }
+                className="w-full flex gap-2 items-center justify-center"
+              >
+                {entity.estatus === EntityStatus.ACTIVE ? "Desactivar Proyecto" : "Activar Proyecto"}
+              </Button>
+            )}
           </div>
-          <div className="flex gap-2">
-            <img className="object-contain" src={autores} alt="" />
-            <p className="text-gray-2 font-semibold">Creador:</p>
-            <p className="text-gray-3 font-semibold">{entity.creador}</p>
-          </div>
-          {entity.estatus === EntityStatus.ACTIVE ? (
-            <Button
-              bgColor="red"
-              onClick={() =>
-                updateProjectState(entity.id, EntityStatus.INACTIVE)
-              }
-              className="w-full flex gap-2 items-center justify-center"
-            >
-              Desactivar Proyecto
-            </Button>
-          ) : (
-            <Button
-              bgColor="green"
-              onClick={() => updateProjectState(entity.id, EntityStatus.ACTIVE)}
-              className="w-full flex gap-2 items-center justify-center"
-            >
-              Activar Proyecto
-            </Button>
-          )}
         </div>
       </div>
     </EntityCard>
-  )
-}
+  );
+};
 
-export default ProjectDetailCard
+export default ProjectDetailCard;
+
+
