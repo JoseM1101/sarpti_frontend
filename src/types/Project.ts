@@ -11,6 +11,8 @@ export interface ProjectPostData {
   descripcion: string;
   responsable: string;
   areas_tematicas_id: string;
+  inversion: number;
+  productos: ProductFormData[];
 /*   fecha_creacion: string; 
   estatus: number; 
   creador: string;
@@ -20,4 +22,11 @@ export interface ProjectPostData {
   inversion: number;
   inversionista: string; */
  
+}
+
+
+interface ProductFormData {
+titulo: string;
+descripcion: string;
+url: URL;
 }

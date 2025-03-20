@@ -114,8 +114,8 @@ const InsertForm: React.FC<InsertFormProps> = ({ closeModal }) => {
       await createInvestigation(formattedData)
       console.log("Formulario enviado, cerrando modal")
       closeModal()
-      window.location.reload()
-      alert("Investigación creada exitosamente")
+      /* window.location.reload();
+      alert("Investigación creada exitosamente"); */
     } catch (error) {
       console.error("Error al crear la investigación", error)
     }

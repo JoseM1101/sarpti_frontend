@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import axios from "axios"
-import Cookies from "js-cookie" // Importar Cookies para obtener el token
+import Cookies from "js-cookie"
 
 const FormTwo = () => {
   const { register, watch } = useFormContext()
@@ -19,21 +19,17 @@ const FormTwo = () => {
     if (cedula.length === 8) {
       try {
         const token = Cookies.get("token")
-        const response = await axios.get(
-          `http://10.200.36.15:3000/personas?identificacion=${cedula}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        const response = await axios.get(`/personas?identificacion=${cedula}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
         const data = response.data
 
         if (data.success && data.data.list.length > 0) {
           const persona = data.data.list[0]
-          const nombreCompleto =
-            `${persona.primer_nombre} ${persona.segundo_nombre} ${persona.primer_apellido} ${persona.segundo_apellido}`.trim()
+          const nombreCompleto = `${persona.nombre} ${persona.apellido}`.trim()
 
           if (type === "tutor") {
             setTutorVerifications((prev) => ({
@@ -79,13 +75,22 @@ const FormTwo = () => {
     }
   }
 
-  const handleTutorCedulaChange = (index: number, cedula: string) => {
-    verifyCedula(cedula, "tutor")
-  }
-
-  const handleAuthorCedulaChange = (index: number, cedula: string) => {
-    verifyCedula(cedula, "author")
-  }
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name && name.startsWith("cedula-")) {
+        const index = parseInt(name.split("-")[1], 10)
+        const cedula = value[name]
+        if (cedula && cedula.length === 8) {
+          if (index < 5) {
+            verifyCedula(cedula, "tutor")
+          } else {
+            verifyCedula(cedula, "author")
+          }
+        }
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const handleAddTutor = () => {
     if (tutorCount < 4) {
@@ -135,9 +140,6 @@ const FormTwo = () => {
                   {...register(`cedula-${index + 1}`, { required: true })}
                   placeholder="Cédula"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-                  onChange={(e) =>
-                    handleTutorCedulaChange(index, e.target.value)
-                  }
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">
@@ -196,9 +198,6 @@ const FormTwo = () => {
                   {...register(`cedula-${index + 5}`, { required: index < 1 })}
                   placeholder="Cédula"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-                  onChange={(e) =>
-                    handleAuthorCedulaChange(index, e.target.value)
-                  }
                 />
                 {cedula && cedula.length === 8 && (
                   <div className="flex items-center gap-2">

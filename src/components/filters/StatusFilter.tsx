@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { statusItems } from "../../utils"
 import FilterCard from "./FilterCard"
 import { useFilterContext } from "./context/useFilterContext"
@@ -8,7 +8,11 @@ const FilterItem: React.FC<{
   value: (typeof statusItems)[keyof typeof statusItems]
 }> = ({ status, value }) => {
   const [isActive, setIsActive] = useState<boolean>(false)
-  const { setFilterQuery } = useFilterContext()
+  const { setFilterQuery, resetTrigger } = useFilterContext()
+
+  useEffect(() => {
+    setIsActive(false)
+  }, [resetTrigger])
 
   const handleClick = () => {
     const newIsActive = !isActive

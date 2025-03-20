@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useFormContext } from "react-hook-form"
 
-const FormFive = () => {
+const FormEight = () => {
   const { register } = useFormContext()
   const [productCount, setProductCount] = useState(1)
 
@@ -25,16 +25,6 @@ const FormFive = () => {
         placeholder="Inversión"
         className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <select
-        {...register("nivel", { required: true })}
-        className="max-w-md p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">Selecciona un nivel</option>
-        <option value="1">1: Pregrado</option>
-        <option value="2">2: Especialización</option>
-        <option value="3">3: Maestría</option>
-        <option value="4">4: Doctorado</option>
-      </select>
 
       <h2 className="font-semibold text-lg">Productos</h2>
       <div className="max-h-60 overflow-y-auto  rounded-lg p-2  items-cente">
@@ -84,4 +74,4 @@ const FormFive = () => {
   )
 }
 
-export default FormFive
+export default FormEight

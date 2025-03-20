@@ -3,6 +3,7 @@ import { useProjects } from "../../hooks/useProjects"
 import ProjectMenuCard from "./ProjectMenuCard"
 import EntityList from "../entity/EntityList"
 import { Project } from "../../types/Project"
+import { useFilterContext } from "../filters/context/useFilterContext"
 interface ProjectListProps {
   filteredProjects: Project[]
 }
@@ -17,6 +18,7 @@ const renderFunction = (entity: Project) => {
 
 const ProjectsList: React.FC<ProjectListProps> = ({ filteredProjects }) => {
   const { projects, error, isLoading } = useProjects()
+  const { isBeingFiltered } = useFilterContext()
 
   if (error) {
     return <div>Error: {error.message}</div>
@@ -26,9 +28,22 @@ const ProjectsList: React.FC<ProjectListProps> = ({ filteredProjects }) => {
     return <div>Loading...</div>
   }
 
-  return (
+  return isBeingFiltered ? (
+    filteredProjects.length > 0 ? (
+      <EntityList<Project>
+        entities={filteredProjects}
+        renderEntity={(entity) => renderFunction(entity)}
+      />
+    ) : (
+      <div className="flex justify-center items-center h-full">
+        <p className="text-gray-3 text-lg font-semibold">
+          No se encontraron resultados
+        </p>
+      </div>
+    )
+  ) : (
     <EntityList<Project>
-      entities={filteredProjects.length > 0 ? filteredProjects : projects}
+      entities={projects}
       renderEntity={(entity) => renderFunction(entity)}
     />
   )

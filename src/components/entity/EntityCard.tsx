@@ -64,7 +64,12 @@ EntityCard.Title = function EntityCardTitle({
   const { entity } = useEntityCardContext()
 
   return (
-    <h3 className={twMerge("text-lg font-semibold text-gray-3", className)}>
+    <h3
+      className={twMerge(
+        "text-lg font-semibold text-gray-3 break-words",
+        className
+      )}
+    >
       {entity.titulo}
     </h3>
   )
@@ -78,7 +83,12 @@ EntityCard.Description = function EntityCardDescription({
   const { entity } = useEntityCardContext()
 
   return (
-    <h3 className={twMerge("text-sm font-semibold text-gray-3", className)}>
+    <h3
+      className={twMerge(
+        "text-sm font-semibold text-gray-3 break-words",
+        className
+      )}
+    >
       {entity.descripcion}
     </h3>
   )

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useFilterContext } from "./context/useFilterContext"
 import FilterCard from "./FilterCard"
 import BasicDatePicker from "../common/BasicDatePicker"
@@ -10,7 +10,7 @@ type DateFilterKeys =
   | "fecha_culminacion_max"
 
 const DateFilter: React.FC = () => {
-  const { setFilterQuery } = useFilterContext()
+  const { setFilterQuery, resetTrigger } = useFilterContext()
 
   const [dates, setDates] = useState<Record<DateFilterKeys, string | null>>({
     fecha_inicio_min: null,
@@ -18,6 +18,15 @@ const DateFilter: React.FC = () => {
     fecha_culminacion_min: null,
     fecha_culminacion_max: null,
   })
+
+  useEffect(() => {
+    setDates({
+      fecha_inicio_min: null,
+      fecha_inicio_max: null,
+      fecha_culminacion_min: null,
+      fecha_culminacion_max: null,
+    })
+  }, [resetTrigger])
 
   const parseDate = (dateStr: string | null): Date | null =>
     dateStr ? new Date(dateStr) : null

@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, useMemo } from "react"
+import { useState, ChangeEvent, useEffect, useMemo, useRef } from "react"
 import { twMerge } from "tailwind-merge"
 import { useFilterContext } from "./context/useFilterContext"
 import { debounce } from "../../utils"
@@ -10,8 +10,21 @@ interface SearchBarProps {
 
 const SearchBar = ({ onSearch, className }: SearchBarProps) => {
   const [query, setQuery] = useState<string>("")
-  const { setFilterQuery } = useFilterContext()
+  const { setFilterQuery, resetTrigger, setIsBeingFiltered } =
+    useFilterContext()
   const debouncedSearch = useMemo(() => debounce(onSearch, 500), [onSearch])
+  const hasBeenFiltered = useRef(false)
+
+  useEffect(() => {
+    setQuery("")
+  }, [resetTrigger])
+
+  useEffect(() => {
+    if (query !== "") {
+      setIsBeingFiltered(true)
+      hasBeenFiltered.current = true
+    }
+  }, [query, setIsBeingFiltered])
 
   useEffect(() => {
     setFilterQuery((prevQuery) => {

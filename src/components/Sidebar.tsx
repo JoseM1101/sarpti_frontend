@@ -4,7 +4,7 @@ import logo from "../assets/images/logo.png"
 import { twMerge } from "tailwind-merge"
 import investigaciones from "../assets/icons/investigaciones.png"
 import administracion from "../assets/icons/administracion.png"
-import perfil from "../assets/icons/perfil.png"
+// import perfil from "../assets/icons/perfil.png"
 import investigadores from "../assets/icons/investigadores.png"
 import Cookies from "js-cookie"
 
@@ -92,17 +92,14 @@ const Sidebar: React.FC<{ className?: string }> = ({ className }) => {
         ))}
         <span className="h-px bg-gray-2 w-full my-8"></span>
       </div>
-      <div className="absolute left-10 bottom-16">
-        <button
-          onClick={handleLogout}
-          className="flex gap-2 items-center text-xl text-gray-600 hover:text-red-600 transition-colors"
-        >
+      <div className="absolute left-10 bottom-5">
+        <button onClick={handleLogout} className="text-xl text-gray-3 ">
           Cerrar sesión
         </button>
       </div>
-      <div className="absolute left-10 bottom-5">
+      {/* <div className="absolute left-10 bottom-5">
         <LinkRenderer icon={perfil} text="Perfil" to="/perfil" />
-      </div>
+      </div> */}
     </aside>
   )
 }
