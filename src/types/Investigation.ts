@@ -1,5 +1,5 @@
 import { Entity, EntityProduct } from "./Entity"
-import { Person } from "./Person"
+/* import { Person } from "./Person" */
 
 export type StartDate = string
 export type EndDate = string | null
@@ -29,8 +29,8 @@ export interface Investigation extends Entity {
   nivel: InvestigationLevel
   proyecto: string
   inversion: number
-  autores: Person[]
-  tutores: Person[]
+  autores: string[]
+  tutores: string[]
   keywords: Keywords
   productos: EntityProduct[] | null
 }
